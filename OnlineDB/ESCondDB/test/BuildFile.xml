@@ -1,0 +1,8 @@
+<use   name="OnlineDB/Oracle"/>
+<use   name="OnlineDB/EcalCondDB"/>
+<use   name="OnlineDB/ESCondDB"/>
+<use   name="DataFormats/EcalDetId"/>
+<use   name="root"/>
+<bin   file="NewODESPedTest.cpp"></bin>
+<bin   file="ODESTestFED.cpp"></bin>
+<bin   file="test.cpp"></bin>
