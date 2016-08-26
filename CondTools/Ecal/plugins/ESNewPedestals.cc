@@ -59,6 +59,47 @@ ESNewPedestals::ESNewPedestals( const edm::ParameterSet& iConfig ) {
   runType_                   = iConfig.getParameter<std::string>("runType");
   startevent_                = iConfig.getUntrackedParameter<unsigned int>("startevent", 1);
 
+  lookuptable_               = iConfig.getUntrackedParameter<FileInPath>("LookupTable");
+  
+  // read in look-up table
+  for (int i=0; i<2; ++i){ 
+    for (int j=0; j<2; ++j){ 
+      for (int k=0; k<40; ++k){ 
+        for (int m=0; m<40; ++m) {
+          FED[i][j][k][m] = 0;
+	  for (int n=0; n<32; ++n) {
+	    MASK[i][j][k][m][n] = 0;
+	    CMMASK[i][j][k][m][n] = 0;
+	    ZS[i][j][k][m][n] = 0;
+	    CMRange[i][j][k][m][n] = 0;
+	  }
+	}
+      }
+    }
+  }
+
+  int nLines, iz, ip, ix, iy, fed, kchip, pace, bundle, fiber, optorx;
+  std::ifstream file;
+  file.open(lookuptable_.fullPath().c_str());
+
+  if( file.is_open() ) {
+    
+    file >> nLines;
+    for (int i=0; i<nLines; ++i) {
+      file >> iz >> ip >> ix >> iy >> fed >> kchip >> pace >> bundle >> fiber >> optorx ;
+
+      int zside = (iz==1) ? 0: 1; 
+
+      FED[zside][ip-1][ix-1][iy-1] = fed;
+      KCHIP[zside][ip-1][ix-1][iy-1] = kchip;
+      PACE[zside][ip-1][ix-1][iy-1] = pace;
+      FIBER[zside][ip-1][ix-1][iy-1] = fiber;
+      OPTORX[zside][ip-1][ix-1][iy-1] = optorx;
+    }
+  } else {
+    cout<<"ESNewPedestals::ESNewPedestals : Look up table file can not be found in "<<lookuptable_.fullPath().c_str()<<endl;
+  }
+
   std::cout << "EcalPedestals Source handler constructor\n" << std::endl;
   m_firstRun = static_cast<unsigned int>(atoi(iConfig.getParameter<std::string>("firstRun").c_str()));
   m_lastRun = static_cast<unsigned int>(atoi(iConfig.getParameter<std::string>("lastRun").c_str()));
@@ -216,7 +257,27 @@ void ESNewPedestals::beginRun(edm::Run const &, edm::EventSetup const & c) {
 		for (CImon p = dataset_mon.begin(); p != dataset_mon.end(); p++) {
 			ecid_xt = p->first;
 	                rd_ped  = p->second;
-			std::cout<<"Mean: "<<rd_ped.getPedMean() <<" - RMS: "<< rd_ped.getPedRMS()<<std::endl;
+			int zs =  ( ( (int) ecid_xt.getLogicID()/1000000 ) % 10 ) - 1; 
+			int lay = (zs==0 || zs==1 ) ? 0 : 1; //For now z=1 or 3 is layer 1 and z=2 or 4 layer 2. Should check this.
+			int st = ecid_xt.getLogicID() % 100;
+
+			if ( ( FED[zs][lay][ecid_xt.getID2()][ecid_xt.getID3()] < 520) || ( FED[zs][lay][ecid_xt.getID2()][ecid_xt.getID3()] > 575) ){continue;}
+			PED[zs][lay][ecid_xt.getID2()][ecid_xt.getID3()][st-1] = rd_ped.getPedMean();
+
+			// flip strip numbering from detector id to HW id
+			int istr = st-1;
+			
+			if (zs==0 && lay==0 && ecid_xt.getID3()<20) istr = 31 - istr;
+			if (zs==0 && lay==1 && ecid_xt.getID2()>=20) istr = 31 - istr;
+			if (zs==1 && lay==0 && ecid_xt.getID3()>=20) istr = 31 - istr;
+			if (zs==1 && lay==1 && ecid_xt.getID2()<20) istr = 31 - istr;
+	
+			std::cout<<"Mean: "<<rd_ped.getPedMean() <<" - RMS: "<< rd_ped.getPedRMS()<< " - LOGIC_ID: " << ecid_xt.getLogicID() << " - id1: "<< ecid_xt.getID1() <<" - id2: " << ecid_xt.getID2() << " - id3: "<< ecid_xt.getID3() << " - getMapsTo: "<< ecid_xt.getMapsTo() << " - z value: " << ( (int) ecid_xt.getLogicID()/1000000 ) % 10 << " - strip " << ecid_xt.getLogicID() % 100  << std::endl;			
+			//Here I will fill the table with the required values
+			std::cout << "REC_ID " << myRun <<  " FED_ID " << FED[zs][lay][ecid_xt.getID2()][ecid_xt.getID3()] << " OPTORX_ID " << OPTORX[zs][lay][ecid_xt.getID2()][ecid_xt.getID3()] << " FIBER_ID " << FIBER[zs][lay][ecid_xt.getID2()][ecid_xt.getID3()] << " KCHIP_ID " << KCHIP[zs][lay][ecid_xt.getID2()][ecid_xt.getID3()] << " PACE_ID " << PACE[zs][lay][ecid_xt.getID2()][ecid_xt.getID3()] << " STRIP_ID " << istr+1 << " PEDESTAL " << PED[zs][lay][ecid_xt.getID2()][ecid_xt.getID3()][st-1] << " GAIN " << 1 << " ZS " << ZS[zs][lay][ecid_xt.getID2()][ecid_xt.getID3()][st-1] << " MASKED " << 0 << " CM_MASKED " << CMMASK[zs][lay][ecid_xt.getID2()][ecid_xt.getID3()][st-1] << " CM_RANGE " << CMRange[zs][lay][ecid_xt.getID2()][ecid_xt.getID3()][st-1] << std::endl; 
+
+
+
 		}		
 
 	} catch (exception &e) {

@@ -31,6 +31,8 @@ process.esnewpedestals = cms.EDAnalyzer("ESNewPedestals",
   startevent = cms.untracked.uint32(1),
   xtalnumber = cms.untracked.int32(0),
 
+  LookupTable = cms.untracked.FileInPath("EventFilter/ESDigiToRaw/data/ES_lookup_table.dat"),
+
 #  Source = cms.PSet(
     GenTag = cms.string('LOCAL'),
 #    RunTag = cms.string('TEST_PULSE'),
@@ -39,7 +41,7 @@ process.esnewpedestals = cms.EDAnalyzer("ESNewPedestals",
     lastRun = cms.string('100000000'),
     LocationSource = cms.string('P5'),
     OnlineDBUser = cms.string('cms_es_cond'),
-    OnlineDBPassword = cms.string('********'),
+    OnlineDBPassword = cms.string('*******'),
     debug = cms.bool(True),
     Location = cms.string('P5_Co'),
     OnlineDBSID = cms.string('cms_orcon_adg')
