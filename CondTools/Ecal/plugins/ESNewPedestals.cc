@@ -55,6 +55,7 @@ ESNewPedestals::ESNewPedestals( const edm::ParameterSet& iConfig ) {
    //now do what ever initialization is needed   
   //  EBDigiCollection_          = iConfig.getParameter<edm::InputTag>("EBDigiCollection");
   runnumber_                 = iConfig.getUntrackedParameter<int>("runnumber",-1);
+  thegain_                 = iConfig.getUntrackedParameter<int>("Gain",-1);
   ECALType_                  = iConfig.getParameter<std::string>("ECALType");
   runType_                   = iConfig.getParameter<std::string>("runType");
   startevent_                = iConfig.getUntrackedParameter<unsigned int>("startevent", 1);
@@ -257,24 +258,28 @@ void ESNewPedestals::beginRun(edm::Run const &, edm::EventSetup const & c) {
 		for (CImon p = dataset_mon.begin(); p != dataset_mon.end(); p++) {
 			ecid_xt = p->first;
 	                rd_ped  = p->second;
-			int zs =  ( ( (int) ecid_xt.getLogicID()/1000000 ) % 10 ) - 1; 
-			int lay = (zs==0 || zs==1 ) ? 0 : 1; //For now z=1 or 3 is layer 1 and z=2 or 4 layer 2. Should check this.
-			int st = ecid_xt.getLogicID() % 100;
+			// zs here is 1,2,3,4 -> ES+F ES+R ES-F ES-R
+			int zs =  ( ( (int) ecid_xt.getLogicID()/1000000 ) % 10 ); 
+			int zside = (zs==1 || zs==2 )? 0 : 1; //z=1 or 2 is ES+ (0) and z=3 or 4 is ES- (1)
+			int lay = (zs==1 || zs==3 ) ? 0 : 1; //z=1 or 3 is first layer (0) and z=2 or 4 is second layer (1). 
+			int st = ecid_xt.getLogicID() % 100; //goes from 1 to 32. 
+			int ix = ecid_xt.getID2() + 1;
+			int iy = ecid_xt.getID3() + 1;
 
-			if ( ( FED[zs][lay][ecid_xt.getID2()][ecid_xt.getID3()] < 520) || ( FED[zs][lay][ecid_xt.getID2()][ecid_xt.getID3()] > 575) ){continue;}
-			PED[zs][lay][ecid_xt.getID2()][ecid_xt.getID3()][st-1] = rd_ped.getPedMean();
+			if ( ( FED[zside][lay][ix][iy] < 520) || ( FED[zside][lay][ix][iy] > 575) ){continue;}
+			PED[zside][lay][ix][iy][st-1] = rd_ped.getPedMean();
 
-			// flip strip numbering from detector id to HW id
+			// This is for the strip_id: Flip strip numbering from detector id to HW id
 			int istr = st-1;
 			
-			if (zs==0 && lay==0 && ecid_xt.getID3()<20) istr = 31 - istr;
-			if (zs==0 && lay==1 && ecid_xt.getID2()>=20) istr = 31 - istr;
-			if (zs==1 && lay==0 && ecid_xt.getID3()>=20) istr = 31 - istr;
-			if (zs==1 && lay==1 && ecid_xt.getID2()<20) istr = 31 - istr;
+			if (zside==0 && lay==0 && iy<20) istr = 31 - istr;
+			if (zside==0 && lay==1 && ix>=20) istr = 31 - istr;
+			if (zside==1 && lay==0 && iy>=20) istr = 31 - istr;
+			if (zside==1 && lay==1 && ix<20) istr = 31 - istr;
 	
-			std::cout<<"Mean: "<<rd_ped.getPedMean() <<" - RMS: "<< rd_ped.getPedRMS()<< " - LOGIC_ID: " << ecid_xt.getLogicID() << " - id1: "<< ecid_xt.getID1() <<" - id2: " << ecid_xt.getID2() << " - id3: "<< ecid_xt.getID3() << " - getMapsTo: "<< ecid_xt.getMapsTo() << " - z value: " << ( (int) ecid_xt.getLogicID()/1000000 ) % 10 << " - strip " << ecid_xt.getLogicID() % 100  << std::endl;			
+			std::cout<<"Mean: "<<rd_ped.getPedMean() <<" - RMS: "<< rd_ped.getPedRMS()<< " - LOGIC_ID: " << ecid_xt.getLogicID() << " - id1: "<< ecid_xt.getID1() <<" - id2: " << ix << " - id3: "<< iy << " - getMapsTo: "<< ecid_xt.getMapsTo() << " - z value: " << ( (int) ecid_xt.getLogicID()/1000000 ) % 10 << " - strip " << ecid_xt.getLogicID() % 100  << std::endl;			
 			//Here I will fill the table with the required values
-			std::cout << "REC_ID " << myRun <<  " FED_ID " << FED[zs][lay][ecid_xt.getID2()][ecid_xt.getID3()] << " OPTORX_ID " << OPTORX[zs][lay][ecid_xt.getID2()][ecid_xt.getID3()] << " FIBER_ID " << FIBER[zs][lay][ecid_xt.getID2()][ecid_xt.getID3()] << " KCHIP_ID " << KCHIP[zs][lay][ecid_xt.getID2()][ecid_xt.getID3()] << " PACE_ID " << PACE[zs][lay][ecid_xt.getID2()][ecid_xt.getID3()] << " STRIP_ID " << istr+1 << " PEDESTAL " << PED[zs][lay][ecid_xt.getID2()][ecid_xt.getID3()][st-1] << " GAIN " << 1 << " ZS " << ZS[zs][lay][ecid_xt.getID2()][ecid_xt.getID3()][st-1] << " MASKED " << 0 << " CM_MASKED " << CMMASK[zs][lay][ecid_xt.getID2()][ecid_xt.getID3()][st-1] << " CM_RANGE " << CMRange[zs][lay][ecid_xt.getID2()][ecid_xt.getID3()][st-1] << std::endl; 
+			std::cout << "REC_ID " << myRun <<  " FED_ID " << FED[zside][lay][ix][iy] << " OPTORX_ID " << OPTORX[zside][lay][ix][iy] << " FIBER_ID " << FIBER[zside][lay][ix][iy] << " KCHIP_ID " << KCHIP[zside][lay][ix][iy] << " PACE_ID " << PACE[zside][lay][ix][iy] << " STRIP_ID " << istr+1 << " PEDESTAL " << PED[zside][lay][ix][iy][st-1] << " GAIN " << thegain_ << " ZS " << ZS[zside][lay][ix][iy][st-1] << " MASKED " << 0 << " CM_MASKED " << CMMASK[zside][lay][ix][iy][st-1] << " CM_RANGE " << CMRange[zside][lay][ix][iy][st-1] << std::endl; 
 
 
 

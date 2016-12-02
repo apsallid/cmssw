@@ -58,6 +58,7 @@ class ESNewPedestals : public edm::EDAnalyzer {
   enum { kGains = 3, kFirstGainId = 1};
  private:
   int runnumber_;
+  int thegain_;
   unsigned int cnt_evt_;
   std::string ECALType_; // EB or EE
   std::string runType_; // Pedes or Other

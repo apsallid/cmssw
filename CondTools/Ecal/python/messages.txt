@@ -1,4 +1,4 @@
------ Begin Fatal Exception 02-Dec-2016 19:23:25 CET-----------------------
+----- Begin Fatal Exception 16-Nov-2016 13:49:39 CET-----------------------
 An exception of category 'StdException' occurred while
    [0] Processing run: 1
    [1] Calling global beginRun for module ESNewPedestals/'esnewpedestals'

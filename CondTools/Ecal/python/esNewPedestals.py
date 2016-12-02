@@ -26,6 +26,7 @@ process.maxEvents = cms.untracked.PSet(
 process.esnewpedestals = cms.EDAnalyzer("ESNewPedestals",
 
   runnumber = cms.untracked.int32(234594),
+  Gain = cms.untracked.int32(1),
   ECALType = cms.string("EE"),
   runType = cms.string("Pedes"),
   startevent = cms.untracked.uint32(1),
@@ -41,7 +42,7 @@ process.esnewpedestals = cms.EDAnalyzer("ESNewPedestals",
     lastRun = cms.string('100000000'),
     LocationSource = cms.string('P5'),
     OnlineDBUser = cms.string('cms_es_cond'),
-    OnlineDBPassword = cms.string('*******'),
+    OnlineDBPassword = cms.string('********'),
     debug = cms.bool(True),
     Location = cms.string('P5_Co'),
     OnlineDBSID = cms.string('cms_orcon_adg')
