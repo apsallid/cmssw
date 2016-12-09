@@ -14,7 +14,7 @@
 #include "CondFormats/EcalObjects/interface/EcalChannelStatus.h"
 #include "CondFormats/DataRecord/interface/EcalChannelStatusRcd.h"
 #include "OnlineDB/ESCondDB/interface/ESMonPedestalsDat.h"
-
+#include "OnlineDB/ESCondDB/interface/ODESFEPedestalOffsetsDat.h"
 
 //#include<fstream>
 
@@ -55,7 +55,15 @@ ESNewPedestals::ESNewPedestals( const edm::ParameterSet& iConfig ) {
    //now do what ever initialization is needed   
   //  EBDigiCollection_          = iConfig.getParameter<edm::InputTag>("EBDigiCollection");
   runnumber_                 = iConfig.getUntrackedParameter<int>("runnumber",-1);
-  thegain_                 = iConfig.getUntrackedParameter<int>("Gain",-1);
+  thegain_                   = iConfig.getUntrackedParameter<int>("Gain",-1);
+  zerosup                    = iConfig.getParameter<std::string>("ZS");
+  readfeconfinfo             = iConfig.getParameter<bool>("ReadESFECONFINFO"),
+  writefeconfinfo            = iConfig.getParameter<bool>("WriteESFECONFINFO"),
+  readfeconfdat              = iConfig.getParameter<bool>("ReadESFECONFDAT"),
+  cmc                        = iConfig.getParameter<std::string>("cmc");
+  highlowg                   = iConfig.getParameter<std::string>("HighLowG");
+  Ped_sub                    = iConfig.getParameter<std::string>("Ped_sub");
+  Magnet                     = iConfig.getParameter<std::string>("Magnet");
   ECALType_                  = iConfig.getParameter<std::string>("ECALType");
   runType_                   = iConfig.getParameter<std::string>("runType");
   startevent_                = iConfig.getUntrackedParameter<unsigned int>("startevent", 1);
@@ -245,6 +253,34 @@ void ESNewPedestals::beginRun(edm::Run const &, edm::EventSetup const & c) {
   
   run_t myRun=133734;
   subrun_t mySubRun=1;
+  
+  //Creating output tag
+  std::string cmcT= "CMC"; 
+  std::string CMC_Range="4.3";
+  std::string zsT="ZS";
+  std::string ZS_Val="3.0";
+  std::string sub_PedT="PS";
+
+  if ( zerosup=="OFF" ) {  
+    std::cout << "Setting ZS = 1.0 " << std::endl;
+    ZS_Val="1.0";
+    zsT="NZS";
+  } else {
+    std::cout << "ZS_Val(3.0): Going with this for now " << std::endl;
+    zsT="ZS";
+  }
+
+  if( cmc=="OFF" ){ CMC_Range="0.0"; cmcT="NCMC";} 
+  else { CMC_Range = "4.3"; cmcT= "CMC"; }
+
+  if( Ped_sub =="OFF" ) { sub_PedT = "NPS"; } 
+  else { sub_PedT="PS"; }
+
+  std::string outtag = sub_PedT+"_"+zsT+"_"+cmcT+"_"+highlowg+"_"+Magnet;
+  std::cout << "This is the out tag " << outtag << std::endl;
+  
+  
+
         std::cout<<"Looking for run: "<< myRun <<std::endl;
 	try {
   		ESMonRunIOV myMonIOV = econn->fetchESMonRunIOV(&my_runtag, "CMSSW", myRun,mySubRun );	
@@ -255,7 +291,70 @@ void ESNewPedestals::beginRun(edm::Run const &, edm::EventSetup const & c) {
 		std::cout<<"Extracted "<<dataset_mon.size()<<" dataset."<<std::endl;
 	        EcalLogicID ecid_xt;
         	ESMonPedestalsDat  rd_ped;
+		//This is to write the table
+		std::map<EcalLogicID, ODESFEPedestalOffsetsDat > myosfeconfdat; 
+		myosfeconfdat.clear();
+
+		ODESFEPedestalOffsetInfo myosfeconfinfo;
+		// Get Last Version for tag
+		// myosfeconfinfo.setId(276180);
+		// myosfeconfinfo.setConfigTag(outtag);//outtag
+		// myosfeconfinfo.setVersion(1);
+		// myosfeconfinfo.setIov_pl(276180);
+		// myosfeconfinfo.setIov_mi(276180);
+		// myosfeconfinfo.setUser_comment("");
+		//econn->fetchConfigSet(&myosfeconfinfo);
+
+		// The following is to read from database ES_FE_CONF_INFO
+		int therecid;
+		if (readfeconfinfo){
+		  therecid = 12;
+		  myosfeconfinfo.setId(therecid);
+		  // myosfeconfinfo.setConfigTag("PS_ZS_CMC_HG_BON");//outtag
+		  // myosfeconfinfo.setVersion(4);
+		  // myosfeconfinfo.setIov_pl(131328);
+		  // myosfeconfinfo.setIov_mi(131327);
+		  // myosfeconfinfo.setUser_comment("");
+		  econn->fetchConfigSet(&myosfeconfinfo);
+		  std::cout << "Version="  << myosfeconfinfo.getVersion() << " Iov+= " << myosfeconfinfo.getIov_pl() << " Iov-= " << myosfeconfinfo.getIov_mi() << endl;
+		  std::cout << "COMMENT= " <<  myosfeconfinfo.getUser_comment() << "  Id= " << myosfeconfinfo.getId() << " Tag=" << myosfeconfinfo.getConfigTag()  << endl;
+		}
+		
+		
+		// int version= myosfeconfinfo.getVersion()+1;
+		// std::cout << "The TAG = " << outtag << "  is now set with the version number: " << version << endl;
+
+	
+
+		//The following is to write to the database
+		if (writefeconfinfo){
+		  therecid = 276180;
+		  myosfeconfinfo.setId(therecid);
+		  myosfeconfinfo.setConfigTag(outtag);//outtag
+		  myosfeconfinfo.setVersion(1);
+		  myosfeconfinfo.setIov_pl(therecid);
+		  myosfeconfinfo.setIov_mi(therecid);
+		  myosfeconfinfo.setUser_comment("");
+
+		  econn->insertConfigSet(&myosfeconfinfo) ;
+		}
+
+		//The following is to read the esfeconfdat table from the database
+		if (readfeconfdat){
+		  std::vector<ODESFEPedestalOffsetsDat> osfeconfdatread;
+		  osfeconfdatread.clear();
+
+		  econn->fetchConfigDataSet(&osfeconfdatread, &myosfeconfinfo);
+
+		  for (std::vector<ODESFEPedestalOffsetsDat>::iterator it = osfeconfdatread.begin(); it != osfeconfdatread.end(); ++it ){
+		    (*it).print();		      
+		  }
+
+		}
+		
 		for (CImon p = dataset_mon.begin(); p != dataset_mon.end(); p++) {
+		        ODESFEPedestalOffsetsDat tmposfeconfdat;
+			
 			ecid_xt = p->first;
 	                rd_ped  = p->second;
 			// zs here is 1,2,3,4 -> ES+F ES+R ES-F ES-R
@@ -268,6 +367,7 @@ void ESNewPedestals::beginRun(edm::Run const &, edm::EventSetup const & c) {
 
 			if ( ( FED[zside][lay][ix][iy] < 520) || ( FED[zside][lay][ix][iy] > 575) ){continue;}
 			PED[zside][lay][ix][iy][st-1] = rd_ped.getPedMean();
+			PEDRMS[zside][lay][ix][iy][st-1] = rd_ped.getPedRMS();
 
 			// This is for the strip_id: Flip strip numbering from detector id to HW id
 			int istr = st-1;
@@ -277,17 +377,90 @@ void ESNewPedestals::beginRun(edm::Run const &, edm::EventSetup const & c) {
 			if (zside==1 && lay==0 && iy>=20) istr = 31 - istr;
 			if (zside==1 && lay==1 && ix<20) istr = 31 - istr;
 	
-			std::cout<<"Mean: "<<rd_ped.getPedMean() <<" - RMS: "<< rd_ped.getPedRMS()<< " - LOGIC_ID: " << ecid_xt.getLogicID() << " - id1: "<< ecid_xt.getID1() <<" - id2: " << ix << " - id3: "<< iy << " - getMapsTo: "<< ecid_xt.getMapsTo() << " - z value: " << ( (int) ecid_xt.getLogicID()/1000000 ) % 10 << " - strip " << ecid_xt.getLogicID() % 100  << std::endl;			
-			//Here I will fill the table with the required values
-			std::cout << "REC_ID " << myRun <<  " FED_ID " << FED[zside][lay][ix][iy] << " OPTORX_ID " << OPTORX[zside][lay][ix][iy] << " FIBER_ID " << FIBER[zside][lay][ix][iy] << " KCHIP_ID " << KCHIP[zside][lay][ix][iy] << " PACE_ID " << PACE[zside][lay][ix][iy] << " STRIP_ID " << istr+1 << " PEDESTAL " << PED[zside][lay][ix][iy][st-1] << " GAIN " << thegain_ << " ZS " << ZS[zside][lay][ix][iy][st-1] << " MASKED " << 0 << " CM_MASKED " << CMMASK[zside][lay][ix][iy][st-1] << " CM_RANGE " << CMRange[zside][lay][ix][iy][st-1] << std::endl; 
+			// std::cout<<"Mean: "<<rd_ped.getPedMean() <<" - RMS: "<< rd_ped.getPedRMS()<< " - LOGIC_ID: " << ecid_xt.getLogicID() << " - id1: "<< ecid_xt.getID1() <<" - id2: " << ix << " - id3: "<< iy << " - getMapsTo: "<< ecid_xt.getMapsTo() << " - z value: " << ( (int) ecid_xt.getLogicID()/1000000 ) % 10 << " - strip " << ecid_xt.getLogicID() % 100  << std::endl;			
+			// // Here I will fill the table with the required values
+			// std::cout << "REC_ID " << myRun <<  " FED_ID " << FED[zside][lay][ix][iy] << " OPTORX_ID " << OPTORX[zside][lay][ix][iy] << " FIBER_ID " << FIBER[zside][lay][ix][iy] << " KCHIP_ID " << KCHIP[zside][lay][ix][iy] << " PACE_ID " << PACE[zside][lay][ix][iy] << " STRIP_ID " << istr+1 << " PEDESTAL " << PED[zside][lay][ix][iy][st-1] << " GAIN " << thegain_ << " ZS " << ZS[zside][lay][ix][iy][st-1] << " MASKED " << 0 << " CM_MASKED " << CMMASK[zside][lay][ix][iy][st-1] << " CM_RANGE " << CMRange[zside][lay][ix][iy][st-1] << std::endl; 
+
+			int maskedval = 0;
+			if( (PEDRMS[zside][lay][ix][iy][st-1] > 20) || (PEDRMS[zside][lay][ix][iy][st-1] < 3 ) ) {maskedval = 1;}
+			else {maskedval = 0;}
+			
+			if( std::atof(CMC_Range.c_str()) != 0.0 ) { 
+			  CMRange[zside][lay][ix][iy][st-1] = std::atof(CMC_Range.c_str()) * PEDRMS[zside][lay][ix][iy][st-1];
+			} else { 
+			  CMRange[zside][lay][ix][iy][st-1] = 0;
+			}
+
+			if(PEDRMS[zside][lay][ix][iy][st-1] > 8 ) { CMMASK[zside][lay][ix][iy][st-1] = 1; }
+			else { CMMASK[zside][lay][ix][iy][st-1] = 0; }
+
+			if( std::atof(ZS_Val.c_str()) != 1.0) { 
+			  ZS[zside][lay][ix][iy][st-1] = std::atof(ZS_Val.c_str()) * PEDRMS[zside][lay][ix][iy][st-1];
+			} else {
+			  ZS[zside][lay][ix][iy][st-1] = 1;
+			}
 
 
+			tmposfeconfdat.setId(myRun); 
+			tmposfeconfdat.setFedId(FED[zside][lay][ix][iy]); 
+			tmposfeconfdat.setFiberId(FIBER[zside][lay][ix][iy]); 
+			tmposfeconfdat.setKchipId(KCHIP[zside][lay][ix][iy]); 
+			tmposfeconfdat.setPaceId(PACE[zside][lay][ix][iy]); 
+			tmposfeconfdat.setStripId(istr+1); 
+			tmposfeconfdat.setRxId(OPTORX[zside][lay][ix][iy]); 
+			tmposfeconfdat.setGain(thegain_); 
+			tmposfeconfdat.setPedestal(PED[zside][lay][ix][iy][st-1]); 
+			tmposfeconfdat.setMasked(maskedval); 
+			tmposfeconfdat.setZs(ZS[zside][lay][ix][iy][st-1]); 
+			tmposfeconfdat.setCmMasked(CMMASK[zside][lay][ix][iy][st-1]); 
+			tmposfeconfdat.setCmRange(CMRange[zside][lay][ix][iy][st-1]); 
+			tmposfeconfdat.setRms(PEDRMS[zside][lay][ix][iy][st-1]); 
 
-		}		
+			myosfeconfdat.insert( std::map<EcalLogicID, ODESFEPedestalOffsetsDat >::value_type( ecid_xt,  tmposfeconfdat ) );
+
+			//myosfeconfdat.push_back( tmposfeconfdat );
+
+			
+
+
+		}	
+
+		if ( econn ) {
+		  try {
+		    std::cout << "Inserting new Config Pedestals Data ..." << std::endl;
+		    // if ( myosfeconfdat.size() != 0 ) econn->insertConfigDataArraySet(myosfeconfdat,myosfeconfinfo);
+
+		    //if ( myosfeconfdat.size() != 0 ) econn->insertDataArraySet(&myosfeconfdat,&myosfeconfinfo);
+
+		    std::cout << "done." << std::endl;
+		  } catch (runtime_error &e) {
+		    cerr << e.what() << endl;
+		  }
+		}
+			
+
+	
 
 	} catch (exception &e) {
 		std::cout << e.what() << std::endl;
 	}
+
+	RunTag my_outruntag;
+	my_outruntag.setLocationDef(my_locdef);
+	my_outruntag.setRunTypeDef(my_rundef);
+	my_outruntag.setGeneralTag("LOCAL");	
+
+	run_t myoutRun=276180;
+	RunIOV outRunIOV;
+	outRunIOV.setRunTag(my_outruntag);
+	outRunIOV.setRunNumber(myoutRun);
+
+	// ESMonRunIOV outMonIOV;
+	// outMonIOV.setSubRunNumber(mySubRun);
+	// outMonIOV.setRunIOV(outRunIOV);
+	// outMonIOV.writeDB( &ecid_xt, &rd_ped, &outMonIOV );
+
+
 	int mon_runs = 1;
   std::cout << "number of Mon runs is : " << mon_runs<< std::endl;
 

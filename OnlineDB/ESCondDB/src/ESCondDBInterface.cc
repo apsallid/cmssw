@@ -64,3 +64,4 @@ string ESCondDBInterface::query_location(const int num)  throw(std::runtime_erro
   }
  return  loc ;
 }
+

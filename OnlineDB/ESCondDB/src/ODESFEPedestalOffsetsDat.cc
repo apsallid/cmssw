@@ -83,9 +83,11 @@ void ODESFEPedestalOffsetsDat::writeDB(const ODESFEPedestalOffsetsDat* item, ODE
 //  ************************************************************************   // 
 
 void ODESFEPedestalOffsetsDat::fetchData(std::vector< ODESFEPedestalOffsetsDat >* p, ODESFEPedestalOffsetInfo* iov)
+// void ODESFEPedestalOffsetsDat::fetchData(std::map<EcalLogicID, ODESFEPedestalOffsetsDat >* fillMap, ODESFEPedestalOffsetInfo* iov)
   throw(std::runtime_error)
 {
   this->checkConnection();
+  // fillMap->clear();
 
   iov->setConnection(m_env, m_conn);
   int iovID = iov->fetchID();
@@ -99,10 +101,11 @@ void ODESFEPedestalOffsetsDat::fetchData(std::vector< ODESFEPedestalOffsetsDat >
     m_readStmt->setInt(1, iovID);
     ResultSet* rset = m_readStmt->executeQuery();
 
-
+    // std::pair< EcalLogicID, ODESFEPedestalOffsetsDat > p;
     ODESFEPedestalOffsetsDat dat;
+
     while(rset->next()) {
-      // dat.setId( rset->getInt(1) );
+      dat.setId( rset->getInt(1) );
       dat.setFedId( rset->getInt(2) );
       dat.setFiberId( rset->getInt(3) );
       dat.setKchipId( rset->getInt(4) );
@@ -115,10 +118,11 @@ void ODESFEPedestalOffsetsDat::fetchData(std::vector< ODESFEPedestalOffsetsDat >
       dat.setZs( rset->getInt(11) );
       dat.setCmMasked( rset->getInt(12) );
       dat.setCmRange( rset->getInt(13) );
-      dat.setRms( rset->getInt(14) );
+      //dat.setRms( rset->getInt(14) );
 
       p->push_back( dat);
 
+ 
     }
 
   } catch (SQLException &e) {
@@ -323,3 +327,15 @@ void ODESFEPedestalOffsetsDat::writeArrayDB(const std::vector< ODESFEPedestalOff
     throw(runtime_error("ODESFEPedestalOffsetsDat::writeArrayDB():  "+e.getMessage()));
   }
 }
+
+void ODESFEPedestalOffsetsDat::print(void) const 
+{
+  
+  std::cout << "REC_ID " <<  m_ID <<  " FED_ID " <<  m_fed_id << " OPTORX_ID " <<  m_rx_id << " FIBER_ID " << m_fiber_id  << " KCHIP_ID " <<  m_kchip_id << " PACE_ID " << m_pace_id  << " STRIP_ID " << m_strip_id << " PEDESTAL " <<  m_pedestal << " GAIN " << m_gain << " ZS " <<  m_zs << " MASKED " <<  m_masked << " CM_MASKED " << m_cm_masked << " CM_RANGE " << m_cm_range << std::endl; 
+
+
+
+}
+
+
+

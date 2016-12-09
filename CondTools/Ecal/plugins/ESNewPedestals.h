@@ -59,13 +59,15 @@ class ESNewPedestals : public edm::EDAnalyzer {
  private:
   int runnumber_;
   int thegain_;
+  bool readfeconfinfo, writefeconfinfo, readfeconfdat;
+  std::string zerosup, cmc, highlowg, Ped_sub, Magnet;
   unsigned int cnt_evt_;
   std::string ECALType_; // EB or EE
   std::string runType_; // Pedes or Other
   unsigned int startevent_; 
   FileInPath lookuptable_;
   Int_t FED[2][2][40][40], KCHIP[2][2][40][40], PACE[2][2][40][40], FIBER[2][2][40][40], OPTORX[2][2][40][40];
-  Int_t PED[2][2][40][40][32], MASK[2][2][40][40][32], CMMASK[2][2][40][40][32], ZS[2][2][40][40][32];
+  Int_t PED[2][2][40][40][32], PEDRMS[2][2][40][40][32], MASK[2][2][40][40][32], CMMASK[2][2][40][40][32], ZS[2][2][40][40][32];
   Int_t CMRange[2][2][40][40][32];
   std::vector<int> maskedChannels_;
   std::vector<int> maskedEEChannels_;

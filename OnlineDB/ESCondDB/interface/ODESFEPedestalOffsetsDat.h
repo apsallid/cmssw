@@ -64,6 +64,8 @@ class ODESFEPedestalOffsetsDat : public IODConfig {
   inline void setRms(int rms) { m_rms = rms; }
   inline int getRms() const { return m_rms; }
 
+  void print(void) const;
+
  private:
   void prepareWrite() 
     throw(std::runtime_error);

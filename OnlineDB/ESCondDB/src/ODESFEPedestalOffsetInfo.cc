@@ -84,8 +84,10 @@ void ODESFEPedestalOffsetInfo::prepareWrite()
   try {
     m_writeStmt = m_conn->createStatement();
     m_writeStmt->setSQL("INSERT INTO "+getTable()+
-      " ( rec_id, tag, version,iov_id_es_pl,iov_id_es_mi,user_comment, magnet, gain, pedzero) " 
-	  " VALUES ( :1, :2, :3 ,:4, :5, :6, :7, :8, :9) " );
+      " ( rec_id, tag, version,iov_id_es_pl,iov_id_es_mi,user_comment) " 
+	  " VALUES ( :1, :2, :3 ,:4, :5, :6) " );
+      // " ( rec_id, tag, version,iov_id_es_pl,iov_id_es_mi,user_comment, magnet, gain, pedzero) " 
+      // 	  " VALUES ( :1, :2, :3 ,:4, :5, :6, :7, :8, :9) " );
     m_writeStmt->setInt(1, next_id);
     m_ID=next_id;
     cout << "Id= " << m_ID << endl;
@@ -126,9 +128,9 @@ void ODESFEPedestalOffsetInfo::writeDB()
     m_writeStmt->setInt(4, this->getIov_pl());
     m_writeStmt->setInt(5, this->getIov_mi());
     m_writeStmt->setString(6, this->getUser_comment());
-    m_writeStmt->setInt(7, this->getMagnet());
-    m_writeStmt->setInt(8, this->getGain());
-    m_writeStmt->setInt(9, this->getZero());
+    //    m_writeStmt->setInt(7, this->getMagnet());
+    //m_writeStmt->setInt(8, this->getGain());
+    //m_writeStmt->setInt(9, this->getZero());
 
     m_writeStmt->executeUpdate();
   } catch (SQLException &e) {
@@ -167,7 +169,7 @@ void ODESFEPedestalOffsetInfo::fetchData(ODESFEPedestalOffsetInfo * result)
       m_readStmt->setSQL("SELECT * FROM " + getTable() +   
 			 " where  rec_id = :1 ");
       m_readStmt->setInt(1, result->getId());
-   } else if (result->getVersion()==0) {
+    } else if (result->getVersion()==0) {
       m_readStmt->setSQL("SELECT * FROM "+ getTable() +
           " where version = ( select max(version) from "+ getTable() +" ) and tag=:1");
       m_readStmt->setString(1, result->getConfigTag());
@@ -192,9 +194,9 @@ void ODESFEPedestalOffsetInfo::fetchData(ODESFEPedestalOffsetInfo * result)
     result->setIov_pl(rset->getInt(4));
     result->setIov_mi(rset->getInt(5));
     result->setUser_comment(rset->getString(6));
-    result->setMagnet(rset->getInt(7));
-    result->setGain(rset->getInt(8));
-    result->setZero(rset->getInt(9));
+    //result->setMagnet(rset->getInt(7));
+    //result->setGain(rset->getInt(8));
+    //result->setZero(rset->getInt(9));
 
     
   } catch (SQLException &e) {

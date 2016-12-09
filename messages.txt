@@ -1,8 +1,1 @@
------ Begin Fatal Exception 02-Dec-2016 19:23:25 CET-----------------------
-An exception of category 'StdException' occurred while
-   [0] Processing run: 1
-   [1] Calling global beginRun for module ESNewPedestals/'esnewpedestals'
-Exception Message:
-A std::exception was thrown.
-ERROR:  Connection Failed:  ORA-01017: invalid username/password; logon denied
------ End Fatal Exception -------------------------------------------------
+Begin processing the 1st record. Run 1, Event 1, LumiSection 1 at 09-Dec-2016 15:47:20.626 CET
