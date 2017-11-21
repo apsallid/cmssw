@@ -55,11 +55,13 @@ ESNewPedestals::ESNewPedestals( const edm::ParameterSet& iConfig ) {
    //now do what ever initialization is needed   
   //  EBDigiCollection_          = iConfig.getParameter<edm::InputTag>("EBDigiCollection");
   runnumber_                 = iConfig.getUntrackedParameter<int>("runnumber",-1);
+  therecid_                 = iConfig.getUntrackedParameter<int>("ESFECONFINFO_recid",-1);
   thegain_                   = iConfig.getUntrackedParameter<int>("Gain",-1);
   zerosup                    = iConfig.getParameter<std::string>("ZS");
   readfeconfinfo             = iConfig.getParameter<bool>("ReadESFECONFINFO"),
   writefeconfinfo            = iConfig.getParameter<bool>("WriteESFECONFINFO"),
   readfeconfdat              = iConfig.getParameter<bool>("ReadESFECONFDAT"),
+  writefeconfdat              = iConfig.getParameter<bool>("WriteESFECONFDAT"),
   cmc                        = iConfig.getParameter<std::string>("cmc");
   highlowg                   = iConfig.getParameter<std::string>("HighLowG");
   Ped_sub                    = iConfig.getParameter<std::string>("Ped_sub");
@@ -118,7 +120,8 @@ ESNewPedestals::ESNewPedestals( const edm::ParameterSet& iConfig ) {
   m_locationsource = iConfig.getParameter<std::string>("LocationSource");
   m_location = iConfig.getParameter<std::string>("Location");
   m_gentag = iConfig.getParameter<std::string>("GenTag");
-  std::cout << m_sid<<"/"<<m_user<<"/"<<m_pass<<"/"<<m_location<<"/"<<m_gentag   << std::endl;
+  m_esmonruniovtag= iConfig.getParameter<std::string>("ESMonRunIOVTag");
+  std::cout << m_sid<<"/"<<m_user<<"/"<<m_pass<<"/"<<m_location<<"/"<<m_gentag   << "/"<<m_esmonruniovtag <<std::endl;
 
   vector<int> listDefaults;
   listDefaults.push_back(-1);  
@@ -242,16 +245,16 @@ void ESNewPedestals::beginRun(edm::Run const &, edm::EventSetup const & c) {
   my_rundef.setRunType("PEDESTAL");
   my_runtag.setLocationDef(my_locdef);
   my_runtag.setRunTypeDef(my_rundef);
-  my_runtag.setGeneralTag("LOCAL");	
+  my_runtag.setGeneralTag(m_gentag); //was LOCAL in a previous time. This is GEN_TAG of RUN_TAG. PEDESTAL
 
   // here we retrieve the Monitoring run records
   MonVersionDef monverdef;
   monverdef.setMonitoringVersion("test01");
   MonRunTag mon_tag;
-  mon_tag.setGeneralTag("CMSSW");
+  mon_tag.setGeneralTag(m_esmonruniovtag); //was CMSSW
   mon_tag.setMonVersionDef(monverdef);
   
-  run_t myRun=133734;
+  run_t myRun=runnumber_; //289591  133734
   subrun_t mySubRun=1;
   
   //Creating output tag
@@ -283,7 +286,7 @@ void ESNewPedestals::beginRun(edm::Run const &, edm::EventSetup const & c) {
 
         std::cout<<"Looking for run: "<< myRun <<std::endl;
 	try {
-  		ESMonRunIOV myMonIOV = econn->fetchESMonRunIOV(&my_runtag, "CMSSW", myRun,mySubRun );	
+  		ESMonRunIOV myMonIOV = econn->fetchESMonRunIOV(&my_runtag, m_esmonruniovtag, myRun,mySubRun );	
 		std::cout<<"MonIOV ID: "<<myMonIOV.fetchID()<<std::endl;
 		std::map<EcalLogicID, ESMonPedestalsDat> dataset_mon;
 		econn->fetchDataSet(&dataset_mon, &myMonIOV);
@@ -292,8 +295,10 @@ void ESNewPedestals::beginRun(edm::Run const &, edm::EventSetup const & c) {
 	        EcalLogicID ecid_xt;
         	ESMonPedestalsDat  rd_ped;
 		//This is to write the table
-		std::map<EcalLogicID, ODESFEPedestalOffsetsDat > myosfeconfdat; 
+		// std::map<EcalLogicID, ODESFEPedestalOffsetsDat > myosfeconfdat; 
+		std::vector<ODESFEPedestalOffsetsDat > myosfeconfdat;
 		myosfeconfdat.clear();
+		
 
 		ODESFEPedestalOffsetInfo myosfeconfinfo;
 		// Get Last Version for tag
@@ -306,10 +311,8 @@ void ESNewPedestals::beginRun(edm::Run const &, edm::EventSetup const & c) {
 		//econn->fetchConfigSet(&myosfeconfinfo);
 
 		// The following is to read from database ES_FE_CONF_INFO
-		int therecid;
 		if (readfeconfinfo){
-		  therecid = 12;
-		  myosfeconfinfo.setId(therecid);
+		  myosfeconfinfo.setId(therecid_);
 		  // myosfeconfinfo.setConfigTag("PS_ZS_CMC_HG_BON");//outtag
 		  // myosfeconfinfo.setVersion(4);
 		  // myosfeconfinfo.setIov_pl(131328);
@@ -328,13 +331,15 @@ void ESNewPedestals::beginRun(edm::Run const &, edm::EventSetup const & c) {
 
 		//The following is to write to the database
 		if (writefeconfinfo){
-		  therecid = 276180;
-		  myosfeconfinfo.setId(therecid);
+		  myosfeconfinfo.setId(0);//=>The code will increment from the last max rec_id when it sees the 0.
 		  myosfeconfinfo.setConfigTag(outtag);//outtag
 		  myosfeconfinfo.setVersion(1);
-		  myosfeconfinfo.setIov_pl(therecid);
-		  myosfeconfinfo.setIov_mi(therecid);
-		  myosfeconfinfo.setUser_comment("");
+		  myosfeconfinfo.setIov_pl(0);
+		  myosfeconfinfo.setIov_mi(0);
+		  myosfeconfinfo.setUser_comment("write test andreas");
+		  // myosfeconfinfo.setMagnet(0);
+		  // myosfeconfinfo.setGain(0);
+		  // myosfeconfinfo.setZero(0);
 
 		  econn->insertConfigSet(&myosfeconfinfo) ;
 		}
@@ -401,7 +406,7 @@ void ESNewPedestals::beginRun(edm::Run const &, edm::EventSetup const & c) {
 			}
 
 
-			tmposfeconfdat.setId(myRun); 
+			tmposfeconfdat.setId(therecid_); 
 			tmposfeconfdat.setFedId(FED[zside][lay][ix][iy]); 
 			tmposfeconfdat.setFiberId(FIBER[zside][lay][ix][iy]); 
 			tmposfeconfdat.setKchipId(KCHIP[zside][lay][ix][iy]); 
@@ -416,21 +421,23 @@ void ESNewPedestals::beginRun(edm::Run const &, edm::EventSetup const & c) {
 			tmposfeconfdat.setCmRange(CMRange[zside][lay][ix][iy][st-1]); 
 			tmposfeconfdat.setRms(PEDRMS[zside][lay][ix][iy][st-1]); 
 
-			myosfeconfdat.insert( std::map<EcalLogicID, ODESFEPedestalOffsetsDat >::value_type( ecid_xt,  tmposfeconfdat ) );
+			// myosfeconfdat.insert( std::map<EcalLogicID, ODESFEPedestalOffsetsDat >::value_type( ecid_xt,  tmposfeconfdat ) );
 
-			//myosfeconfdat.push_back( tmposfeconfdat );
+			myosfeconfdat.push_back( tmposfeconfdat );
 
 			
 
 
 		}	
 
-		if ( econn ) {
+		if ( econn && writefeconfdat ) {
 		  try {
 		    std::cout << "Inserting new Config Pedestals Data ..." << std::endl;
-		    // if ( myosfeconfdat.size() != 0 ) econn->insertConfigDataArraySet(myosfeconfdat,myosfeconfinfo);
+		    std::cout << myosfeconfdat.size() << std::endl;
+		    if ( myosfeconfdat.size() != 0 ) econn->insertConfigDataArraySet(myosfeconfdat,&myosfeconfinfo);
+		    // if ( myosfeconfdat.size() != 0 ) econn->insertConfigDataSet(myosfeconfdat,&myosfeconfinfo);
 
-		    //if ( myosfeconfdat.size() != 0 ) econn->insertDataArraySet(&myosfeconfdat,&myosfeconfinfo);
+		    // if ( myosfeconfdat.size() != 0 ) econn->insertDataArraySet(&myosfeconfdat,&myosfeconfinfo);
 
 		    std::cout << "done." << std::endl;
 		  } catch (runtime_error &e) {

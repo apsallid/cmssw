@@ -58,8 +58,9 @@ class ESNewPedestals : public edm::EDAnalyzer {
   enum { kGains = 3, kFirstGainId = 1};
  private:
   int runnumber_;
+  int therecid_;
   int thegain_;
-  bool readfeconfinfo, writefeconfinfo, readfeconfdat;
+  bool readfeconfinfo, writefeconfinfo, readfeconfdat, writefeconfdat;
   std::string zerosup, cmc, highlowg, Ped_sub, Magnet;
   unsigned int cnt_evt_;
   std::string ECALType_; // EB or EE
@@ -75,6 +76,7 @@ class ESNewPedestals : public edm::EDAnalyzer {
   unsigned int m_lastRun ;
   std::string m_location;
   std::string m_gentag;
+  std::string m_esmonruniovtag;
   std::string m_sid;
   std::string m_user;
   std::string m_pass;
