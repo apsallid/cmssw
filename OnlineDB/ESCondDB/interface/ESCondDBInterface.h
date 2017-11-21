@@ -45,7 +45,7 @@ class ESCondDBInterface : public EcalCondDBInterface {
 		      std::string sid,
 		      std::string user,
 		      std::string pass,
-		      int port=1521 )
+		    int port=10121 ) //was 1521
    : EcalCondDBInterface ( host, sid, user, pass, port )
    {
      // call the parent constructor
