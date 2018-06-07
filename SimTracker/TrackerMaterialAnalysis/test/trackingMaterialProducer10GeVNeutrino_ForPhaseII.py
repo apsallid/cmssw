@@ -11,7 +11,7 @@ readGeometryFromDB = False
 # only a temporary hack, since the material description has
 # been updated in release via XML and the DB is behind.
 if not readGeometryFromDB:
-  process.load('Configuration.Geometry.GeometryExtended2023D4_cff')
+  process.load('Configuration.Geometry.GeometryExtended2023D17_cff')
 else:
 # GlobalTag and geometry via GT
   process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
@@ -38,7 +38,7 @@ process.load("SimTracker.TrackerMaterialAnalysis.trackingMaterialProducer_cff")
 process.trackingMaterialProducer.StackingAction.TrackNeutrino = True
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(200000)
+    input = cms.untracked.int32(200)
 )
 
 # Input source
@@ -84,5 +84,5 @@ def customizeMessageLogger(process):
 
     return process
 
-#process = customizeMessageLogger(process)
+process = customizeMessageLogger(process)
 

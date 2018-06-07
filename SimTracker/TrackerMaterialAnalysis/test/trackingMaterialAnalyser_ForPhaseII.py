@@ -16,12 +16,14 @@ if readGeometryFromDB:
   from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
   process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc', '')
 else:
-  process.load('Configuration.Geometry.GeometryExtended2023D4Reco_cff')
+  #process.load('Configuration.Geometry.GeometryExtended2023D4Reco_cff')
+  process.load("Geometry.HGCalCommonData.testHGCV9XML_cfi")
+  process.load("Geometry.HGCalCommonData.hgcalParametersInitialization_cfi")
 
 process.load('FWCore.MessageService.MessageLogger_cfi')
 
 # Add our custom detector grouping to DDD
-process.XMLIdealGeometryESSource.geomXMLFiles.extend(['SimTracker/TrackerMaterialAnalysis/data/trackingMaterialGroups_ForPhaseII_D4.xml'])
+#process.XMLIdealGeometryESSource.geomXMLFiles.extend(['SimTracker/TrackerMaterialAnalysis/data/trackingMaterialGroups_ForPhaseII_D4.xml'])
 
 # Analyze and plot the tracking material
 process.load("SimTracker.TrackerMaterialAnalysis.trackingMaterialAnalyser_ForPhaseII_cff")
@@ -68,6 +70,6 @@ def customizeMessageLogger(process):
     return process
 
 
-#process = customizeMessageLogger(process)
+process = customizeMessageLogger(process)
 
 
