@@ -17,7 +17,11 @@
 #include "SimDataFormats/ValidationFormats/interface/MaterialAccountingDetector.h"
 #include "MaterialAccountingGroup.h"
 
+#include "CLHEP/Units/GlobalPhysicalConstants.h"
+#include "CLHEP/Units/GlobalSystemOfUnits.h"
+
 double const MaterialAccountingGroup::s_tolerance = 0.01; // 100um should be small enough that no elements from different layers/groups are so close
+double const MaterialAccountingGroup::tolerance   = 0.001; 
 
 MaterialAccountingGroup::MaterialAccountingGroup( const std::string & name, const DDCompactView & geometry ) :
   m_name( name ),
@@ -30,8 +34,18 @@ MaterialAccountingGroup::MaterialAccountingGroup( const std::string & name, cons
   m_file( nullptr )
 {
   // retrieve the elements from DDD
+  DDValue namevalue;
+  if ( TString(name.c_str()).Contains( "Tracker" )  ){
+    namevalue = DDValue("TrackingMaterialGroup", name);
+  } else if ( TString(name.c_str()).Contains( "HGCal" )  ){
+    namevalue = DDValue("Volume", name);
+  } else{
+    std::cout << name  << std::endl;
+    std::cerr << "Only Tracker and HGCal is supported" << std::endl;
+  }
   // DDSpecificsMatchesValueFilter filter{DDValue("TrackingMaterialGroup", name)};
-  DDSpecificsMatchesValueFilter filter{DDValue("Volume", name)};
+  // DDSpecificsMatchesValueFilter filter{DDValue("Volume", name)};
+  DDSpecificsMatchesValueFilter filter{namevalue};
   DDFilteredView fv( geometry,filter );
   LogTrace("MaterialAccountingGroup") << "Elements within: " << name << std::endl;
   while (fv.next()) {
@@ -41,8 +55,11 @@ MaterialAccountingGroup::MaterialAccountingGroup( const std::string & name, cons
               << GlobalPoint(position.x(), position.y(), position.z()).perp()
               << ", " << GlobalPoint(position.x(), position.y(), position.z()).z()
               << ") cm" << std::endl;
+    LogTrace("MaterialAccountingGroup") << "Adding " << fv.logicalPart().toString() << " at(x,y,z): "
+              << position.x() <<  " cm, " <<position.y() <<  " cm, " << position.z() << " cm, " << std::endl;
     LogTrace("MaterialAccountingGroup") << "Name of added element: "
                                         << fv.logicalPart().toString() << std::endl;
+
     m_elements.push_back( GlobalPoint(position.x(), position.y(), position.z()) );
   }
 
