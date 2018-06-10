@@ -50,7 +50,7 @@ TrackingMaterialAnalyser::TrackingMaterialAnalyser(const edm::ParameterSet& iPSe
   m_saveXml                 = iPSet.getParameter<bool>("SaveXML");
   if (m_saveSummaryPlot)
     // m_plotter               = new TrackingMaterialPlotter( 300., 120., 10 );      // 10x10 points per cm2
-    m_plotter               = new TrackingMaterialPlotter( 520., 270., 10 );      // 10x10 points per cm2
+    m_plotter               = new TrackingMaterialPlotter( 550., 350., 10 );      // 10x10 points per cm2
   else
     m_plotter               = nullptr;
 }
