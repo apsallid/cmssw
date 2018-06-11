@@ -48,7 +48,11 @@ _LABELS2COMPS = {'BeamPipe': 'BEAM',
                  'Phase2PixelBarrel': 'Phase2PixelBarrel',
                  'Phase2OTBarrel': 'Phase2OTBarrel',
                  'Phase2PixelEndcap': 'Phase2PixelEndcap',
-                 'Phase2OTForward': 'Phase2OTForward'}
+                 'Phase2OTForward': 'Phase2OTForward',
+                 'HGCal': 'HGCal',
+                 'HGCalEE': 'HGCalEE',
+                 'HGCalHE': ['HGCalHEsil', 'HGCalHEmix']
+                 }
 
 # Compounds are used to stick together different part of the Tracker
 # detector, so that their cumulative material description can be
@@ -71,6 +75,10 @@ COMPOUNDS["TrackerSumPhaseII"] = ["BeamPipe",
 COMPOUNDS["Pixel"] = ["PixBar", "PixFwdMinus", "PixFwdPlus"]
 COMPOUNDS["Strip"] = ["TIB", "TIDF", "TIDB", "InnerServices", "TOB", "TEC"]
 COMPOUNDS["InnerTracker"] = ["TIB", "TIDF", "TIDB", "InnerServices"]
+COMPOUNDS["HGCal"] = ["HGCal"]
+COMPOUNDS["HGCalEE"] = ["HGCalEE"]
+COMPOUNDS["HGCalHE"] = ["HGCalHEsil", "HGCalHEmix"]
+
 
 # The DETECTORS must be the single component of the tracker for which
 # the user can ask for the corresponding material description.
@@ -90,6 +98,9 @@ DETECTORS["TIDF"] = kMagenta+2
 DETECTORS["TIDB"] = kMagenta+2
 DETECTORS["TOB"] = kOrange+10
 DETECTORS["TEC"] = kOrange-2
+DETECTORS["HGCal"] = kAzure-5
+DETECTORS["HGCalEE"] = kAzure-9
+DETECTORS["HGCalHE"] = kOrange-2
 
 # sDETS are the label of the Tracker elements in the Reconstruction
 # geometry. They are all used to derive the reconstruction material
