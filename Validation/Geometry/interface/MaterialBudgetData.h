@@ -302,6 +302,8 @@ public:
   float theSupportFractionIL, theSensitiveFractionIL, theCablesFractionIL,
     theCoolingFractionIL, theElectronicsFractionIL, theOtherFractionIL, theAirFractionIL;
   float theSupportMB, theSensitiveMB, theCablesMB, theCoolingMB, theElectronicsMB, theOtherMB, theAirMB;
+  //HGCal
+  float theCopperMB, theH_ScintillatorMB, theLeadMB, theM_NEMA_FR4_plateMB, theSiliconMB, theStainlessSteelMB, theWCuMB;
   float theTotalIL;
   float theSupportIL, theSensitiveIL, theCablesIL, theCoolingIL, theElectronicsIL, theOtherIL, theAirIL;
   // rr

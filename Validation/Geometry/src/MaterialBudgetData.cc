@@ -122,6 +122,15 @@ void MaterialBudgetData::dataStartTrack( const G4Track* aTrack )
   theElectronicsMB = 0.;
   theOtherMB       = 0.;
   theAirMB         = 0.;
+  //HGCal
+  theCopperMB           = 0.;
+  theH_ScintillatorMB   = 0.;
+  theLeadMB             = 0.;
+  theM_NEMA_FR4_plateMB = 0.;
+  theSiliconMB          = 0.;
+  theStainlessSteelMB   = 0.;
+  theWCuMB              = 0.;
+
   theSupportIL     = 0.;
   theSensitiveIL   = 0.;
   theCablesIL      = 0.;
@@ -129,6 +138,16 @@ void MaterialBudgetData::dataStartTrack( const G4Track* aTrack )
   theElectronicsIL = 0.;
   theOtherIL       = 0.;
   theAirIL         = 0.;
+
+  //HGCal
+  theCopperIL           = 0.;
+  theH_ScintillatorIL   = 0.;
+  theLeadIL             = 0.;
+  theM_NEMA_FR4_plateIL = 0.;
+  theSiliconIL          = 0.;
+  theStainlessSteelIL   = 0.;
+  theWCuIL              = 0.;
+  
   theSupportFractionMB     = 0.;
   theSensitiveFractionMB   = 0.;
   theCablesFractionMB      = 0.;
@@ -165,8 +184,13 @@ void MaterialBudgetData::dataEndTrack( const G4Track* aTrack )
   //-  std::cout << "[OVAL] MaterialBudget " << G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID() << " " << theEta << " " << thePhi << " " << theTotalMB << std::endl;
   // rr
   std::cout << "Recorded steps " << theStepN << std::endl;
-  std::cout << " Material Budget: Radiation Length   " << "G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID()" << " eta " << theEta << " phi " << thePhi << " total X " << theTotalMB << " SUP " << theSupportMB << " SEN " << theSensitiveMB << " CAB " << theCablesMB << " COL " << theCoolingMB << " ELE " << theElectronicsMB << " other " << theOtherMB << " Air " << theAirMB << std::endl;
-  std::cout << " Material Budget: Interaction Length " << "G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID()" << " eta " << theEta << " phi " << thePhi << " total L " << theTotalIL << " SUP " << theSupportIL << " SEN " << theSensitiveIL << " CAB " << theCablesIL << " COL " << theCoolingIL << " ELE " << theElectronicsIL << " other " << theOtherIL << " Air " << theAirIL << std::endl;
+  // std::cout << " Material Budget: Radiation Length   " << "G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID()" << " eta " << theEta << " phi " << thePhi << " total X " << theTotalMB << " SUP " << theSupportMB << " SEN " << theSensitiveMB << " CAB " << theCablesMB << " COL " << theCoolingMB << " ELE " << theElectronicsMB << " other " << theOtherMB << " Air " << theAirMB << std::endl;
+    // std::cout << " Material Budget: Interaction Length " << "G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID()" << " eta " << theEta << " phi " << thePhi << " total L " << theTotalIL << " SUP " << theSupportIL << " SEN " << theSensitiveIL << " CAB " << theCablesIL << " COL " << theCoolingIL << " ELE " << theElectronicsIL << " other " << theOtherIL << " Air " << theAirIL << std::endl;
+
+  std::cout << " HGCal Material Budget: Radiation Length   " << "G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID()" << " eta " << theEta << " phi " << thePhi << " total X " << theTotalMB << " theCopperMB " << theCopperMB << " theH_ScintillatorMB " << theH_ScintillatorMB << " CAB " << theCablesMB << " theLeadMB " << theLeadMB << " theM_NEMA_FR4_plateMB " << theM_NEMA_FR4_plateMB << " theSiliconMB " << theSiliconMB << " Air " << theAirMB << " theStainlessSteelMB " << theStainlessSteelMB << " theWCuMB " << theWCuMB << std::endl;
+
+  std::cout << " HGCal Material Budget: Interaction Length   " << "G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID()" << " eta " << theEta << " phi " << thePhi << " total X " << theTotalIL << " theCopperIL " << theCopperIL << " theH_ScintillatorIL " << theH_ScintillatorIL << " CAB " << theCablesIL << " theLeadIL " << theLeadIL << " theM_NEMA_FR4_plateIL " << theM_NEMA_FR4_plateIL << " theSiliconIL " << theSiliconIL << " Air " << theAirIL << " theStainlessSteelIL " << theStainlessSteelIL << " theWCuIL " << theWCuIL << std::endl;
+
   // rr
 }
 
