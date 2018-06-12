@@ -124,13 +124,15 @@ sDETS["TEC"] = kPink
 # mat*root files produced. The numbering of the plots is identical
 # across all files.
 hist_label_to_num = OrderedDict()
-hist_label_to_num['SUP'] = [100, 13, 'Support'] # Index first, color second, legend label third
-hist_label_to_num['SEN'] = [200, 27, 'Sensitive']
+hist_label_to_num['COP'] = [100, 13, 'Copper'] # Index first, color second, legend label third
+hist_label_to_num['SCI'] = [200, 27, 'Scintillator']
 hist_label_to_num['CAB'] = [300, 46, 'Cables']
-hist_label_to_num['COL'] = [400, 38, 'Cooling']
-hist_label_to_num['ELE'] = [500, 30, 'Electronics']
+hist_label_to_num['MNE'] = [400, 38, 'M_NEMA_FR4 plate']
+hist_label_to_num['SIL'] = [500, 30, 'Silicon']
 hist_label_to_num['OTH'] = [600, 42, 'Other']
 hist_label_to_num['AIR'] = [700, 29, 'Air']
+hist_label_to_num['SST'] = [800, 40, 'Stainless Steel']
+hist_label_to_num['WCU'] = [900, 33, 'WCu']
 
 def setTDRStyle():
     """Function to setup a TDR-like style"""

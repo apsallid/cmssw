@@ -81,12 +81,17 @@ void MaterialBudgetCategorizer::buildMaps()
   
   //----- Build map material name - X0 contributes
   cout << endl << endl << "MaterialBudgetCategorizer::Fill X0 Map" << endl;
-  std::string theMaterialX0FileName = edm::FileInPath("Validation/Geometry/data/trackerMaterials.x0").fullPath();
-  buildCategoryMap(theMaterialX0FileName, theX0Map);
+  // std::string theMaterialX0FileName = edm::FileInPath("Validation/Geometry/data/trackerMaterials.x0").fullPath();
+  // buildCategoryMap(theMaterialX0FileName, theX0Map);
+  //For the HGCal
+  std::string thehgcalMaterialX0FileName = edm::FileInPath("Validation/Geometry/data/hgcalMaterials.x0").fullPath();
+  buildHGCalCategoryMap(thehgcalMaterialX0FileName, theX0Map);
   //----- Build map material name - L0 contributes
   cout << endl << endl << "MaterialBudgetCategorizer::Fill L0 Map" << endl;
-  std::string theMaterialL0FileName = edm::FileInPath("Validation/Geometry/data/trackerMaterials.l0").fullPath();
-  buildCategoryMap(theMaterialL0FileName, theL0Map);
+  // std::string theMaterialL0FileName = edm::FileInPath("Validation/Geometry/data/trackerMaterials.l0").fullPath();
+  // buildCategoryMap(theMaterialL0FileName, theL0Map);
+  std::string thehgcalMaterialL0FileName = edm::FileInPath("Validation/Geometry/data/hgcalMaterials.l0").fullPath();
+  buildHGCalCategoryMap(thehgcalMaterialL0FileName, theL0Map);
   // summary of all the materials loaded
   cout << endl << endl << "MaterialBudgetCategorizer::Material Summary --------" << endl;
   G4EmCalculator calc;
@@ -164,6 +169,51 @@ void MaterialBudgetCategorizer::buildCategoryMap(std::string theMaterialFileName
 	 << " ELE " << ele 
 	 << " OTH " << oth 
 	 << " AIR " << air 
+	 << endl;
+  }
+  
+}
+
+void MaterialBudgetCategorizer::buildHGCalCategoryMap(std::string theMaterialFileName, std::map<std::string,std::vector<float> >& theMap) {
+  //  const G4MaterialTable* matTable = G4Material::GetMaterialTable();
+  //  G4int matSize = matTable->size();
+  
+  std::ifstream theMaterialFile(theMaterialFileName);
+  if (!theMaterialFile) 
+    cms::Exception("LogicError") <<" File not found " << theMaterialFileName;
+  
+  // fill everything as "other"
+  float Air,Cables,Copper,H_Scintillator,Lead,M_NEMA_FR4_plate,Silicon,StainlessSteel,WCu, oth; 
+  Air=Cables=Copper=H_Scintillator=Lead=M_NEMA_FR4_plate=Silicon=StainlessSteel=WCu=0.;
+  oth=1.;
+  
+  //
+  std::string materialName;
+  while(theMaterialFile) {
+    theMaterialFile >> materialName;
+    theMaterialFile >> Air >> Cables >> Copper >> H_Scintillator >> Lead >> M_NEMA_FR4_plate >> Silicon >> StainlessSteel >> WCu;
+    oth = 0.000;
+    theMap[materialName].clear();        // clear before re-filling
+    theMap[materialName].push_back(Air             ); // Air             
+    theMap[materialName].push_back(Cables          ); // Cables          
+    theMap[materialName].push_back(Copper          ); // Copper          
+    theMap[materialName].push_back(H_Scintillator  ); // H_Scintillator  
+    theMap[materialName].push_back(Lead            ); // Lead            
+    theMap[materialName].push_back(M_NEMA_FR4_plate); // M_NEMA_FR4_plate
+    theMap[materialName].push_back(Silicon         ); // Silicon         
+    theMap[materialName].push_back(StainlessSteel  ); // StainlessSteel  
+    theMap[materialName].push_back(WCu             ); // WCu             
+    cout << " material " << materialName << " filled " 
+	 << " Air              " << Air             
+	 << " Cables           " << Cables          
+	 << " Copper           " << Copper          
+	 << " H_Scintillator   " << H_Scintillator  
+	 << " Lead             " << Lead            
+	 << " M_NEMA_FR4_plate " << M_NEMA_FR4_plate
+	 << " Silicon          " << Silicon         
+	 << " StainlessSteel   " << StainlessSteel  
+	 << " WCu              " << WCu             
+	 << " OTH " << oth 
 	 << endl;
   }
   
