@@ -161,143 +161,169 @@ void MaterialBudgetHGCalHistos::book()
   hmgr->addHisto2( new TH2F("951", "R vs z [WCu]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
   hmgr->addHisto2( new TH2F("960", "MB prof local R  z [WCu];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
   hmgr->addHisto2( new TH2F("961", "R vs z [WCu]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  // Lead
+  hmgr->addHistoProf1( new TProfile("1010", "MB prof Eta [Lead];#eta;x/X_{0}", 250, -5.0, 5.0 ) );
+  hmgr->addHisto1( new TH1F("1011", "Eta [Lead]" , 501, -5., 5. ) );
+  hmgr->addHistoProf1( new TProfile("1020", "MB prof Phi [Lead];#varphi [rad];x/X_{0}", 180, -3.1416, 3.1416 ) );
+  hmgr->addHisto1( new TH1F("1021", "Phi [Lead]" , 180, -3.1416, 3.1416 ) );
+  hmgr->addHistoProf2( new TProfile2D("1030", "MB prof Eta  Phi [Lead];#eta;#varphi;x/X_{0}", 250, -5., 5., 180, -3.1416, 3.1416 ) );
+  hmgr->addHisto2( new TH2F("1031", "Eta vs Phi [Lead]" , 501, -5., 5., 180, -3.1416, 3.1416 ) );
+  hmgr->addHistoProf1( new TProfile("1040", "MB prof R [Lead];R [mm];x/X_{0}", 300, 0., 3000. ) );
+  hmgr->addHisto1( new TH1F("1041", "R [Lead]" , 300, 0., 3000. ) );
+  hmgr->addHistoProf2( new TProfile2D("1050", "MB prof sum R  z [Lead];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("1051", "R vs z [Lead]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("1060", "MB prof local R  z [Lead];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("1061", "R vs z [Lead]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
 
 
   
   // total Lambda0
-  hmgr->addHistoProf1( new TProfile("1010", "IL prof Eta;#eta;#lambda/#lambda_{0} ", 250, -5., 5. ) );
-  hmgr->addHisto1( new TH1F("1011", "Eta " , 501, -5., 5. ) );
-  hmgr->addHistoProf1( new TProfile("1020", "IL prof Phi;#varphi [rad];#lambda/#lambda_{0} ", 180, -3.1416, 3.1416 ) );
-  hmgr->addHisto1( new TH1F("1021", "Phi " , 180, -3.1416, 3.1416 ) );
-  hmgr->addHistoProf2( new TProfile2D("1030", "IL prof Eta  Phi;#eta;#varphi;#lambda/#lambda_{0} ", 250, -5., 5., 180, -3.1416, 3.1416 ) );
-  hmgr->addHisto2( new TH2F("1031", "Eta vs Phi " , 501, -5., 5., 180, -3.1416, 3.1416 ) );
+  hmgr->addHistoProf1( new TProfile("10010", "IL prof Eta;#eta;#lambda/#lambda_{0} ", 250, -5., 5. ) );
+  hmgr->addHisto1( new TH1F("10011", "Eta " , 501, -5., 5. ) );
+  hmgr->addHistoProf1( new TProfile("10020", "IL prof Phi;#varphi [rad];#lambda/#lambda_{0} ", 180, -3.1416, 3.1416 ) );
+  hmgr->addHisto1( new TH1F("10021", "Phi " , 180, -3.1416, 3.1416 ) );
+  hmgr->addHistoProf2( new TProfile2D("10030", "IL prof Eta  Phi;#eta;#varphi;#lambda/#lambda_{0} ", 250, -5., 5., 180, -3.1416, 3.1416 ) );
+  hmgr->addHisto2( new TH2F("10031", "Eta vs Phi " , 501, -5., 5., 180, -3.1416, 3.1416 ) );
   
   // rr
-  hmgr->addHistoProf1( new TProfile("1040", "IL prof R;R [mm];#lambda/#lambda_{0} ", 300, 0., 3000. ) );
-  hmgr->addHisto1( new TH1F("1041", "R " , 300, 0., 3000. ) );
-  hmgr->addHistoProf2( new TProfile2D("1050", "IL prof sum R  z;z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHistoProf1( new TProfile("10040", "IL prof R;R [mm];#lambda/#lambda_{0} ", 300, 0., 3000. ) );
+  hmgr->addHisto1( new TH1F("10041", "R " , 300, 0., 3000. ) );
+  hmgr->addHistoProf2( new TProfile2D("10050", "IL prof sum R  z;z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
   hmgr->addHisto2( new TH2F("1999", "Tot track length for l0", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1051", "R vs z " , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1060", "IL prof local R  z;z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1061", "R vs z " , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10051", "R vs z " , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10060", "IL prof local R  z;z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10061", "R vs z " , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
   
   // Copper
-  hmgr->addHistoProf1( new TProfile("1110", "IL prof Eta [Copper];#eta;#lambda/#lambda_{0}", 250, -5.0, 5.0 ) );
-  hmgr->addHisto1( new TH1F("1111", "Eta [Copper]" , 501, -5., 5. ) );
-  hmgr->addHistoProf1( new TProfile("1120", "IL prof Phi [Copper];#varphi [rad];#lambda/#lambda_{0}", 180, -3.1416, 3.1416 ) );
-  hmgr->addHisto1( new TH1F("1121", "Phi [Copper]" , 180, -3.1416, 3.1416 ) );
-  hmgr->addHistoProf2( new TProfile2D("1130", "IL prof Eta  Phi [Copper];#eta;#varphi;#lambda/#lambda_{0}", 250, -5., 5., 180, -3.1416, 3.1416 ) );
-  hmgr->addHisto2( new TH2F("1131", "Eta vs Phi [Copper]" , 501, -5., 5., 180, -3.1416, 3.1416 ) );
-  hmgr->addHistoProf1( new TProfile("1140", "IL prof R [Copper];R [mm];#lambda/#lambda_{0}", 300, 0., 3000. ) );
-  hmgr->addHisto1( new TH1F("1141", "R [Copper]" , 300, 0., 3000. ) );
-  hmgr->addHistoProf2( new TProfile2D("1150", "IL prof sum R  z [Copper];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1151", "R vs z [Copper]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1160", "IL prof local R  z [Copper];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1161", "R vs z [Copper]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHistoProf1( new TProfile("10110", "IL prof Eta [Copper];#eta;#lambda/#lambda_{0}", 250, -5.0, 5.0 ) );
+  hmgr->addHisto1( new TH1F("10111", "Eta [Copper]" , 501, -5., 5. ) );
+  hmgr->addHistoProf1( new TProfile("10120", "IL prof Phi [Copper];#varphi [rad];#lambda/#lambda_{0}", 180, -3.1416, 3.1416 ) );
+  hmgr->addHisto1( new TH1F("10121", "Phi [Copper]" , 180, -3.1416, 3.1416 ) );
+  hmgr->addHistoProf2( new TProfile2D("10130", "IL prof Eta  Phi [Copper];#eta;#varphi;#lambda/#lambda_{0}", 250, -5., 5., 180, -3.1416, 3.1416 ) );
+  hmgr->addHisto2( new TH2F("10131", "Eta vs Phi [Copper]" , 501, -5., 5., 180, -3.1416, 3.1416 ) );
+  hmgr->addHistoProf1( new TProfile("10140", "IL prof R [Copper];R [mm];#lambda/#lambda_{0}", 300, 0., 3000. ) );
+  hmgr->addHisto1( new TH1F("10141", "R [Copper]" , 300, 0., 3000. ) );
+  hmgr->addHistoProf2( new TProfile2D("10150", "IL prof sum R  z [Copper];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10151", "R vs z [Copper]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10160", "IL prof local R  z [Copper];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10161", "R vs z [Copper]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
   // H_Scintillator
-  hmgr->addHistoProf1( new TProfile("1210", "IL prof Eta [Scintillator];#eta;#lambda/#lambda_{0}", 250, -5.0, 5.0 ) );
-  hmgr->addHisto1( new TH1F("1211", "Eta [Scintillator]" , 501, -5., 5. ) );
-  hmgr->addHistoProf1( new TProfile("1220", "IL prof Phi [Scintillator];#varphi [rad];#lambda/#lambda_{0}", 180, -3.1416, 3.1416 ) );
-  hmgr->addHisto1( new TH1F("1221", "Phi [Scintillator]" , 180, -3.1416, 3.1416 ) );
-  hmgr->addHistoProf2( new TProfile2D("1230", "IL prof Eta  Phi [Scintillator];#eta;#varphi;#lambda/#lambda_{0}", 250, -5., 5., 180, -3.1416, 3.1416 ) );
-  hmgr->addHisto2( new TH2F("1231", "Eta vs Phi [Scintillator]" , 501, -5., 5., 180, -3.1416, 3.1416 ) );
-  hmgr->addHistoProf1( new TProfile("1240", "IL prof R [Scintillator];R [mm];#lambda/#lambda_{0}", 300, 0., 3000. ) );
-  hmgr->addHisto1( new TH1F("1241", "R [Scintillator]" , 300, 0., 3000. ) );
-  hmgr->addHistoProf2( new TProfile2D("1250", "IL prof sum R  z [Scintillator];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1251", "R vs z [Scintillator]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1260", "IL prof local R  z [Scintillator];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1261", "R vs z [Scintillator]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHistoProf1( new TProfile("10210", "IL prof Eta [Scintillator];#eta;#lambda/#lambda_{0}", 250, -5.0, 5.0 ) );
+  hmgr->addHisto1( new TH1F("10211", "Eta [Scintillator]" , 501, -5., 5. ) );
+  hmgr->addHistoProf1( new TProfile("10220", "IL prof Phi [Scintillator];#varphi [rad];#lambda/#lambda_{0}", 180, -3.1416, 3.1416 ) );
+  hmgr->addHisto1( new TH1F("10221", "Phi [Scintillator]" , 180, -3.1416, 3.1416 ) );
+  hmgr->addHistoProf2( new TProfile2D("10230", "IL prof Eta  Phi [Scintillator];#eta;#varphi;#lambda/#lambda_{0}", 250, -5., 5., 180, -3.1416, 3.1416 ) );
+  hmgr->addHisto2( new TH2F("10231", "Eta vs Phi [Scintillator]" , 501, -5., 5., 180, -3.1416, 3.1416 ) );
+  hmgr->addHistoProf1( new TProfile("10240", "IL prof R [Scintillator];R [mm];#lambda/#lambda_{0}", 300, 0., 3000. ) );
+  hmgr->addHisto1( new TH1F("10241", "R [Scintillator]" , 300, 0., 3000. ) );
+  hmgr->addHistoProf2( new TProfile2D("10250", "IL prof sum R  z [Scintillator];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10251", "R vs z [Scintillator]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10260", "IL prof local R  z [Scintillator];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10261", "R vs z [Scintillator]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
   // Cables
-  hmgr->addHistoProf1( new TProfile("1310", "IL prof Eta [Cables];#eta;#lambda/#lambda_{0}", 250, -5.0, 5.0 ) );
-  hmgr->addHisto1( new TH1F("1311", "Eta [Cables]" , 501, -5., 5. ) );
-  hmgr->addHistoProf1( new TProfile("1320", "IL prof Phi [Cables];#varphi [rad];#lambda/#lambda_{0}", 180, -3.1416, 3.1416 ) );
-  hmgr->addHisto1( new TH1F("1321", "Phi [Cables]" , 180, -3.1416, 3.1416 ) );
-  hmgr->addHistoProf2( new TProfile2D("1330", "IL prof Eta  Phi [Cables];#eta;#varphi;#lambda/#lambda_{0}", 250, -5., 5., 180, -3.1416, 3.1416 ) );
-  hmgr->addHisto2( new TH2F("1331", "Eta vs Phi [Cables]" , 501, -5., 5., 180, -3.1416, 3.1416 ) );
-  hmgr->addHistoProf1( new TProfile("1340", "IL prof R [Cables];R [mm];#lambda/#lambda_{0}", 300, 0., 3000. ) );
-  hmgr->addHisto1( new TH1F("1341", "R [Cables]" , 300, 0., 3000. ) );
-  hmgr->addHistoProf2( new TProfile2D("1350", "IL prof sum R  z [Cables];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1351", "R vs z [Cables]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1360", "IL prof local R  z [Cables];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1361", "R vs z [Cables]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHistoProf1( new TProfile("10310", "IL prof Eta [Cables];#eta;#lambda/#lambda_{0}", 250, -5.0, 5.0 ) );
+  hmgr->addHisto1( new TH1F("10311", "Eta [Cables]" , 501, -5., 5. ) );
+  hmgr->addHistoProf1( new TProfile("10320", "IL prof Phi [Cables];#varphi [rad];#lambda/#lambda_{0}", 180, -3.1416, 3.1416 ) );
+  hmgr->addHisto1( new TH1F("10321", "Phi [Cables]" , 180, -3.1416, 3.1416 ) );
+  hmgr->addHistoProf2( new TProfile2D("10330", "IL prof Eta  Phi [Cables];#eta;#varphi;#lambda/#lambda_{0}", 250, -5., 5., 180, -3.1416, 3.1416 ) );
+  hmgr->addHisto2( new TH2F("10331", "Eta vs Phi [Cables]" , 501, -5., 5., 180, -3.1416, 3.1416 ) );
+  hmgr->addHistoProf1( new TProfile("10340", "IL prof R [Cables];R [mm];#lambda/#lambda_{0}", 300, 0., 3000. ) );
+  hmgr->addHisto1( new TH1F("10341", "R [Cables]" , 300, 0., 3000. ) );
+  hmgr->addHistoProf2( new TProfile2D("10350", "IL prof sum R  z [Cables];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10351", "R vs z [Cables]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10360", "IL prof local R  z [Cables];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10361", "R vs z [Cables]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
   // M_NEMA_FR4_plate
-  hmgr->addHistoProf1( new TProfile("1410", "IL prof Eta [M_NEMA_FR4_plate];#eta;#lambda/#lambda_{0}", 250, -5.0, 5.0 ) );
-  hmgr->addHisto1( new TH1F("1411", "Eta [M_NEMA_FR4_plate]" , 501, -5., 5. ) );
-  hmgr->addHistoProf1( new TProfile("1420", "IL prof Phi [M_NEMA_FR4_plate];#varphi [rad];#lambda/#lambda_{0}", 180, -3.1416, 3.1416 ) );
-  hmgr->addHisto1( new TH1F("1421", "Phi [M_NEMA_FR4_plate]" , 180, -3.1416, 3.1416 ) );
-  hmgr->addHistoProf2( new TProfile2D("1430", "IL prof Eta  Phi [M_NEMA_FR4_plate];#eta;#varphi;#lambda/#lambda_{0}", 250, -5., 5., 180, -3.1416, 3.1416 ) );
-  hmgr->addHisto2( new TH2F("1431", "Eta vs Phi [M_NEMA_FR4_plate]" , 501, -5., 5., 180, -3.1416, 3.1416 ) );
-  hmgr->addHistoProf1( new TProfile("1440", "IL prof R [M_NEMA_FR4_plate];R [mm];#lambda/#lambda_{0}", 300, 0., 3000. ) );
-  hmgr->addHisto1( new TH1F("1441", "R [M_NEMA_FR4_plate]" , 300, 0., 3000. ) );
-  hmgr->addHistoProf2( new TProfile2D("1450", "IL prof sum R  z [M_NEMA_FR4_plate];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1451", "R vs z [M_NEMA_FR4_plate]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1460", "IL prof local R  z [M_NEMA_FR4_plate];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1461", "R vs z [M_NEMA_FR4_plate]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHistoProf1( new TProfile("10410", "IL prof Eta [M_NEMA_FR4_plate];#eta;#lambda/#lambda_{0}", 250, -5.0, 5.0 ) );
+  hmgr->addHisto1( new TH1F("10411", "Eta [M_NEMA_FR4_plate]" , 501, -5., 5. ) );
+  hmgr->addHistoProf1( new TProfile("10420", "IL prof Phi [M_NEMA_FR4_plate];#varphi [rad];#lambda/#lambda_{0}", 180, -3.1416, 3.1416 ) );
+  hmgr->addHisto1( new TH1F("10421", "Phi [M_NEMA_FR4_plate]" , 180, -3.1416, 3.1416 ) );
+  hmgr->addHistoProf2( new TProfile2D("10430", "IL prof Eta  Phi [M_NEMA_FR4_plate];#eta;#varphi;#lambda/#lambda_{0}", 250, -5., 5., 180, -3.1416, 3.1416 ) );
+  hmgr->addHisto2( new TH2F("10431", "Eta vs Phi [M_NEMA_FR4_plate]" , 501, -5., 5., 180, -3.1416, 3.1416 ) );
+  hmgr->addHistoProf1( new TProfile("10440", "IL prof R [M_NEMA_FR4_plate];R [mm];#lambda/#lambda_{0}", 300, 0., 3000. ) );
+  hmgr->addHisto1( new TH1F("10441", "R [M_NEMA_FR4_plate]" , 300, 0., 3000. ) );
+  hmgr->addHistoProf2( new TProfile2D("10450", "IL prof sum R  z [M_NEMA_FR4_plate];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10451", "R vs z [M_NEMA_FR4_plate]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10460", "IL prof local R  z [M_NEMA_FR4_plate];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10461", "R vs z [M_NEMA_FR4_plate]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
   // Silicon
-  hmgr->addHistoProf1( new TProfile("1510", "IL prof Eta [Silicon];#eta;#lambda/#lambda_{0}", 250, -5.0, 5.0 ) );
-  hmgr->addHisto1( new TH1F("1511", "Eta [Silicon]" , 501, -5., 5. ) );
-  hmgr->addHistoProf1( new TProfile("1520", "IL prof Phi [Silicon];#varphi [rad];#lambda/#lambda_{0}", 180, -3.1416, 3.1416 ) );
-  hmgr->addHisto1( new TH1F("1521", "Phi [Silicon]" , 180, -3.1416, 3.1416 ) );
-  hmgr->addHistoProf2( new TProfile2D("1530", "IL prof Eta  Phi [Silicon];#eta;#varphi;#lambda/#lambda_{0}", 250, -5., 5., 180, -3.1416, 3.1416 ) );
-  hmgr->addHisto2( new TH2F("1531", "Eta vs Phi [Silicon]" , 501, -5., 5., 180, -3.1416, 3.1416 ) );
-  hmgr->addHistoProf1( new TProfile("1540", "IL prof R [Silicon];R [mm];#lambda/#lambda_{0}", 300, 0., 3000. ) );
-  hmgr->addHisto1( new TH1F("1541", "R [Silicon]" , 300, 0., 3000. ) );
-  hmgr->addHistoProf2( new TProfile2D("1550", "IL prof sum R  z [Silicon];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1551", "R vs z [Silicon]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1560", "IL prof local R  z [Silicon];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1561", "R vs z [Silicon]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHistoProf1( new TProfile("10510", "IL prof Eta [Silicon];#eta;#lambda/#lambda_{0}", 250, -5.0, 5.0 ) );
+  hmgr->addHisto1( new TH1F("10511", "Eta [Silicon]" , 501, -5., 5. ) );
+  hmgr->addHistoProf1( new TProfile("10520", "IL prof Phi [Silicon];#varphi [rad];#lambda/#lambda_{0}", 180, -3.1416, 3.1416 ) );
+  hmgr->addHisto1( new TH1F("10521", "Phi [Silicon]" , 180, -3.1416, 3.1416 ) );
+  hmgr->addHistoProf2( new TProfile2D("10530", "IL prof Eta  Phi [Silicon];#eta;#varphi;#lambda/#lambda_{0}", 250, -5., 5., 180, -3.1416, 3.1416 ) );
+  hmgr->addHisto2( new TH2F("10531", "Eta vs Phi [Silicon]" , 501, -5., 5., 180, -3.1416, 3.1416 ) );
+  hmgr->addHistoProf1( new TProfile("10540", "IL prof R [Silicon];R [mm];#lambda/#lambda_{0}", 300, 0., 3000. ) );
+  hmgr->addHisto1( new TH1F("10541", "R [Silicon]" , 300, 0., 3000. ) );
+  hmgr->addHistoProf2( new TProfile2D("10550", "IL prof sum R  z [Silicon];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10551", "R vs z [Silicon]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10560", "IL prof local R  z [Silicon];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10561", "R vs z [Silicon]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
   // Other
-  hmgr->addHistoProf1( new TProfile("1610", "IL prof Eta [Other];#eta;#lambda/#lambda_{0}", 250, -5.0, 5.0 ) );
-  hmgr->addHisto1( new TH1F("1611", "Eta [Other]" , 501, -5., 5. ) );
-  hmgr->addHistoProf1( new TProfile("1620", "IL prof Phi [Other];#varphi [rad];#lambda/#lambda_{0}", 180, -3.1416, 3.1416 ) );
-  hmgr->addHisto1( new TH1F("1621", "Phi [Other]" , 180, -3.1416, 3.1416 ) );
-  hmgr->addHistoProf2( new TProfile2D("1630", "IL prof Eta  Phi [Other];#eta;#varphi;#lambda/#lambda_{0}", 250, -5., 5., 180, -3.1416, 3.1416 ) );
-  hmgr->addHisto2( new TH2F("1631", "Eta vs Phi [Other]" , 501, -5., 5., 180, -3.1416, 3.1416 ) );
-  hmgr->addHistoProf1( new TProfile("1640", "IL prof R [Other];R [mm];#lambda/#lambda_{0}", 300, 0., 3000. ) );
-  hmgr->addHisto1( new TH1F("1641", "R [Other]" , 300, 0., 3000. ) );
-  hmgr->addHistoProf2( new TProfile2D("1650", "IL prof sum R  z [Other];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1651", "R vs z [Other]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1660", "IL prof local R  z [Other];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1661", "R vs z [Other]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHistoProf1( new TProfile("10610", "IL prof Eta [Other];#eta;#lambda/#lambda_{0}", 250, -5.0, 5.0 ) );
+  hmgr->addHisto1( new TH1F("10611", "Eta [Other]" , 501, -5., 5. ) );
+  hmgr->addHistoProf1( new TProfile("10620", "IL prof Phi [Other];#varphi [rad];#lambda/#lambda_{0}", 180, -3.1416, 3.1416 ) );
+  hmgr->addHisto1( new TH1F("10621", "Phi [Other]" , 180, -3.1416, 3.1416 ) );
+  hmgr->addHistoProf2( new TProfile2D("10630", "IL prof Eta  Phi [Other];#eta;#varphi;#lambda/#lambda_{0}", 250, -5., 5., 180, -3.1416, 3.1416 ) );
+  hmgr->addHisto2( new TH2F("10631", "Eta vs Phi [Other]" , 501, -5., 5., 180, -3.1416, 3.1416 ) );
+  hmgr->addHistoProf1( new TProfile("10640", "IL prof R [Other];R [mm];#lambda/#lambda_{0}", 300, 0., 3000. ) );
+  hmgr->addHisto1( new TH1F("10641", "R [Other]" , 300, 0., 3000. ) );
+  hmgr->addHistoProf2( new TProfile2D("10650", "IL prof sum R  z [Other];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10651", "R vs z [Other]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10660", "IL prof local R  z [Other];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10661", "R vs z [Other]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
   // Air
-  hmgr->addHistoProf1( new TProfile("1710", "IL prof Eta [Air];#eta;#lambda/#lambda_{0}", 250, -5.0, 5.0 ) );
-  hmgr->addHisto1( new TH1F("1711", "Eta [Air]" , 501, -5., 5. ) );
-  hmgr->addHistoProf1( new TProfile("1720", "IL prof Phi [Air];#varphi [rad];#lambda/#lambda_{0}", 180, -3.1416, 3.1416 ) );
-  hmgr->addHisto1( new TH1F("1721", "Phi [Air]" , 180, -3.1416, 3.1416 ) );
-  hmgr->addHistoProf2( new TProfile2D("1730", "IL prof Eta  Phi [Air];#eta;#varphi;#lambda/#lambda_{0}", 250, -5., 5., 180, -3.1416, 3.1416 ) );
-  hmgr->addHisto2( new TH2F("1731", "Eta vs Phi [Air]" , 501, -5., 5., 180, -3.1416, 3.1416 ) );
-  hmgr->addHistoProf1( new TProfile("1740", "IL prof R [Air];R [mm];#lambda/#lambda_{0}", 300, 0., 3000. ) );
-  hmgr->addHisto1( new TH1F("1741", "R [Air]" , 300, 0., 3000. ) );
-  hmgr->addHistoProf2( new TProfile2D("1750", "IL prof sum R  z [Air];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1751", "R vs z [Air]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1760", "IL prof local R  z [Air];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1761", "R vs z [Air]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHistoProf1( new TProfile("10710", "IL prof Eta [Air];#eta;#lambda/#lambda_{0}", 250, -5.0, 5.0 ) );
+  hmgr->addHisto1( new TH1F("10711", "Eta [Air]" , 501, -5., 5. ) );
+  hmgr->addHistoProf1( new TProfile("10720", "IL prof Phi [Air];#varphi [rad];#lambda/#lambda_{0}", 180, -3.1416, 3.1416 ) );
+  hmgr->addHisto1( new TH1F("10721", "Phi [Air]" , 180, -3.1416, 3.1416 ) );
+  hmgr->addHistoProf2( new TProfile2D("10730", "IL prof Eta  Phi [Air];#eta;#varphi;#lambda/#lambda_{0}", 250, -5., 5., 180, -3.1416, 3.1416 ) );
+  hmgr->addHisto2( new TH2F("10731", "Eta vs Phi [Air]" , 501, -5., 5., 180, -3.1416, 3.1416 ) );
+  hmgr->addHistoProf1( new TProfile("10740", "IL prof R [Air];R [mm];#lambda/#lambda_{0}", 300, 0., 3000. ) );
+  hmgr->addHisto1( new TH1F("10741", "R [Air]" , 300, 0., 3000. ) );
+  hmgr->addHistoProf2( new TProfile2D("10750", "IL prof sum R  z [Air];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10751", "R vs z [Air]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10760", "IL prof local R  z [Air];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10761", "R vs z [Air]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
   //StainlessSteel
-  hmgr->addHistoProf1( new TProfile("1810", "IL prof Eta [StainlessSteel];#eta;#lambda/#lambda_{0}", 250, -5.0, 5.0 ) );
-  hmgr->addHisto1( new TH1F("1811", "Eta [StainlessSteel]" , 501, -5., 5. ) );
-  hmgr->addHistoProf1( new TProfile("1820", "IL prof Phi [StainlessSteel];#varphi [rad];#lambda/#lambda_{0}", 180, -3.1416, 3.1416 ) );
-  hmgr->addHisto1( new TH1F("1821", "Phi [StainlessSteel]" , 180, -3.1416, 3.1416 ) );
-  hmgr->addHistoProf2( new TProfile2D("1830", "IL prof Eta  Phi [StainlessSteel];#eta;#varphi;#lambda/#lambda_{0}", 250, -5., 5., 180, -3.1416, 3.1416 ) );
-  hmgr->addHisto2( new TH2F("1831", "Eta vs Phi [StainlessSteel]" , 501, -5., 5., 180, -3.1416, 3.1416 ) );
-  hmgr->addHistoProf1( new TProfile("1840", "IL prof R [StainlessSteel];R [mm];#lambda/#lambda_{0}", 300, 0., 3000. ) );
-  hmgr->addHisto1( new TH1F("1841", "R [StainlessSteel]" , 300, 0., 3000. ) );
-  hmgr->addHistoProf2( new TProfile2D("1850", "IL prof sum R  z [StainlessSteel];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1851", "R vs z [StainlessSteel]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1860", "IL prof local R  z [StainlessSteel];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1861", "R vs z [StainlessSteel]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHistoProf1( new TProfile("10810", "IL prof Eta [StainlessSteel];#eta;#lambda/#lambda_{0}", 250, -5.0, 5.0 ) );
+  hmgr->addHisto1( new TH1F("10811", "Eta [StainlessSteel]" , 501, -5., 5. ) );
+  hmgr->addHistoProf1( new TProfile("10820", "IL prof Phi [StainlessSteel];#varphi [rad];#lambda/#lambda_{0}", 180, -3.1416, 3.1416 ) );
+  hmgr->addHisto1( new TH1F("10821", "Phi [StainlessSteel]" , 180, -3.1416, 3.1416 ) );
+  hmgr->addHistoProf2( new TProfile2D("10830", "IL prof Eta  Phi [StainlessSteel];#eta;#varphi;#lambda/#lambda_{0}", 250, -5., 5., 180, -3.1416, 3.1416 ) );
+  hmgr->addHisto2( new TH2F("10831", "Eta vs Phi [StainlessSteel]" , 501, -5., 5., 180, -3.1416, 3.1416 ) );
+  hmgr->addHistoProf1( new TProfile("10840", "IL prof R [StainlessSteel];R [mm];#lambda/#lambda_{0}", 300, 0., 3000. ) );
+  hmgr->addHisto1( new TH1F("10841", "R [StainlessSteel]" , 300, 0., 3000. ) );
+  hmgr->addHistoProf2( new TProfile2D("10850", "IL prof sum R  z [StainlessSteel];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10851", "R vs z [StainlessSteel]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10860", "IL prof local R  z [StainlessSteel];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10861", "R vs z [StainlessSteel]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
   //WCu
-  hmgr->addHistoProf1( new TProfile("1910", "IL prof Eta [WCu];#eta;#lambda/#lambda_{0}", 250, -5.0, 5.0 ) );
-  hmgr->addHisto1( new TH1F("1911", "Eta [WCu]" , 501, -5., 5. ) );
-  hmgr->addHistoProf1( new TProfile("1920", "IL prof Phi [WCu];#varphi [rad];#lambda/#lambda_{0}", 180, -3.1416, 3.1416 ) );
-  hmgr->addHisto1( new TH1F("1921", "Phi [WCu]" , 180, -3.1416, 3.1416 ) );
-  hmgr->addHistoProf2( new TProfile2D("1930", "IL prof Eta  Phi [WCu];#eta;#varphi;#lambda/#lambda_{0}", 250, -5., 5., 180, -3.1416, 3.1416 ) );
-  hmgr->addHisto2( new TH2F("1931", "Eta vs Phi [WCu]" , 501, -5., 5., 180, -3.1416, 3.1416 ) );
-  hmgr->addHistoProf1( new TProfile("1940", "IL prof R [WCu];R [mm];#lambda/#lambda_{0}", 300, 0., 3000. ) );
-  hmgr->addHisto1( new TH1F("1941", "R [WCu]" , 300, 0., 3000. ) );
-  hmgr->addHistoProf2( new TProfile2D("1950", "IL prof sum R  z [WCu];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1951", "R vs z [WCu]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1960", "IL prof local R  z [WCu];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
-  hmgr->addHisto2( new TH2F("1961", "R vs z [WCu]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHistoProf1( new TProfile("10910", "IL prof Eta [WCu];#eta;#lambda/#lambda_{0}", 250, -5.0, 5.0 ) );
+  hmgr->addHisto1( new TH1F("10911", "Eta [WCu]" , 501, -5., 5. ) );
+  hmgr->addHistoProf1( new TProfile("10920", "IL prof Phi [WCu];#varphi [rad];#lambda/#lambda_{0}", 180, -3.1416, 3.1416 ) );
+  hmgr->addHisto1( new TH1F("10921", "Phi [WCu]" , 180, -3.1416, 3.1416 ) );
+  hmgr->addHistoProf2( new TProfile2D("10930", "IL prof Eta  Phi [WCu];#eta;#varphi;#lambda/#lambda_{0}", 250, -5., 5., 180, -3.1416, 3.1416 ) );
+  hmgr->addHisto2( new TH2F("10931", "Eta vs Phi [WCu]" , 501, -5., 5., 180, -3.1416, 3.1416 ) );
+  hmgr->addHistoProf1( new TProfile("10940", "IL prof R [WCu];R [mm];#lambda/#lambda_{0}", 300, 0., 3000. ) );
+  hmgr->addHisto1( new TH1F("10941", "R [WCu]" , 300, 0., 3000. ) );
+  hmgr->addHistoProf2( new TProfile2D("10950", "IL prof sum R  z [WCu];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10951", "R vs z [WCu]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10960", "IL prof local R  z [WCu];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("10961", "R vs z [WCu]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  // Lead
+  hmgr->addHistoProf1( new TProfile("11010", "IL prof Eta [Lead];#eta;#lambda/#lambda_{0}", 250, -5.0, 5.0 ) );
+  hmgr->addHisto1( new TH1F("11011", "Eta [Lead]" , 501, -5., 5. ) );
+  hmgr->addHistoProf1( new TProfile("11020", "IL prof Phi [Lead];#varphi [rad];#lambda/#lambda_{0}", 180, -3.1416, 3.1416 ) );
+  hmgr->addHisto1( new TH1F("11021", "Phi [Lead]" , 180, -3.1416, 3.1416 ) );
+  hmgr->addHistoProf2( new TProfile2D("11030", "IL prof Eta  Phi [Lead];#eta;#varphi;#lambda/#lambda_{0}", 250, -5., 5., 180, -3.1416, 3.1416 ) );
+  hmgr->addHisto2( new TH2F("11031", "Eta vs Phi [Lead]" , 501, -5., 5., 180, -3.1416, 3.1416 ) );
+  hmgr->addHistoProf1( new TProfile("11040", "IL prof R [Lead];R [mm];#lambda/#lambda_{0}", 300, 0., 3000. ) );
+  hmgr->addHisto1( new TH1F("11041", "R [Lead]" , 300, 0., 3000. ) );
+  hmgr->addHistoProf2( new TProfile2D("11050", "IL prof sum R  z [Lead];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("11051", "R vs z [Lead]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("11060", "IL prof local R  z [Lead];z [mm];R [mm];x/X_{0} ", nzbin, zMin, zMax, nrbin, rMin, rMax ) );
+  hmgr->addHisto2( new TH2F("11061", "R vs z [Lead]" , nzbin, zMin, zMax, nrbin, rMin, rMax ) );
   //
   
   // rr
@@ -419,6 +445,15 @@ void MaterialBudgetHGCalHistos::fillEndTrack()
     hmgr->getHistoProf1(920)->Fill(theData->getPhi(),theData->getWCuMB());
     hmgr->getHistoProf2(930)->Fill(theData->getEta(),theData->getPhi(),theData->getWCuMB());
 
+    // Lead
+    hmgr->getHisto1(1011)->Fill(theData->getEta());
+    hmgr->getHisto1(1021)->Fill(theData->getPhi());
+    hmgr->getHisto2(1031)->Fill(theData->getEta(),theData->getPhi());
+    
+    hmgr->getHistoProf1(1010)->Fill(theData->getEta(),theData->getLeadMB());
+    hmgr->getHistoProf1(1020)->Fill(theData->getPhi(),theData->getLeadMB());
+    hmgr->getHistoProf2(1030)->Fill(theData->getEta(),theData->getPhi(),theData->getLeadMB());
+
     //
     // Compute the total x/X0 crossed at each step radius for each path
     //
@@ -433,6 +468,7 @@ void MaterialBudgetHGCalHistos::fillEndTrack()
     float theTotalMB_AIR = 0.0;
     float theTotalMB_SST = 0.0;
     float theTotalMB_WCU = 0.0;
+    float theTotalMB_LEA = 0.0;
     for(int iStep = 0; iStep < theData->getNumberOfSteps(); iStep++) {
       theTotalMB_TOT += theData->getStepDmb(iStep);
       theTotalMB_COP += theData->getCopperDmb(iStep);
@@ -444,6 +480,7 @@ void MaterialBudgetHGCalHistos::fillEndTrack()
       theTotalMB_AIR += theData->getAirDmb(iStep);        
       theTotalMB_SST += theData->getStainlessSteelDmb(iStep);        
       theTotalMB_WCU += theData->getWCuDmb(iStep);        
+      theTotalMB_LEA += theData->getLeadDmb(iStep);        
 
       int iCop = 0;
       int iSci = 0;
@@ -454,6 +491,7 @@ void MaterialBudgetHGCalHistos::fillEndTrack()
       int iAir = 0;
       int iSst = 0;
       int iWcu = 0;
+      int iLea = 0;
       if( theData->getCopperDmb(iStep)>0.     ) { iCop = 1; }
       if( theData->getH_ScintillatorDmb(iStep)>0.   ) { iSci = 1; }
       if( theData->getCablesDmb(iStep)>0.      ) { iCab = 1; }
@@ -463,6 +501,7 @@ void MaterialBudgetHGCalHistos::fillEndTrack()
       if( theData->getAirDmb(iStep)>0.         ) { iAir = 1; }
       if( theData->getStainlessSteelDmb(iStep)>0.         ) { iSst = 1; }
       if( theData->getWCuDmb(iStep)>0.         ) { iWcu = 1; }
+      if( theData->getLeadDmb(iStep)>0.         ) { iLea = 1; }
 
       float deltaRadius = sqrt(
 			       pow( theData->getStepFinalX(iStep)-theData->getStepInitialX(iStep),2 )
@@ -573,6 +612,13 @@ void MaterialBudgetHGCalHistos::fillEndTrack()
 	hmgr->getHistoProf2(950)->Fill(z,polarRadius,theTotalMB_WCU);
 	hmgr->getHisto2(961)->Fill(z,polarRadius);
 	hmgr->getHisto2(960)->Fill(z,polarRadius,iWcu*fillValue);
+	// Lead
+	hmgr->getHisto1(1041)->Fill(polarRadius);
+	hmgr->getHistoProf1(1040)->Fill(polarRadius,theTotalMB_LEA);
+	hmgr->getHisto2(1051)->Fill(z,polarRadius);
+	hmgr->getHistoProf2(1050)->Fill(z,polarRadius,theTotalMB_LEA);
+	hmgr->getHisto2(1061)->Fill(z,polarRadius);
+	hmgr->getHisto2(1060)->Fill(z,polarRadius,iLea*fillValue);
 	//
       }
     }
@@ -585,94 +631,103 @@ void MaterialBudgetHGCalHistos::fillEndTrack()
 
     
     // Total Lambda0
-    hmgr->getHisto1(1011)->Fill(theData->getEta());
-    hmgr->getHisto1(1021)->Fill(theData->getPhi());
-    hmgr->getHisto2(1031)->Fill(theData->getEta(),theData->getPhi());
+    hmgr->getHisto1(10011)->Fill(theData->getEta());
+    hmgr->getHisto1(10021)->Fill(theData->getPhi());
+    hmgr->getHisto2(10031)->Fill(theData->getEta(),theData->getPhi());
     
-    hmgr->getHistoProf1(1010)->Fill(theData->getEta(),theData->getTotalIL());
-    hmgr->getHistoProf1(1020)->Fill(theData->getPhi(),theData->getTotalIL());
-    hmgr->getHistoProf2(1030)->Fill(theData->getEta(),theData->getPhi(),theData->getTotalIL());
+    hmgr->getHistoProf1(10010)->Fill(theData->getEta(),theData->getTotalIL());
+    hmgr->getHistoProf1(10020)->Fill(theData->getPhi(),theData->getTotalIL());
+    hmgr->getHistoProf2(10030)->Fill(theData->getEta(),theData->getPhi(),theData->getTotalIL());
     
     // Copper
-    hmgr->getHisto1(1111)->Fill(theData->getEta());
-    hmgr->getHisto1(1121)->Fill(theData->getPhi());
-    hmgr->getHisto2(1131)->Fill(theData->getEta(),theData->getPhi());
+    hmgr->getHisto1(10111)->Fill(theData->getEta());
+    hmgr->getHisto1(10121)->Fill(theData->getPhi());
+    hmgr->getHisto2(10131)->Fill(theData->getEta(),theData->getPhi());
     
-    hmgr->getHistoProf1(1110)->Fill(theData->getEta(),theData->getCopperIL());
-    hmgr->getHistoProf1(1120)->Fill(theData->getPhi(),theData->getCopperIL());
-    hmgr->getHistoProf2(1130)->Fill(theData->getEta(),theData->getPhi(),theData->getCopperIL());
+    hmgr->getHistoProf1(10110)->Fill(theData->getEta(),theData->getCopperIL());
+    hmgr->getHistoProf1(10120)->Fill(theData->getPhi(),theData->getCopperIL());
+    hmgr->getHistoProf2(10130)->Fill(theData->getEta(),theData->getPhi(),theData->getCopperIL());
     
     // H_Scintillator
-    hmgr->getHisto1(1211)->Fill(theData->getEta());
-    hmgr->getHisto1(1221)->Fill(theData->getPhi());
-    hmgr->getHisto2(1231)->Fill(theData->getEta(),theData->getPhi());
+    hmgr->getHisto1(10211)->Fill(theData->getEta());
+    hmgr->getHisto1(10221)->Fill(theData->getPhi());
+    hmgr->getHisto2(10231)->Fill(theData->getEta(),theData->getPhi());
     
-    hmgr->getHistoProf1(1210)->Fill(theData->getEta(),theData->getH_ScintillatorIL());
-    hmgr->getHistoProf1(1220)->Fill(theData->getPhi(),theData->getH_ScintillatorIL());
-    hmgr->getHistoProf2(1230)->Fill(theData->getEta(),theData->getPhi(),theData->getH_ScintillatorIL());
+    hmgr->getHistoProf1(10210)->Fill(theData->getEta(),theData->getH_ScintillatorIL());
+    hmgr->getHistoProf1(10220)->Fill(theData->getPhi(),theData->getH_ScintillatorIL());
+    hmgr->getHistoProf2(10230)->Fill(theData->getEta(),theData->getPhi(),theData->getH_ScintillatorIL());
     
     // Cables
-    hmgr->getHisto1(1311)->Fill(theData->getEta());
-    hmgr->getHisto1(1321)->Fill(theData->getPhi());
-    hmgr->getHisto2(1331)->Fill(theData->getEta(),theData->getPhi());
+    hmgr->getHisto1(10311)->Fill(theData->getEta());
+    hmgr->getHisto1(10321)->Fill(theData->getPhi());
+    hmgr->getHisto2(10331)->Fill(theData->getEta(),theData->getPhi());
     
-    hmgr->getHistoProf1(1310)->Fill(theData->getEta(),theData->getCablesIL());
-    hmgr->getHistoProf1(1320)->Fill(theData->getPhi(),theData->getCablesIL());
-    hmgr->getHistoProf2(1330)->Fill(theData->getEta(),theData->getPhi(),theData->getCablesIL());
+    hmgr->getHistoProf1(10310)->Fill(theData->getEta(),theData->getCablesIL());
+    hmgr->getHistoProf1(10320)->Fill(theData->getPhi(),theData->getCablesIL());
+    hmgr->getHistoProf2(10330)->Fill(theData->getEta(),theData->getPhi(),theData->getCablesIL());
     
     // M_NEMA_FR4_plate
-    hmgr->getHisto1(1411)->Fill(theData->getEta());
-    hmgr->getHisto1(1421)->Fill(theData->getPhi());
-    hmgr->getHisto2(1431)->Fill(theData->getEta(),theData->getPhi());
+    hmgr->getHisto1(10411)->Fill(theData->getEta());
+    hmgr->getHisto1(10421)->Fill(theData->getPhi());
+    hmgr->getHisto2(10431)->Fill(theData->getEta(),theData->getPhi());
     
-    hmgr->getHistoProf1(1410)->Fill(theData->getEta(),theData->getM_NEMA_FR4_plateIL());
-    hmgr->getHistoProf1(1420)->Fill(theData->getPhi(),theData->getM_NEMA_FR4_plateIL());
-    hmgr->getHistoProf2(1430)->Fill(theData->getEta(),theData->getPhi(),theData->getM_NEMA_FR4_plateIL());
+    hmgr->getHistoProf1(10410)->Fill(theData->getEta(),theData->getM_NEMA_FR4_plateIL());
+    hmgr->getHistoProf1(10420)->Fill(theData->getPhi(),theData->getM_NEMA_FR4_plateIL());
+    hmgr->getHistoProf2(10430)->Fill(theData->getEta(),theData->getPhi(),theData->getM_NEMA_FR4_plateIL());
     
     // Silicon
-    hmgr->getHisto1(1511)->Fill(theData->getEta());
-    hmgr->getHisto1(1521)->Fill(theData->getPhi());
-    hmgr->getHisto2(1531)->Fill(theData->getEta(),theData->getPhi());
+    hmgr->getHisto1(10511)->Fill(theData->getEta());
+    hmgr->getHisto1(10521)->Fill(theData->getPhi());
+    hmgr->getHisto2(10531)->Fill(theData->getEta(),theData->getPhi());
     
-    hmgr->getHistoProf1(1510)->Fill(theData->getEta(),theData->getSiliconIL());
-    hmgr->getHistoProf1(1520)->Fill(theData->getPhi(),theData->getSiliconIL());
-    hmgr->getHistoProf2(1530)->Fill(theData->getEta(),theData->getPhi(),theData->getSiliconIL());
+    hmgr->getHistoProf1(10510)->Fill(theData->getEta(),theData->getSiliconIL());
+    hmgr->getHistoProf1(10520)->Fill(theData->getPhi(),theData->getSiliconIL());
+    hmgr->getHistoProf2(10530)->Fill(theData->getEta(),theData->getPhi(),theData->getSiliconIL());
     
     // Other
-    hmgr->getHisto1(1611)->Fill(theData->getEta());
-    hmgr->getHisto1(1621)->Fill(theData->getPhi());
-    hmgr->getHisto2(1631)->Fill(theData->getEta(),theData->getPhi());
+    hmgr->getHisto1(10611)->Fill(theData->getEta());
+    hmgr->getHisto1(10621)->Fill(theData->getPhi());
+    hmgr->getHisto2(10631)->Fill(theData->getEta(),theData->getPhi());
     
-    hmgr->getHistoProf1(1610)->Fill(theData->getEta(),theData->getOtherIL());
-    hmgr->getHistoProf1(1620)->Fill(theData->getPhi(),theData->getOtherIL());
-    hmgr->getHistoProf2(1630)->Fill(theData->getEta(),theData->getPhi(),theData->getOtherIL());
+    hmgr->getHistoProf1(10610)->Fill(theData->getEta(),theData->getOtherIL());
+    hmgr->getHistoProf1(10620)->Fill(theData->getPhi(),theData->getOtherIL());
+    hmgr->getHistoProf2(10630)->Fill(theData->getEta(),theData->getPhi(),theData->getOtherIL());
     
     // Air
-    hmgr->getHisto1(1711)->Fill(theData->getEta());
-    hmgr->getHisto1(1721)->Fill(theData->getPhi());
-    hmgr->getHisto2(1731)->Fill(theData->getEta(),theData->getPhi());
+    hmgr->getHisto1(10711)->Fill(theData->getEta());
+    hmgr->getHisto1(10721)->Fill(theData->getPhi());
+    hmgr->getHisto2(10731)->Fill(theData->getEta(),theData->getPhi());
     
-    hmgr->getHistoProf1(1710)->Fill(theData->getEta(),theData->getAirIL());
-    hmgr->getHistoProf1(1720)->Fill(theData->getPhi(),theData->getAirIL());
-    hmgr->getHistoProf2(1730)->Fill(theData->getEta(),theData->getPhi(),theData->getAirIL());
+    hmgr->getHistoProf1(10710)->Fill(theData->getEta(),theData->getAirIL());
+    hmgr->getHistoProf1(10720)->Fill(theData->getPhi(),theData->getAirIL());
+    hmgr->getHistoProf2(10730)->Fill(theData->getEta(),theData->getPhi(),theData->getAirIL());
     
     // StainlessSteel
-    hmgr->getHisto1(1811)->Fill(theData->getEta());
-    hmgr->getHisto1(1821)->Fill(theData->getPhi());
-    hmgr->getHisto2(1831)->Fill(theData->getEta(),theData->getPhi());
+    hmgr->getHisto1(10811)->Fill(theData->getEta());
+    hmgr->getHisto1(10821)->Fill(theData->getPhi());
+    hmgr->getHisto2(10831)->Fill(theData->getEta(),theData->getPhi());
     
-    hmgr->getHistoProf1(1810)->Fill(theData->getEta(),theData->getStainlessSteelIL());
-    hmgr->getHistoProf1(1820)->Fill(theData->getPhi(),theData->getStainlessSteelIL());
-    hmgr->getHistoProf2(1830)->Fill(theData->getEta(),theData->getPhi(),theData->getStainlessSteelIL());
+    hmgr->getHistoProf1(10810)->Fill(theData->getEta(),theData->getStainlessSteelIL());
+    hmgr->getHistoProf1(10820)->Fill(theData->getPhi(),theData->getStainlessSteelIL());
+    hmgr->getHistoProf2(10830)->Fill(theData->getEta(),theData->getPhi(),theData->getStainlessSteelIL());
 
     // WCu
-    hmgr->getHisto1(1911)->Fill(theData->getEta());
-    hmgr->getHisto1(1921)->Fill(theData->getPhi());
-    hmgr->getHisto2(1931)->Fill(theData->getEta(),theData->getPhi());
+    hmgr->getHisto1(10911)->Fill(theData->getEta());
+    hmgr->getHisto1(10921)->Fill(theData->getPhi());
+    hmgr->getHisto2(10931)->Fill(theData->getEta(),theData->getPhi());
     
-    hmgr->getHistoProf1(1910)->Fill(theData->getEta(),theData->getWCuIL());
-    hmgr->getHistoProf1(1920)->Fill(theData->getPhi(),theData->getWCuIL());
-    hmgr->getHistoProf2(1930)->Fill(theData->getEta(),theData->getPhi(),theData->getWCuIL());
+    hmgr->getHistoProf1(10910)->Fill(theData->getEta(),theData->getWCuIL());
+    hmgr->getHistoProf1(10920)->Fill(theData->getPhi(),theData->getWCuIL());
+    hmgr->getHistoProf2(10930)->Fill(theData->getEta(),theData->getPhi(),theData->getWCuIL());
+
+    // Lead
+    hmgr->getHisto1(11011)->Fill(theData->getEta());
+    hmgr->getHisto1(11021)->Fill(theData->getPhi());
+    hmgr->getHisto2(11031)->Fill(theData->getEta(),theData->getPhi());
+    
+    hmgr->getHistoProf1(11010)->Fill(theData->getEta(),theData->getLeadIL());
+    hmgr->getHistoProf1(11020)->Fill(theData->getPhi(),theData->getLeadIL());
+    hmgr->getHistoProf2(11030)->Fill(theData->getEta(),theData->getPhi(),theData->getLeadIL());
 
     // Compute the total l/l0 crossed at each step radius for each path
     float theTotalIL_TOT = 0.0;
@@ -685,6 +740,7 @@ void MaterialBudgetHGCalHistos::fillEndTrack()
     float theTotalIL_AIR = 0.0;
     float theTotalIL_SST = 0.0;
     float theTotalIL_WCU = 0.0;
+    float theTotalIL_LEA = 0.0;
     for(int iStep = 0; iStep < theData->getNumberOfSteps(); iStep++) {
       theTotalIL_TOT += theData->getStepDil(iStep);
       theTotalIL_COP += theData->getCopperDil(iStep);
@@ -696,6 +752,7 @@ void MaterialBudgetHGCalHistos::fillEndTrack()
       theTotalIL_AIR += theData->getAirDil(iStep);
       theTotalIL_SST += theData->getStainlessSteelDil(iStep);
       theTotalIL_WCU += theData->getWCuDil(iStep);
+      theTotalIL_LEA += theData->getLeadDil(iStep);
 
       int iCop = 0;
       int iSci = 0;
@@ -706,6 +763,7 @@ void MaterialBudgetHGCalHistos::fillEndTrack()
       int iAir = 0;
       int iSst = 0;
       int iWcu = 0;
+      int iLea = 0;
 
       if( theData->getCopperDil(iStep)>0.     ) { iCop = 1; }
       if( theData->getH_ScintillatorDil(iStep)>0.   ) { iSci = 1; }
@@ -716,6 +774,7 @@ void MaterialBudgetHGCalHistos::fillEndTrack()
       if( theData->getAirDil(iStep)>0.         ) { iAir = 1; }
       if( theData->getStainlessSteelDil(iStep)>0.         ) { iSst = 1; }
       if( theData->getWCuDil(iStep)>0.         ) { iWcu = 1; }
+      if( theData->getLeadDil(iStep)>0.         ) { iLea = 1; }
 
       float deltaRadius = sqrt(
 			       pow( theData->getStepFinalX(iStep)-theData->getStepInitialX(iStep),2 )
@@ -757,75 +816,82 @@ void MaterialBudgetHGCalHistos::fillEndTrack()
 	// Average length
 	hmgr->getHisto2(1999)->Fill(z,polarRadius,subdelta);
 	// Total
-	hmgr->getHisto1(1041)->Fill(polarRadius);
-	hmgr->getHistoProf1(1040)->Fill(polarRadius,theTotalIL_TOT);
-	hmgr->getHisto2(1051)->Fill(z,polarRadius);
-	hmgr->getHistoProf2(1050)->Fill(z,polarRadius,theTotalIL_TOT);
-	hmgr->getHisto2(1061)->Fill(z,polarRadius);
-	hmgr->getHisto2(1060)->Fill(z,polarRadius,fillValue);
+	hmgr->getHisto1(10041)->Fill(polarRadius);
+	hmgr->getHistoProf1(10040)->Fill(polarRadius,theTotalIL_TOT);
+	hmgr->getHisto2(10051)->Fill(z,polarRadius);
+	hmgr->getHistoProf2(10050)->Fill(z,polarRadius,theTotalIL_TOT);
+	hmgr->getHisto2(10061)->Fill(z,polarRadius);
+	hmgr->getHisto2(10060)->Fill(z,polarRadius,fillValue);
 	// Copper
-	hmgr->getHisto1(1141)->Fill(polarRadius);
-	hmgr->getHistoProf1(1140)->Fill(polarRadius,theTotalIL_COP);
-	hmgr->getHisto2(1151)->Fill(z,polarRadius);
-	hmgr->getHistoProf2(1150)->Fill(z,polarRadius,theTotalIL_COP);
-	hmgr->getHisto2(1161)->Fill(z,polarRadius);
-	hmgr->getHisto2(1160)->Fill(z,polarRadius,iCop*fillValue);
+	hmgr->getHisto1(10141)->Fill(polarRadius);
+	hmgr->getHistoProf1(10140)->Fill(polarRadius,theTotalIL_COP);
+	hmgr->getHisto2(10151)->Fill(z,polarRadius);
+	hmgr->getHistoProf2(10150)->Fill(z,polarRadius,theTotalIL_COP);
+	hmgr->getHisto2(10161)->Fill(z,polarRadius);
+	hmgr->getHisto2(10160)->Fill(z,polarRadius,iCop*fillValue);
 	// H_Scintillator
-	hmgr->getHisto1(1241)->Fill(polarRadius);
-	hmgr->getHistoProf1(1240)->Fill(polarRadius,theTotalIL_SCI);
-	hmgr->getHisto2(1251)->Fill(z,polarRadius);
-	hmgr->getHistoProf2(1250)->Fill(z,polarRadius,theTotalIL_SCI);
-	hmgr->getHisto2(1261)->Fill(z,polarRadius);
-	hmgr->getHisto2(1260)->Fill(z,polarRadius,iSci*fillValue);
+	hmgr->getHisto1(10241)->Fill(polarRadius);
+	hmgr->getHistoProf1(10240)->Fill(polarRadius,theTotalIL_SCI);
+	hmgr->getHisto2(10251)->Fill(z,polarRadius);
+	hmgr->getHistoProf2(10250)->Fill(z,polarRadius,theTotalIL_SCI);
+	hmgr->getHisto2(10261)->Fill(z,polarRadius);
+	hmgr->getHisto2(10260)->Fill(z,polarRadius,iSci*fillValue);
 	// Cables
-	hmgr->getHisto1(1341)->Fill(polarRadius);
-	hmgr->getHistoProf1(1340)->Fill(polarRadius,theTotalIL_CAB);
-	hmgr->getHisto2(1351)->Fill(z,polarRadius);
-	hmgr->getHistoProf2(1350)->Fill(z,polarRadius,theTotalIL_CAB);
-	hmgr->getHisto2(1361)->Fill(z,polarRadius);
-	hmgr->getHisto2(1360)->Fill(z,polarRadius,iCab*fillValue);
+	hmgr->getHisto1(10341)->Fill(polarRadius);
+	hmgr->getHistoProf1(10340)->Fill(polarRadius,theTotalIL_CAB);
+	hmgr->getHisto2(10351)->Fill(z,polarRadius);
+	hmgr->getHistoProf2(10350)->Fill(z,polarRadius,theTotalIL_CAB);
+	hmgr->getHisto2(10361)->Fill(z,polarRadius);
+	hmgr->getHisto2(10360)->Fill(z,polarRadius,iCab*fillValue);
 	// M_NEMA_FR4_plate
-	hmgr->getHisto1(1441)->Fill(polarRadius);
-	hmgr->getHistoProf1(1440)->Fill(polarRadius,theTotalIL_MNE);
-	hmgr->getHisto2(1451)->Fill(z,polarRadius);
-	hmgr->getHistoProf2(1450)->Fill(z,polarRadius,theTotalIL_MNE);
-	hmgr->getHisto2(1461)->Fill(z,polarRadius);
-	hmgr->getHisto2(1460)->Fill(z,polarRadius,iMne*fillValue);
+	hmgr->getHisto1(10441)->Fill(polarRadius);
+	hmgr->getHistoProf1(10440)->Fill(polarRadius,theTotalIL_MNE);
+	hmgr->getHisto2(10451)->Fill(z,polarRadius);
+	hmgr->getHistoProf2(10450)->Fill(z,polarRadius,theTotalIL_MNE);
+	hmgr->getHisto2(10461)->Fill(z,polarRadius);
+	hmgr->getHisto2(10460)->Fill(z,polarRadius,iMne*fillValue);
 	// Silicon
-	hmgr->getHisto1(1541)->Fill(polarRadius);
-	hmgr->getHistoProf1(1540)->Fill(polarRadius,theTotalIL_NIM);
-	hmgr->getHisto2(1551)->Fill(z,polarRadius);
-	hmgr->getHistoProf2(1550)->Fill(z,polarRadius,theTotalIL_NIM);
-	hmgr->getHisto2(1561)->Fill(z,polarRadius);
-	hmgr->getHisto2(1560)->Fill(z,polarRadius,iSil*fillValue);
+	hmgr->getHisto1(10541)->Fill(polarRadius);
+	hmgr->getHistoProf1(10540)->Fill(polarRadius,theTotalIL_NIM);
+	hmgr->getHisto2(10551)->Fill(z,polarRadius);
+	hmgr->getHistoProf2(10550)->Fill(z,polarRadius,theTotalIL_NIM);
+	hmgr->getHisto2(10561)->Fill(z,polarRadius);
+	hmgr->getHisto2(10560)->Fill(z,polarRadius,iSil*fillValue);
 	// Other
-	hmgr->getHisto1(1641)->Fill(polarRadius);
-	hmgr->getHistoProf1(1640)->Fill(polarRadius,theTotalIL_OTH);
-	hmgr->getHisto2(1651)->Fill(z,polarRadius);
-	hmgr->getHistoProf2(1650)->Fill(z,polarRadius,theTotalIL_OTH);
-	hmgr->getHisto2(1661)->Fill(z,polarRadius);
-	hmgr->getHisto2(1660)->Fill(z,polarRadius,iOth*fillValue);
+	hmgr->getHisto1(10641)->Fill(polarRadius);
+	hmgr->getHistoProf1(10640)->Fill(polarRadius,theTotalIL_OTH);
+	hmgr->getHisto2(10651)->Fill(z,polarRadius);
+	hmgr->getHistoProf2(10650)->Fill(z,polarRadius,theTotalIL_OTH);
+	hmgr->getHisto2(10661)->Fill(z,polarRadius);
+	hmgr->getHisto2(10660)->Fill(z,polarRadius,iOth*fillValue);
 	// Air
-	hmgr->getHisto1(1741)->Fill(polarRadius);
-	hmgr->getHistoProf1(1740)->Fill(polarRadius,theTotalIL_AIR);
-	hmgr->getHisto2(1751)->Fill(z,polarRadius);
-	hmgr->getHistoProf2(1750)->Fill(z,polarRadius,theTotalIL_AIR);
-	hmgr->getHisto2(1761)->Fill(z,polarRadius);
-	hmgr->getHisto2(1760)->Fill(z,polarRadius,iAir*fillValue);
+	hmgr->getHisto1(10741)->Fill(polarRadius);
+	hmgr->getHistoProf1(10740)->Fill(polarRadius,theTotalIL_AIR);
+	hmgr->getHisto2(10751)->Fill(z,polarRadius);
+	hmgr->getHistoProf2(10750)->Fill(z,polarRadius,theTotalIL_AIR);
+	hmgr->getHisto2(10761)->Fill(z,polarRadius);
+	hmgr->getHisto2(10760)->Fill(z,polarRadius,iAir*fillValue);
 	// StainlessSteel
-	hmgr->getHisto1(1841)->Fill(polarRadius);
-	hmgr->getHistoProf1(1840)->Fill(polarRadius,theTotalIL_SST);
-	hmgr->getHisto2(1851)->Fill(z,polarRadius);
-	hmgr->getHistoProf2(1850)->Fill(z,polarRadius,theTotalIL_SST);
-	hmgr->getHisto2(1861)->Fill(z,polarRadius);
-	hmgr->getHisto2(1860)->Fill(z,polarRadius,iSst*fillValue);
+	hmgr->getHisto1(10841)->Fill(polarRadius);
+	hmgr->getHistoProf1(10840)->Fill(polarRadius,theTotalIL_SST);
+	hmgr->getHisto2(10851)->Fill(z,polarRadius);
+	hmgr->getHistoProf2(10850)->Fill(z,polarRadius,theTotalIL_SST);
+	hmgr->getHisto2(10861)->Fill(z,polarRadius);
+	hmgr->getHisto2(10860)->Fill(z,polarRadius,iSst*fillValue);
 	// WCu
-	hmgr->getHisto1(1941)->Fill(polarRadius);
-	hmgr->getHistoProf1(1940)->Fill(polarRadius,theTotalIL_WCU);
-	hmgr->getHisto2(1951)->Fill(z,polarRadius);
-	hmgr->getHistoProf2(1950)->Fill(z,polarRadius,theTotalIL_WCU);
-	hmgr->getHisto2(1961)->Fill(z,polarRadius);
-	hmgr->getHisto2(1960)->Fill(z,polarRadius,iWcu*fillValue);
+	hmgr->getHisto1(10941)->Fill(polarRadius);
+	hmgr->getHistoProf1(10940)->Fill(polarRadius,theTotalIL_WCU);
+	hmgr->getHisto2(10951)->Fill(z,polarRadius);
+	hmgr->getHistoProf2(10950)->Fill(z,polarRadius,theTotalIL_WCU);
+	hmgr->getHisto2(10961)->Fill(z,polarRadius);
+	hmgr->getHisto2(10960)->Fill(z,polarRadius,iWcu*fillValue);
+	// Lead
+	hmgr->getHisto1(11041)->Fill(polarRadius);
+	hmgr->getHistoProf1(11040)->Fill(polarRadius,theTotalIL_LEA);
+	hmgr->getHisto2(11051)->Fill(z,polarRadius);
+	hmgr->getHistoProf2(11050)->Fill(z,polarRadius,theTotalIL_LEA);
+	hmgr->getHisto2(11061)->Fill(z,polarRadius);
+	hmgr->getHisto2(11060)->Fill(z,polarRadius,iLea*fillValue);
 	//
       }
 
@@ -859,17 +925,19 @@ void MaterialBudgetHGCalHistos::hend()
   hmgr->getHisto2(760)->Divide(hmgr->getHisto2(999));
   hmgr->getHisto2(860)->Divide(hmgr->getHisto2(999));
   hmgr->getHisto2(960)->Divide(hmgr->getHisto2(999));
+  hmgr->getHisto2(1060)->Divide(hmgr->getHisto2(999));
 
-  hmgr->getHisto2(160)->Divide(hmgr->getHisto2(1999));
-  hmgr->getHisto2(1160)->Divide(hmgr->getHisto2(1999));
-  hmgr->getHisto2(1260)->Divide(hmgr->getHisto2(1999));
-  hmgr->getHisto2(1360)->Divide(hmgr->getHisto2(1999));
-  hmgr->getHisto2(1460)->Divide(hmgr->getHisto2(1999));
-  hmgr->getHisto2(1560)->Divide(hmgr->getHisto2(1999));
-  hmgr->getHisto2(1660)->Divide(hmgr->getHisto2(1999));
-  hmgr->getHisto2(1760)->Divide(hmgr->getHisto2(1999));
-  hmgr->getHisto2(1860)->Divide(hmgr->getHisto2(1999));
-  hmgr->getHisto2(1960)->Divide(hmgr->getHisto2(1999));
+  hmgr->getHisto2(10060)->Divide(hmgr->getHisto2(1999));
+  hmgr->getHisto2(10160)->Divide(hmgr->getHisto2(1999));
+  hmgr->getHisto2(10260)->Divide(hmgr->getHisto2(1999));
+  hmgr->getHisto2(10360)->Divide(hmgr->getHisto2(1999));
+  hmgr->getHisto2(10460)->Divide(hmgr->getHisto2(1999));
+  hmgr->getHisto2(10560)->Divide(hmgr->getHisto2(1999));
+  hmgr->getHisto2(10660)->Divide(hmgr->getHisto2(1999));
+  hmgr->getHisto2(10760)->Divide(hmgr->getHisto2(1999));
+  hmgr->getHisto2(10860)->Divide(hmgr->getHisto2(1999));
+  hmgr->getHisto2(10960)->Divide(hmgr->getHisto2(1999));
+  hmgr->getHisto2(11060)->Divide(hmgr->getHisto2(1999));
 
   std::cout << "=== save user histos ===" << std::endl;
   hmgr->save( theFileName );

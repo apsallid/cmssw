@@ -203,6 +203,7 @@ void MaterialBudgetCategorizer::buildHGCalCategoryMap(std::string theMaterialFil
     theMap[materialName].push_back(Silicon         ); // Silicon         
     theMap[materialName].push_back(StainlessSteel  ); // StainlessSteel  
     theMap[materialName].push_back(WCu             ); // WCu             
+    theMap[materialName].push_back(oth             ); // oth
     cout << " material " << materialName << " filled " 
 	 << " Air              " << Air             
 	 << " Cables           " << Cables          

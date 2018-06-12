@@ -284,7 +284,8 @@ void MaterialBudgetData::dataPerStep( const G4Step* aStep )
       theSiliconFractionMB          = myMaterialBudgetCategorizer->x0fraction(materialName).at(6);
       theStainlessSteelFractionMB   = myMaterialBudgetCategorizer->x0fraction(materialName).at(7);
       theWCuFractionMB              = myMaterialBudgetCategorizer->x0fraction(materialName).at(8);
-      
+      theOtherFractionMB            = myMaterialBudgetCategorizer->x0fraction(materialName).at(9);
+
     
       if(theOtherFractionMB!=0) std::cout << " material found with no category " << materialName 
 					  << " in volume " << volumeName << std::endl;
@@ -305,7 +306,8 @@ void MaterialBudgetData::dataPerStep( const G4Step* aStep )
       theSiliconFractionIL          = myMaterialBudgetCategorizer->x0fraction(materialName).at(6);
       theStainlessSteelFractionIL   = myMaterialBudgetCategorizer->x0fraction(materialName).at(7);
       theWCuFractionIL              = myMaterialBudgetCategorizer->x0fraction(materialName).at(8);
- 
+      theOtherFractionIL            = myMaterialBudgetCategorizer->l0fraction(materialName).at(9);
+
 
       if(theOtherFractionIL!=0) std::cout << " material found with no category " << materialName 
 					  << " in volume " << volumeName << std::endl;
