@@ -20,8 +20,8 @@ class  MaterialBudgetCategorizer {
   int volume(std::string s){return theVolumeMap[s];}
   int material(std::string s){return theMaterialMap[s];}
   // rr
-  std::vector<float> x0fraction(std::string s){return theX0Map[s];}
-  std::vector<float> l0fraction(std::string s){return theL0Map[s];}
+  const std::vector<float> & x0fraction(std::string s){return theX0Map[s];}
+  const std::vector<float> & l0fraction(std::string s){return theL0Map[s];}
   // rr
  private:
   void buildMaps();

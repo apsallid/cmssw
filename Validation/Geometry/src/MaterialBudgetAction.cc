@@ -228,14 +228,14 @@ void MaterialBudgetAction::update(const BeginOfTrack* trk)
   }
   
   
-  if(firstParticle) {
+  // if(firstParticle) {
     //--------- start of track
     //-    std::cout << " Data Start Track " << std::endl;
     theData->dataStartTrack( aTrack );
     if (saveToTree) theTree->fillStartTrack();
     if (saveToHistos) theHistos->fillStartTrack();
     if (saveToTxt) theTxt->fillStartTrack();
-  }
+  // }
 }
  
 

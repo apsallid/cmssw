@@ -13,6 +13,7 @@
 
 #include <fstream>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -151,6 +152,9 @@ void MaterialBudgetCategorizer::buildCategoryMap(std::string theMaterialFileName
   while(theMaterialFile) {
     theMaterialFile >> materialName;
     theMaterialFile >> sup >> sen >> cab >> col >> ele;
+    // Skip comments
+    if (materialName[0] == '#')
+      continue;
     oth = 0.000;
     air = 0.000;
     theMap[materialName].clear();        // clear before re-filling
@@ -192,30 +196,35 @@ void MaterialBudgetCategorizer::buildHGCalCategoryMap(std::string theMaterialFil
   while(theMaterialFile) {
     theMaterialFile >> materialName;
     theMaterialFile >> Air >> Cables >> Copper >> H_Scintillator >> Lead >> M_NEMA_FR4_plate >> Silicon >> StainlessSteel >> WCu;
+    // Skip comments
+    if (materialName[0] == '#')
+      continue;
+    // Substitute '*' with spaces
+    std::replace(materialName.begin(), materialName.end(), '*', ' ');
     oth = 0.000;
     theMap[materialName].clear();        // clear before re-filling
-    theMap[materialName].push_back(Air             ); // Air             
+    theMap[materialName].push_back(Air             ); // Air
     theMap[materialName].push_back(Cables          ); // Cables          
     theMap[materialName].push_back(Copper          ); // Copper          
     theMap[materialName].push_back(H_Scintillator  ); // H_Scintillator  
     theMap[materialName].push_back(Lead            ); // Lead            
     theMap[materialName].push_back(M_NEMA_FR4_plate); // M_NEMA_FR4_plate
     theMap[materialName].push_back(Silicon         ); // Silicon         
-    theMap[materialName].push_back(StainlessSteel  ); // StainlessSteel  
-    theMap[materialName].push_back(WCu             ); // WCu             
+    theMap[materialName].push_back(StainlessSteel  ); // StainlessSteel
+    theMap[materialName].push_back(WCu             ); // WCu
     theMap[materialName].push_back(oth             ); // oth
-    cout << " material " << materialName << " filled " 
-	 << " Air              " << Air             
-	 << " Cables           " << Cables          
-	 << " Copper           " << Copper          
-	 << " H_Scintillator   " << H_Scintillator  
-	 << " Lead             " << Lead            
-	 << " M_NEMA_FR4_plate " << M_NEMA_FR4_plate
-	 << " Silicon          " << Silicon         
-	 << " StainlessSteel   " << StainlessSteel  
-	 << " WCu              " << WCu             
-	 << " OTH " << oth 
+    cout << " material " << materialName << " filled " << endl
+	 << "\tAir              " << Air << endl
+	 << "\tCables           " << Cables << endl
+	 << "\tCopper           " << Copper << endl
+	 << "\tH_Scintillator   " << H_Scintillator << endl
+	 << "\tLead             " << Lead << endl
+	 << "\tM_NEMA_FR4_plate " << M_NEMA_FR4_plate << endl
+	 << "\tSilicon          " << Silicon << endl
+	 << "\tStainlessSteel   " << StainlessSteel << endl
+	 << "\tWCu              " << WCu << endl
+	 << "\tOTH " << oth
 	 << endl;
   }
-  
+
 }

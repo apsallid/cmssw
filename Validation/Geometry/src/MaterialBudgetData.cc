@@ -118,8 +118,9 @@ void MaterialBudgetData::SetAllStepsToTree()
 
 void MaterialBudgetData::dataStartTrack( const G4Track* aTrack )
 {
+  std::cout << "MaterialBudgetData::dataStartTrack( const G4Track* aTrack )" << std::endl;;
   const G4ThreeVector& dir = aTrack->GetMomentum() ;
-  
+
   if( myMaterialBudgetCategorizer == nullptr) myMaterialBudgetCategorizer = new MaterialBudgetCategorizer;
   
   theStepN=0;
@@ -256,7 +257,7 @@ void MaterialBudgetData::dataPerStep( const G4Step* aStep )
   G4String volumeName = aStep->GetPreStepPoint()->GetTouchable()->GetVolume(0)->GetLogicalVolume()->GetName();
   std::cout << " Volume "   << volumeName << "\n";
   std::cout << " Material " << materialName << "\n";
-  
+
   // instantiate the categorizer
   assert(myMaterialBudgetCategorizer);
   int volumeID   = myMaterialBudgetCategorizer->volume( volumeName );
@@ -338,12 +339,13 @@ void MaterialBudgetData::dataPerStep( const G4Step* aStep )
 		    //			    << std::endl
 		    //			    << "\tMagnetic Field at (0,0,0): (" << B000[0] << "," < B000[1] << "," << B000[2] << ")" 
 			    << std::endl;
-  
+
   //fill data per step
   if( allStepsToTree ){
-    if( stepN > MAXNUMBERSTEPS ) stepN = MAXNUMBERSTEPS - 1;
-    theDmb[theStepN] = dmb; 
-    theDil[theStepN] = dil; 
+    assert(theStepN < MAXNUMBERSTEPS);
+    if( theStepN > MAXNUMBERSTEPS ) theStepN = MAXNUMBERSTEPS - 1;
+    theDmb[theStepN] = dmb;
+    theDil[theStepN] = dil;
     theSupportDmb[theStepN]     = (dmb * theSupportFractionMB);
     theSensitiveDmb[theStepN]   = (dmb * theSensitiveFractionMB);
     theCoolingDmb[theStepN]     = (dmb * theCoolingFractionMB);
