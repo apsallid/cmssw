@@ -18,15 +18,15 @@ plots = {}
 plots.setdefault('x_vs_eta', Plot_params(10, '#eta', 'x/X_{0}', 0.0, 2.575, -4.0, 4.0, '', 0, 0., 0., 0, 1))
 plots.setdefault('x_vs_phi', Plot_params(20, '#varphi [rad]', 'x/X_{0}', 0.0, 6.2, -4.0, 4.0, '', 0, 0., 0., 0, 1))
 plots.setdefault('x_vs_R',   Plot_params(40, 'R [cm]', 'x/X_{0}', 0.0, 70.0, 0.0, 1200.0, '', 0, 0., 0., 0, 1))
-plots.setdefault('l_vs_eta', Plot_params(1010, '#eta', 'x/#lambda_{I}', 0.0, 0.73, -4.0, 4.0, '', 0, 0., 0., 0, 1))
-plots.setdefault('l_vs_phi', Plot_params(1020, '#varphi [rad]', 'x/#lambda_{I}', 0.0, 1.2, -4.0, 4.0, '', 0, 0., 0., 0, 1))
-plots.setdefault('l_vs_R',   Plot_params(1040, '#R [cm]', 'x/#lambda_{I}', 0.0, 7.5, 0.0, 1200.0, '', 0, 0., 0., 0, 1))
+plots.setdefault('l_vs_eta', Plot_params(10010, '#eta', 'x/#lambda_{I}', 0.0, 0.73, -4.0, 4.0, '', 0, 0., 0., 0, 1))
+plots.setdefault('l_vs_phi', Plot_params(10020, '#varphi [rad]', 'x/#lambda_{I}', 0.0, 1.2, -4.0, 4.0, '', 0, 0., 0., 0, 1))
+plots.setdefault('l_vs_R',   Plot_params(10040, '#R [cm]', 'x/#lambda_{I}', 0.0, 7.5, 0.0, 1200.0, '', 0, 0., 0., 0, 1))
 plots.setdefault('x_vs_eta_vs_phi', Plot_params(30, '#eta', '#varphi', 0., 0., 0., 0., 'x/X_{0}', 0, -1., -1., 0, 1))
-plots.setdefault('l_vs_eta_vs_phi', Plot_params(1030, '#eta', '#varphi', 0., 0., 0., 0., 'x/#lambda_{I}', 0, -1, -1, 0, 1))
+plots.setdefault('l_vs_eta_vs_phi', Plot_params(10030, '#eta', '#varphi', 0., 0., 0., 0., 'x/#lambda_{I}', 0, -1, -1, 0, 1))
 plots.setdefault('x_vs_z_vs_Rsum', Plot_params(50, 'z [mm]', 'R [mm]', 0., 0., 0., 0., '#Sigmax/X_{0}', 1, 0., 2.5, 0, 0))
 plots.setdefault('x_vs_z_vs_R', Plot_params(60, 'z [mm]', 'R [mm]', 0., 0., 0., 0., '1/X_{0}', 1, 0.00001, 0.01, 1, 0))
-plots.setdefault('l_vs_z_vs_Rsum', Plot_params(1050, 'z [mm]', 'R [mm]', 0., 0., 0., 0., '#Sigmax/#lambda_{I}', 1, 0., 1., 0, 0))
-plots.setdefault('l_vs_z_vs_R', Plot_params(1060, 'z [mm]', 'R [mm]', 0., 0., 0., 0., '1/#lambda_{I}', 1, 0.001, 0.9, 1, 0))
+plots.setdefault('l_vs_z_vs_Rsum', Plot_params(10050, 'z [mm]', 'R [mm]', 0., 0., 0., 0., '#Sigmax/#lambda_{I}', 1, 0., 1., 0, 0))
+plots.setdefault('l_vs_z_vs_R', Plot_params(10060, 'z [mm]', 'R [mm]', 0., 0., 0., 0., '1/#lambda_{I}', 1, 0.001, 0.9, 1, 0))
 plots.setdefault('x_over_l_vs_eta', Plot_params(10, '#eta', '(x/X_{0})/(x/#lambda_{I})', 0., 0., 0., 0., '', 0, -1, -1, 0, 0))
 plots.setdefault('x_over_l_vs_phi', Plot_params(20, '#varphi [rad]', '(x/X_{0})/(x/#lambda_{I})', 0., 0., 0., 0., '', 0, -1, -1, 0, 0))
 
@@ -48,7 +48,11 @@ _LABELS2COMPS = {'BeamPipe': 'BEAM',
                  'Phase2PixelBarrel': 'Phase2PixelBarrel',
                  'Phase2OTBarrel': 'Phase2OTBarrel',
                  'Phase2PixelEndcap': 'Phase2PixelEndcap',
-                 'Phase2OTForward': 'Phase2OTForward'}
+                 'Phase2OTForward': 'Phase2OTForward',
+                 'HGCal': 'HGCal',
+                 'HGCalEE': 'HGCalEE',
+                 'HGCalHE': ['HGCalHEsil', 'HGCalHEmix']
+                 }
 
 # Compounds are used to stick together different part of the Tracker
 # detector, so that their cumulative material description can be
@@ -71,6 +75,10 @@ COMPOUNDS["TrackerSumPhaseII"] = ["BeamPipe",
 COMPOUNDS["Pixel"] = ["PixBar", "PixFwdMinus", "PixFwdPlus"]
 COMPOUNDS["Strip"] = ["TIB", "TIDF", "TIDB", "InnerServices", "TOB", "TEC"]
 COMPOUNDS["InnerTracker"] = ["TIB", "TIDF", "TIDB", "InnerServices"]
+COMPOUNDS["HGCal"] = ["HGCal"]
+COMPOUNDS["HGCalEE"] = ["HGCalEE"]
+COMPOUNDS["HGCalHE"] = ["HGCalHEsil", "HGCalHEmix"]
+
 
 # The DETECTORS must be the single component of the tracker for which
 # the user can ask for the corresponding material description.
@@ -90,6 +98,9 @@ DETECTORS["TIDF"] = kMagenta+2
 DETECTORS["TIDB"] = kMagenta+2
 DETECTORS["TOB"] = kOrange+10
 DETECTORS["TEC"] = kOrange-2
+DETECTORS["HGCal"] = kAzure-5
+DETECTORS["HGCalEE"] = kAzure-9
+DETECTORS["HGCalHE"] = kOrange-2
 
 # sDETS are the label of the Tracker elements in the Reconstruction
 # geometry. They are all used to derive the reconstruction material
@@ -113,13 +124,30 @@ sDETS["TEC"] = kPink
 # mat*root files produced. The numbering of the plots is identical
 # across all files.
 hist_label_to_num = OrderedDict()
-hist_label_to_num['SUP'] = [100, 13, 'Support'] # Index first, color second, legend label third
-hist_label_to_num['SEN'] = [200, 27, 'Sensitive']
+'''
+hist_label_to_num['COP'] = [100, 13, 'Copper'] # Index first, color second, legend label third
+hist_label_to_num['SCI'] = [200, 27, 'Scintillator']
 hist_label_to_num['CAB'] = [300, 46, 'Cables']
-hist_label_to_num['COL'] = [400, 38, 'Cooling']
-hist_label_to_num['ELE'] = [500, 30, 'Electronics']
+hist_label_to_num['MNE'] = [400, 38, 'M_NEMA_FR4 plate']
+hist_label_to_num['SIL'] = [500, 30, 'Silicon']
 hist_label_to_num['OTH'] = [600, 42, 'Other']
 hist_label_to_num['AIR'] = [700, 29, 'Air']
+hist_label_to_num['SST'] = [800, 40, 'Stainless Steel']
+hist_label_to_num['WCU'] = [900, 33, 'WCu']
+hist_label_to_num['LEA'] = [1000, 31, 'Lead']
+'''
+
+hist_label_to_num['COP'] = [100, 2, 'Copper'] # Index first, color second, legend label third
+hist_label_to_num['SCI'] = [200, 3, 'Scintillator']
+hist_label_to_num['CAB'] = [300, 4, 'Cables']
+hist_label_to_num['MNE'] = [400, 5, 'M_NEMA_FR4 plate']
+hist_label_to_num['SIL'] = [500, 6, 'Silicon']
+hist_label_to_num['OTH'] = [600, 7, 'Other']
+hist_label_to_num['AIR'] = [700, 8, 'Air']
+hist_label_to_num['SST'] = [800, 9, 'Stainless Steel']
+hist_label_to_num['WCU'] = [900, 28, 'WCu']
+hist_label_to_num['LEA'] = [1000, 12, 'Lead']
+
 
 def setTDRStyle():
     """Function to setup a TDR-like style"""

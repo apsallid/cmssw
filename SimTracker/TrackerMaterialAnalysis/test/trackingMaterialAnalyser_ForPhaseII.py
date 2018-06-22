@@ -16,7 +16,9 @@ if readGeometryFromDB:
   from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
   process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc', '')
 else:
-  process.load('Configuration.Geometry.GeometryExtended2023D4Reco_cff')
+  process.load('Configuration.Geometry.GeometryExtended2023D28Reco_cff')
+  #process.load("Geometry.HGCalCommonData.testHGCV9XML_cfi")
+  #process.load("Geometry.HGCalCommonData.hgcalParametersInitialization_cfi")
 
 process.load('FWCore.MessageService.MessageLogger_cfi')
 
@@ -34,7 +36,7 @@ process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring('file:material.root')
 )
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(200000)
+    input = cms.untracked.int32(200)
 )
 
 process.path = cms.Path(process.trackingMaterialAnalyser)
@@ -68,6 +70,6 @@ def customizeMessageLogger(process):
     return process
 
 
-#process = customizeMessageLogger(process)
+process = customizeMessageLogger(process)
 
 

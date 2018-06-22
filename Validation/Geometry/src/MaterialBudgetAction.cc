@@ -53,6 +53,9 @@ MaterialBudgetAction::MaterialBudgetAction(const edm::ParameterSet& iPSet)
   else if(theHistoList == "ECAL" ) {
     std::cout << "TestGeometry: MaterialBudgetAction running in Ecal Mode" << std::endl;
   } 
+  else if(theHistoList == "HGCal" ) {
+    std::cout << "TestGeometry: MaterialBudgetAction running in HGCal Mode" << std::endl;
+  } 
   else {
     std::cout << "TestGeometry: MaterialBudgetAction running in General Mode" << std::endl;
   }
@@ -75,6 +78,9 @@ MaterialBudgetAction::MaterialBudgetAction(const edm::ParameterSet& iPSet)
     } 
     else if (theHistoList == "ECAL") {
       theHistos = new MaterialBudgetEcalHistos( theData, theHistoMgr, saveToHistosFile );
+    }
+    else if (theHistoList == "HGCal") {
+      theHistos = new MaterialBudgetHGCalHistos( theData, theHistoMgr, saveToHistosFile );
     }
     else {
       theHistos = new MaterialBudgetHistos( theData, theHistoMgr, saveToHistosFile );

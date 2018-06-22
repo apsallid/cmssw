@@ -34,14 +34,33 @@ void MaterialBudgetData::SetAllStepsToTree()
   theCoolingDmb     = new float[MAXNUMBERSTEPS];
   theElectronicsDmb = new float[MAXNUMBERSTEPS];
   theOtherDmb       = new float[MAXNUMBERSTEPS];
-  theAirDmb         = new float[MAXNUMBERSTEPS];
+  //HGCal
+  theAirDmb               = new float[MAXNUMBERSTEPS];
+  theCablesDmb            = new float[MAXNUMBERSTEPS];
+  theCopperDmb            = new float[MAXNUMBERSTEPS];
+  theH_ScintillatorDmb    = new float[MAXNUMBERSTEPS];
+  theLeadDmb              = new float[MAXNUMBERSTEPS];
+  theM_NEMA_FR4_plateDmb  = new float[MAXNUMBERSTEPS];
+  theSiliconDmb           = new float[MAXNUMBERSTEPS];
+  theStainlessSteelDmb    = new float[MAXNUMBERSTEPS];
+  theWCuDmb               = new float[MAXNUMBERSTEPS];
+
   theSupportDil     = new float[MAXNUMBERSTEPS];
   theSensitiveDil   = new float[MAXNUMBERSTEPS];
-  theCablesDil      = new float[MAXNUMBERSTEPS];
   theCoolingDil     = new float[MAXNUMBERSTEPS];
   theElectronicsDil = new float[MAXNUMBERSTEPS];
   theOtherDil       = new float[MAXNUMBERSTEPS];
-  theAirDil         = new float[MAXNUMBERSTEPS];
+  //HGCal
+  theAirDil               = new float[MAXNUMBERSTEPS];
+  theCablesDil            = new float[MAXNUMBERSTEPS];
+  theCopperDil            = new float[MAXNUMBERSTEPS];
+  theH_ScintillatorDil    = new float[MAXNUMBERSTEPS];
+  theLeadDil              = new float[MAXNUMBERSTEPS];
+  theM_NEMA_FR4_plateDil  = new float[MAXNUMBERSTEPS];
+  theSiliconDil           = new float[MAXNUMBERSTEPS];
+  theStainlessSteelDil    = new float[MAXNUMBERSTEPS];
+  theWCuDil               = new float[MAXNUMBERSTEPS];
+
   // rr
   theInitialX = new double[MAXNUMBERSTEPS];
   theInitialY = new double[MAXNUMBERSTEPS];
@@ -117,32 +136,69 @@ void MaterialBudgetData::dataStartTrack( const G4Track* aTrack )
   
   theSupportMB     = 0.;
   theSensitiveMB   = 0.;
-  theCablesMB      = 0.;
   theCoolingMB     = 0.;
   theElectronicsMB = 0.;
   theOtherMB       = 0.;
-  theAirMB         = 0.;
+  //HGCal
+  theAirMB              = 0.;
+  theCablesMB           = 0.;
+  theCopperMB           = 0.;
+  theH_ScintillatorMB   = 0.;
+  theLeadMB             = 0.;
+  theM_NEMA_FR4_plateMB = 0.;
+  theSiliconMB          = 0.;
+  theStainlessSteelMB   = 0.;
+  theWCuMB              = 0.;
+
   theSupportIL     = 0.;
   theSensitiveIL   = 0.;
-  theCablesIL      = 0.;
   theCoolingIL     = 0.;
   theElectronicsIL = 0.;
   theOtherIL       = 0.;
-  theAirIL         = 0.;
+
+  //HGCal
+  theAirIL              = 0.;
+  theCablesIL           = 0.;
+  theCopperIL           = 0.;
+  theH_ScintillatorIL   = 0.;
+  theLeadIL             = 0.;
+  theM_NEMA_FR4_plateIL = 0.;
+  theSiliconIL          = 0.;
+  theStainlessSteelIL   = 0.;
+  theWCuIL              = 0.;
+  
   theSupportFractionMB     = 0.;
   theSensitiveFractionMB   = 0.;
-  theCablesFractionMB      = 0.;
   theCoolingFractionMB     = 0.;
   theElectronicsFractionMB = 0.;
   theOtherFractionMB       = 0.;
-  theAirFractionMB         = 0.;
+  //HGCal
+  theAirFractionMB               = 0.;         
+  theCablesFractionMB            = 0.;            
+  theCopperFractionMB            = 0.;               
+  theH_ScintillatorFractionMB    = 0.;          
+  theLeadFractionMB              = 0.;              
+  theM_NEMA_FR4_plateFractionMB  = 0.;         
+  theSiliconFractionMB           = 0.;               
+  theStainlessSteelFractionMB    = 0.;          
+  theWCuFractionMB               = 0.;                   
+
   theSupportFractionIL     = 0.;
   theSensitiveFractionIL   = 0.;
-  theCablesFractionIL      = 0.;
   theCoolingFractionIL     = 0.;
   theElectronicsFractionIL = 0.;
   theOtherFractionIL       = 0.;
-  theAirFractionIL         = 0.;
+  //HGCal
+  theAirFractionIL               = 0.;         
+  theCablesFractionIL            = 0.;            
+  theCopperFractionIL            = 0.;               
+  theH_ScintillatorFractionIL    = 0.;          
+  theLeadFractionIL              = 0.;              
+  theM_NEMA_FR4_plateFractionIL  = 0.;         
+  theSiliconFractionIL           = 0.;               
+  theStainlessSteelFractionIL    = 0.;          
+  theWCuFractionIL               = 0.;                   
+
   // rr
   
   theID = (int)(aTrack->GetDefinition()->GetPDGEncoding());
@@ -165,8 +221,13 @@ void MaterialBudgetData::dataEndTrack( const G4Track* aTrack )
   //-  std::cout << "[OVAL] MaterialBudget " << G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID() << " " << theEta << " " << thePhi << " " << theTotalMB << std::endl;
   // rr
   std::cout << "Recorded steps " << theStepN << std::endl;
-  std::cout << " Material Budget: Radiation Length   " << "G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID()" << " eta " << theEta << " phi " << thePhi << " total X " << theTotalMB << " SUP " << theSupportMB << " SEN " << theSensitiveMB << " CAB " << theCablesMB << " COL " << theCoolingMB << " ELE " << theElectronicsMB << " other " << theOtherMB << " Air " << theAirMB << std::endl;
-  std::cout << " Material Budget: Interaction Length " << "G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID()" << " eta " << theEta << " phi " << thePhi << " total L " << theTotalIL << " SUP " << theSupportIL << " SEN " << theSensitiveIL << " CAB " << theCablesIL << " COL " << theCoolingIL << " ELE " << theElectronicsIL << " other " << theOtherIL << " Air " << theAirIL << std::endl;
+  // std::cout << " Material Budget: Radiation Length   " << "G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID()" << " eta " << theEta << " phi " << thePhi << " total X " << theTotalMB << " SUP " << theSupportMB << " SEN " << theSensitiveMB << " CAB " << theCablesMB << " COL " << theCoolingMB << " ELE " << theElectronicsMB << " other " << theOtherMB << " Air " << theAirMB << std::endl;
+    // std::cout << " Material Budget: Interaction Length " << "G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID()" << " eta " << theEta << " phi " << thePhi << " total L " << theTotalIL << " SUP " << theSupportIL << " SEN " << theSensitiveIL << " CAB " << theCablesIL << " COL " << theCoolingIL << " ELE " << theElectronicsIL << " other " << theOtherIL << " Air " << theAirIL << std::endl;
+
+  std::cout << " HGCal Material Budget: Radiation Length   " << "G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID()" << " eta " << theEta << " phi " << thePhi << " total X " << theTotalMB << " theCopperMB " << theCopperMB << " theH_ScintillatorMB " << theH_ScintillatorMB << " CAB " << theCablesMB << " theLeadMB " << theLeadMB << " theM_NEMA_FR4_plateMB " << theM_NEMA_FR4_plateMB << " theSiliconMB " << theSiliconMB << " Air " << theAirMB << " theStainlessSteelMB " << theStainlessSteelMB << " theWCuMB " << theWCuMB << std::endl;
+
+  std::cout << " HGCal Material Budget: Interaction Length   " << "G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID()" << " eta " << theEta << " phi " << thePhi << " total X " << theTotalIL << " theCopperIL " << theCopperIL << " theH_ScintillatorIL " << theH_ScintillatorIL << " CAB " << theCablesIL << " theLeadIL " << theLeadIL << " theM_NEMA_FR4_plateIL " << theM_NEMA_FR4_plateIL << " theSiliconIL " << theSiliconIL << " Air " << theAirIL << " theStainlessSteelIL " << theStainlessSteelIL << " theWCuIL " << theWCuIL << std::endl;
+
   // rr
 }
 
@@ -206,23 +267,48 @@ void MaterialBudgetData::dataPerStep( const G4Step* aStep )
   // values as zeros. 
   if(!myMaterialBudgetCategorizer->x0fraction(materialName).empty())
     {
-      theSupportFractionMB     = myMaterialBudgetCategorizer->x0fraction(materialName).at(0);
-      theSensitiveFractionMB   = myMaterialBudgetCategorizer->x0fraction(materialName).at(1);
-      theCablesFractionMB      = myMaterialBudgetCategorizer->x0fraction(materialName).at(2);
-      theCoolingFractionMB     = myMaterialBudgetCategorizer->x0fraction(materialName).at(3);
-      theElectronicsFractionMB = myMaterialBudgetCategorizer->x0fraction(materialName).at(4);
-      theOtherFractionMB       = myMaterialBudgetCategorizer->x0fraction(materialName).at(5);
-      theAirFractionMB         = myMaterialBudgetCategorizer->x0fraction(materialName).at(6);
+      // theSupportFractionMB     = myMaterialBudgetCategorizer->x0fraction(materialName).at(0);
+      // theSensitiveFractionMB   = myMaterialBudgetCategorizer->x0fraction(materialName).at(1);
+      // theCablesFractionMB      = myMaterialBudgetCategorizer->x0fraction(materialName).at(2);
+      // theCoolingFractionMB     = myMaterialBudgetCategorizer->x0fraction(materialName).at(3);
+      // theElectronicsFractionMB = myMaterialBudgetCategorizer->x0fraction(materialName).at(4);
+      // theOtherFractionMB       = myMaterialBudgetCategorizer->x0fraction(materialName).at(5);
+      // theAirFractionMB         = myMaterialBudgetCategorizer->x0fraction(materialName).at(6);
+      
+      theAirFractionMB              = myMaterialBudgetCategorizer->x0fraction(materialName).at(0);
+      theCablesFractionMB           = myMaterialBudgetCategorizer->x0fraction(materialName).at(1);
+      theCopperFractionMB           = myMaterialBudgetCategorizer->x0fraction(materialName).at(2);
+      theH_ScintillatorFractionMB   = myMaterialBudgetCategorizer->x0fraction(materialName).at(3);
+      theLeadFractionMB             = myMaterialBudgetCategorizer->x0fraction(materialName).at(4);
+      theM_NEMA_FR4_plateFractionMB = myMaterialBudgetCategorizer->x0fraction(materialName).at(5);
+      theSiliconFractionMB          = myMaterialBudgetCategorizer->x0fraction(materialName).at(6);
+      theStainlessSteelFractionMB   = myMaterialBudgetCategorizer->x0fraction(materialName).at(7);
+      theWCuFractionMB              = myMaterialBudgetCategorizer->x0fraction(materialName).at(8);
+      theOtherFractionMB            = myMaterialBudgetCategorizer->x0fraction(materialName).at(9);
+
     
       if(theOtherFractionMB!=0) std::cout << " material found with no category " << materialName 
 					  << " in volume " << volumeName << std::endl;
-      theSupportFractionIL     = myMaterialBudgetCategorizer->l0fraction(materialName).at(0);
-      theSensitiveFractionIL   = myMaterialBudgetCategorizer->l0fraction(materialName).at(1);
-      theCablesFractionIL      = myMaterialBudgetCategorizer->l0fraction(materialName).at(2);
-      theCoolingFractionIL     = myMaterialBudgetCategorizer->l0fraction(materialName).at(3);
-      theElectronicsFractionIL = myMaterialBudgetCategorizer->l0fraction(materialName).at(4);
-      theOtherFractionIL       = myMaterialBudgetCategorizer->l0fraction(materialName).at(5);
-      theAirFractionIL         = myMaterialBudgetCategorizer->l0fraction(materialName).at(6);
+      // theSupportFractionIL     = myMaterialBudgetCategorizer->l0fraction(materialName).at(0);
+      // theSensitiveFractionIL   = myMaterialBudgetCategorizer->l0fraction(materialName).at(1);
+      // theCablesFractionIL      = myMaterialBudgetCategorizer->l0fraction(materialName).at(2);
+      // theCoolingFractionIL     = myMaterialBudgetCategorizer->l0fraction(materialName).at(3);
+      // theElectronicsFractionIL = myMaterialBudgetCategorizer->l0fraction(materialName).at(4);
+      // theOtherFractionIL       = myMaterialBudgetCategorizer->l0fraction(materialName).at(5);
+      // theAirFractionIL         = myMaterialBudgetCategorizer->l0fraction(materialName).at(6);
+
+      theAirFractionIL              = myMaterialBudgetCategorizer->x0fraction(materialName).at(0);
+      theCablesFractionIL           = myMaterialBudgetCategorizer->x0fraction(materialName).at(1);
+      theCopperFractionIL           = myMaterialBudgetCategorizer->x0fraction(materialName).at(2);
+      theH_ScintillatorFractionIL   = myMaterialBudgetCategorizer->x0fraction(materialName).at(3);
+      theLeadFractionIL             = myMaterialBudgetCategorizer->x0fraction(materialName).at(4);
+      theM_NEMA_FR4_plateFractionIL = myMaterialBudgetCategorizer->x0fraction(materialName).at(5);
+      theSiliconFractionIL          = myMaterialBudgetCategorizer->x0fraction(materialName).at(6);
+      theStainlessSteelFractionIL   = myMaterialBudgetCategorizer->x0fraction(materialName).at(7);
+      theWCuFractionIL              = myMaterialBudgetCategorizer->x0fraction(materialName).at(8);
+      theOtherFractionIL            = myMaterialBudgetCategorizer->l0fraction(materialName).at(9);
+
+
       if(theOtherFractionIL!=0) std::cout << " material found with no category " << materialName 
 					  << " in volume " << volumeName << std::endl;
     }
@@ -260,18 +346,36 @@ void MaterialBudgetData::dataPerStep( const G4Step* aStep )
     theDil[theStepN] = dil; 
     theSupportDmb[theStepN]     = (dmb * theSupportFractionMB);
     theSensitiveDmb[theStepN]   = (dmb * theSensitiveFractionMB);
-    theCablesDmb[theStepN]      = (dmb * theCablesFractionMB);
     theCoolingDmb[theStepN]     = (dmb * theCoolingFractionMB);
     theElectronicsDmb[theStepN] = (dmb * theElectronicsFractionMB);
     theOtherDmb[theStepN]       = (dmb * theOtherFractionMB);
-    theAirDmb[theStepN]         = (dmb * theAirFractionMB);
+    //HGCal
+    theAirDmb[theStepN]                 = (dmb * theAirFractionMB);
+    theCablesDmb[theStepN]              = (dmb * theCablesFractionMB);
+    theCopperDmb[theStepN]              = (dmb * theCopperFractionMB);                       
+    theH_ScintillatorDmb[theStepN]      = (dmb * theH_ScintillatorFractionMB);       
+    theLeadDmb[theStepN]                = (dmb * theLeadFractionMB);                           
+    theM_NEMA_FR4_plateDmb[theStepN]    = (dmb * theM_NEMA_FR4_plateFractionMB);   
+    theSiliconDmb[theStepN]             = (dmb * theSiliconFractionMB);                     
+    theStainlessSteelDmb[theStepN]      = (dmb * theStainlessSteelFractionMB);       
+    theWCuDmb[theStepN]                 = (dmb * theWCuFractionMB);                             
+
     theSupportDil[theStepN]     = (dil * theSupportFractionIL);
     theSensitiveDil[theStepN]   = (dil * theSensitiveFractionIL);
-    theCablesDil[theStepN]      = (dil * theCablesFractionIL);
     theCoolingDil[theStepN]     = (dil * theCoolingFractionIL);
     theElectronicsDil[theStepN] = (dil * theElectronicsFractionIL);
     theOtherDil[theStepN]       = (dil * theOtherFractionIL);
-    theAirDil[theStepN]         = (dil * theAirFractionIL);
+    //HGCal
+    theAirDil[theStepN]                 = (dil * theAirFractionIL);
+    theCablesDil[theStepN]              = (dil * theCablesFractionIL);
+    theCopperDil[theStepN]              = (dil * theCopperFractionIL);                       
+    theH_ScintillatorDil[theStepN]      = (dil * theH_ScintillatorFractionIL);       
+    theLeadDil[theStepN]                = (dil * theLeadFractionIL);                           
+    theM_NEMA_FR4_plateDil[theStepN]    = (dil * theM_NEMA_FR4_plateFractionIL);   
+    theSiliconDil[theStepN]             = (dil * theSiliconFractionIL);                     
+    theStainlessSteelDil[theStepN]      = (dil * theStainlessSteelFractionIL);       
+    theWCuDil[theStepN]                 = (dil * theWCuFractionIL);                             
+
     theInitialX[theStepN] = prePos.x();
     theInitialY[theStepN] = prePos.y();
     theInitialZ[theStepN] = prePos.z();
@@ -337,6 +441,7 @@ void MaterialBudgetData::dataPerStep( const G4Step* aStep )
 	      << " Other "       << theOtherDmb[theStepN]
 	      << " Air "         << theAirDmb[theStepN]
 	      << std::endl
+
 	      << "\tDelta IL = " << theDil[theStepN]
 	      << std::endl
 	      << "\t\tSupport "  << theSupportDil[theStepN]
@@ -442,18 +547,38 @@ void MaterialBudgetData::dataPerStep( const G4Step* aStep )
   // rr
   theSupportMB     += (dmb * theSupportFractionMB);
   theSensitiveMB   += (dmb * theSensitiveFractionMB);
-  theCablesMB      += (dmb * theCablesFractionMB);
   theCoolingMB     += (dmb * theCoolingFractionMB);
   theElectronicsMB += (dmb * theElectronicsFractionMB);
   theOtherMB       += (dmb * theOtherFractionMB);
-  theAirMB         += (dmb * theAirFractionMB);
+  //HGCal
+  theAirMB                 += (dmb * theAirFractionMB);
+  theCablesMB              += (dmb * theCablesFractionMB);
+  theCopperMB              += (dmb * theCopperFractionMB);                       
+  theH_ScintillatorMB      += (dmb * theH_ScintillatorFractionMB);       
+  theLeadMB                += (dmb * theLeadFractionMB);                           
+  theM_NEMA_FR4_plateMB    += (dmb * theM_NEMA_FR4_plateFractionMB);   
+  theSiliconMB             += (dmb * theSiliconFractionMB);                     
+  theStainlessSteelMB      += (dmb * theStainlessSteelFractionMB);       
+  theWCuMB                 += (dmb * theWCuFractionMB);                             
+
   theSupportIL     += (dil * theSupportFractionIL);
   theSensitiveIL   += (dil * theSensitiveFractionIL);
-  theCablesIL      += (dil * theCablesFractionIL);
   theCoolingIL     += (dil * theCoolingFractionIL);
   theElectronicsIL += (dil * theElectronicsFractionIL);
   theOtherIL       += (dil * theOtherFractionIL);
-  theAirIL         += (dil * theAirFractionIL);
+  //HGCal
+  theAirIL                 += (dil * theAirFractionIL);
+  theCablesIL              += (dil * theCablesFractionIL);
+  theCopperIL              += (dil * theCopperFractionIL);                       
+  theH_ScintillatorIL      += (dil * theH_ScintillatorFractionIL);       
+  theLeadIL                += (dil * theLeadFractionIL);                           
+  theM_NEMA_FR4_plateIL    += (dil * theM_NEMA_FR4_plateFractionIL);   
+  theSiliconIL             += (dil * theSiliconFractionIL);                     
+  theStainlessSteelIL      += (dil * theStainlessSteelFractionIL);       
+  theWCuIL                 += (dil * theWCuFractionIL);                             
+  
+
+
   // rr
   
   theStepN++;

@@ -360,6 +360,7 @@ def createCompoundPlots(detector, plot):
     prof_X0_elements = OrderedDict()
     hist_X0_elements = OrderedDict()
     for label, [num, color, leg] in hist_label_to_num.iteritems():
+        #print label, num, color, leg
         prof_X0_elements[label] = theDetectorFile.Get("%d" % (num + plots[plot].plotNumber))
         hist_X0_elements[label] = prof_X0_elements[label].ProjectionX()
         hist_X0_elements[label].SetFillColor(color)
@@ -586,7 +587,7 @@ def createRatioPlots(detector, plot):
     theDetectorFile = TFile(theDetectorFilename)
     # get TProfiles
     prof_x0_det_total = theDetectorFile.Get('%d' % plots[plot].plotNumber)
-    prof_l0_det_total = theDetectorFile.Get('%d' % (1000+plots[plot].plotNumber))
+    prof_l0_det_total = theDetectorFile.Get('%d' % (10000+plots[plot].plotNumber))
 
     # histos
     hist_x0_total = prof_x0_det_total.ProjectionX()
@@ -607,7 +608,7 @@ def createRatioPlots(detector, plot):
 
             # subdetector profiles
             prof_x0_det_total = subDetectorFile.Get('%d' % plots[plot].plotNumber)
-            prof_l0_det_total = subDetectorFile.Get('%d' % (1000+plots[plot].plotNumber))
+            prof_l0_det_total = subDetectorFile.Get('%d' % (10000+plots[plot].plotNumber))
             # add to summary histogram
             hist_x0_total.Add(prof_x0_det_total.ProjectionX("B_%s" % prof_x0_det_total.GetName()), +1.000 )
             hist_l0_total.Add(prof_l0_det_total.ProjectionX("B_%s" % prof_l0_det_total.GetName()), +1.000 )

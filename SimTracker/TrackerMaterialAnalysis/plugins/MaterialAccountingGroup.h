@@ -196,6 +196,7 @@ private:
 
   // 100um should be small enough that no elements from different layers/groups are so close
   static double const s_tolerance;
+  static double const tolerance;
 };
 
 #endif // MaterialAccountingGroup_h
