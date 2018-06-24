@@ -448,12 +448,12 @@ def create2DPlots(detector, plot):
         for subDetector in COMPOUNDS[detector][1:]:
             # filenames of single components
             subDetectorFilename = "matbdg_%s.root" % subDetector
-
+ 
             # open file
             if not checkFile_(subDetectorFilename):
                 print("Error, missing file %s" % subDetectorFilename)
                 continue
-
+    
             subDetectorFile = TFile(subDetectorFilename)
             files.append(subDetectorFile)
             print("*** Open file... %s" %  subDetectorFilename)
