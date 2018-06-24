@@ -402,9 +402,13 @@ def createCompoundPlots(detector, plot):
 
     # Draw
     stack_X0.Draw("HIST");
+    stack_X0.GetYaxis().SetTitleOffset(1.15);
 
     # Legenda
-    theLegend = TLegend(0.70, 0.70, 0.89, 0.89);
+    theLegend = TLegend(0.40, 0.65, 0.60, 0.89)
+    if plot == "x_vs_phi" or plot == "l_vs_phi": theLegend = TLegend(0.65, 0.30, 0.89, 0.70)
+    if plot == "x_vs_R" or plot == "l_vs_R": theLegend = TLegend(0.75, 0.60, 0.95, 0.90)
+
     for label, [num, color, leg] in hist_label_to_num.iteritems():
         theLegend.AddEntry(hist_X0_elements[label], leg, "f")
     theLegend.Draw();
@@ -435,12 +439,14 @@ def create2DPlots(detector, plot):
 
     theDetectorFile = TFile(theDetectorFilename)
 
+    prof2d_X0_det_total = TProfile2D()
+    prof2d_X0_det_total.Reset()
     # get TProfiles
     prof2d_X0_det_total = theDetectorFile.Get('%s' % plots[plot].plotNumber)
 
     # histos
     prof2d_X0_det_total.__class__ = TProfile2D
-    hist_X0_total = prof2d_X0_det_total.ProjectionXY()
+    #hist_X0_total = prof2d_X0_det_total.ProjectionXY()
 
     # keep files live forever
     files = []
@@ -471,10 +477,10 @@ def create2DPlots(detector, plot):
     # #
 
     # Create "null" histo
-    minX = 1.03*hist_X0_total.GetXaxis().GetXmin()
-    maxX = 1.03*hist_X0_total.GetXaxis().GetXmax()
-    minY = 1.03*hist_X0_total.GetYaxis().GetXmin()
-    maxY = 1.03*hist_X0_total.GetYaxis().GetXmax()
+    minX = 1.03*prof2d_X0_det_total.GetXaxis().GetXmin()
+    maxX = 1.03*prof2d_X0_det_total.GetXaxis().GetXmax()
+    minY = 1.03*prof2d_X0_det_total.GetYaxis().GetXmin()
+    maxY = 1.03*prof2d_X0_det_total.GetYaxis().GetXmax()
 
     frame = TH2F("frame", "", 10, minX, maxX, 10, minY, maxY);
     frame.SetMinimum(0.1)
@@ -484,7 +490,7 @@ def create2DPlots(detector, plot):
 
     # Ratio
     if plots[plot].iRebin:
-        hist_X0_total.Rebin2D()
+        prof2d_X0_det_total.Rebin2D()
 
     # stack
     hist2dTitle = ('%s %s;%s;%s;%s' % (plots[plot].quotaName,
@@ -493,7 +499,8 @@ def create2DPlots(detector, plot):
                                        plots[plot].ordinate,
                                        plots[plot].quotaName))
 
-    hist2d_X0_total = hist_X0_total
+    hist2d_X0_total = prof2d_X0_det_total
+    hist2d_X0_total.SetTitle(hist2dTitle)
     frame.SetTitle(hist2dTitle)
     frame.SetTitleOffset(0.5,"Y")
 
@@ -521,8 +528,9 @@ def create2DPlots(detector, plot):
     can2.SetLogz(plots[plot].zLog)
 
     # Draw in colors
-    frame.Draw()
-    hist2d_X0_total.Draw("COLZsame") #Dummy draw to create the palette object
+    #frame.Draw()
+    #hist2d_X0_total.Draw("COLZsame") #Dummy draw to create the palette object
+    hist2d_X0_total.Draw("COLZ") #Dummy draw to create the palette object
 
     # Store
     can2.Update()
@@ -547,8 +555,10 @@ def create2DPlots(detector, plot):
     hist2d_X0_total.GetYaxis().SetTickLength(hist2d_X0_total.GetXaxis().GetTickLength()/4.)
     hist2d_X0_total.GetYaxis().SetTickLength(hist2d_X0_total.GetXaxis().GetTickLength()/4.)
     hist2d_X0_total.SetTitleOffset(0.5,"Y")
-    hist2d_X0_total.GetXaxis().SetNoExponent(True)
-    hist2d_X0_total.GetYaxis().SetNoExponent(True)
+    hist2d_X0_total.GetYaxis().SetTitleOffset(0.45);
+    #hist2d_X0_total.GetXaxis().SetTitleOffset(1.15);
+    #hist2d_X0_total.GetXaxis().SetNoExponent(True)
+    #hist2d_X0_total.GetYaxis().SetNoExponent(True)
 
     #Add eta labels
     keep_alive = []
@@ -556,14 +566,28 @@ def create2DPlots(detector, plot):
         keep_alive.extend(drawEtaValues())
 
     can2.Modified()
-    hist2d_X0_total.SetContour(255)
+    #hist2d_X0_total.SetContour(255)
 
     # Store
     can2.Update()
     can2.Modified()
 
-    can2.SaveAs( "%s/%s_%s_bw.pdf" % (theDirname, detector, plot))
-    can2.SaveAs( "%s/%s_%s_bw.png" % (theDirname, detector, plot))
+    can2.SaveAs( "%s/%s_%s.pdf" % (theDirname, detector, plot))
+    can2.SaveAs( "%s/%s_%s.png" % (theDirname, detector, plot))
+    can2.SaveAs( "%s/%s_%s.root" % (theDirname, detector, plot))
+
+    #Zoom in a little bit
+    if plot == "x_vs_z_vs_R" or plot == "l_vs_z_vs_R" or plot == "x_vs_z_vs_Rsum" or plot == "l_vs_z_vs_Rsum" or plot == "x_vs_z_vs_Rcos" or plot == "l_vs_z_vs_Rcos": 
+        #Z+
+        #hist2d_X0_total.GetXaxis().SetLimits( 3100., 5200.)
+        hist2d_X0_total.GetXaxis().SetRangeUser( 3100., 5200.)
+        #hist2d_X0_total.Draw("COLZ") 
+        can2.Update()
+        can2.Modified()
+        can2.SaveAs( "%s/%s_%s_ZplusZoom.pdf" % (theDirname, detector, plot))
+        can2.SaveAs( "%s/%s_%s_ZplusZoom.png" % (theDirname, detector, plot))
+
+
     gStyle.SetStripDecimals(True)
 
 def createRatioPlots(detector, plot):
@@ -677,8 +701,8 @@ if __name__ == '__main__':
             print("Error, missing detector")
             raise RuntimeError
         required_2Dplots = ["x_vs_eta_vs_phi", "l_vs_eta_vs_phi", "x_vs_z_vs_R",
-                            "l_vs_z_vs_R", "x_vs_z_vs_Rsum", "l_vs_z_vs_Rsum"]
-        required_plots = ["x_vs_eta", "x_vs_phi", "l_vs_eta", "l_vs_phi"]
+                            "l_vs_z_vs_R", "x_vs_z_vs_Rsum", "l_vs_z_vs_Rsum", "x_vs_z_vs_Rcos", "l_vs_z_vs_Rcos"]
+        required_plots = ["x_vs_eta", "x_vs_phi", "x_vs_R", "l_vs_eta", "l_vs_phi", "l_vs_R"]
 
         required_ratio_plots = ["x_over_l_vs_eta", "x_over_l_vs_phi"]
 
