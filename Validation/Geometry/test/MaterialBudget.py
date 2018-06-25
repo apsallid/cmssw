@@ -38,7 +38,7 @@ def paramsGood_(detector, plot):
 
     theDetectorFilename = ''
     if detector in DETECTORS:
-        theDetectorFilename = 'matbdg_%s.root' % detector
+        theDetectorFilename = 'matbdg_%s_1Mevents.root' % detector
     else:
         theDetectorFilename = 'matbdg_%s.root' % COMPOUNDS[detector][0]
 
@@ -419,7 +419,7 @@ def createCompoundPlots(detector, plot):
     can.SaveAs( "%s/%s_%s.png" % (theDirname, detector, plot))
 
 
-def create2DPlots(detector, plot):
+def create2DPlots(detector, plot, plotnum, plotmat):
     """Produce the requested plot for the specified detector.
 
        Function that will plot the requested 2D-@plot for the
@@ -441,8 +441,10 @@ def create2DPlots(detector, plot):
 
     prof2d_X0_det_total = TProfile2D()
     prof2d_X0_det_total.Reset()
+
     # get TProfiles
-    prof2d_X0_det_total = theDetectorFile.Get('%s' % plots[plot].plotNumber)
+    #prof2d_X0_det_total = theDetectorFile.Get('%s' % plots[plot].plotNumber)
+    prof2d_X0_det_total = theDetectorFile.Get('%s' % plotnum)
 
     # histos
     prof2d_X0_det_total.__class__ = TProfile2D
@@ -504,13 +506,15 @@ def create2DPlots(detector, plot):
     frame.SetTitle(hist2dTitle)
     frame.SetTitleOffset(0.5,"Y")
 
+    #If here you put different histomin,histomaxin plot_utils you won't see anything 
+    #for the material plots. 
     if plots[plot].histoMin != -1.:
         hist2d_X0_total.SetMinimum(plots[plot].histoMin)
     if plots[plot].histoMax != -1.:
         hist2d_X0_total.SetMaximum(plots[plot].histoMax)
 
     #
-    can2name = "MBCan_2D_%s_%s" % (detector, plot)
+    can2name = "MBCan_2D_%s_%s_%s" % (detector, plot, plotmat)
     can2 = TCanvas(can2name, can2name, 2480+248, 580+58+58)
     can2.SetTopMargin(0.1)
     can2.SetBottomMargin(0.1)
@@ -572,9 +576,9 @@ def create2DPlots(detector, plot):
     can2.Update()
     can2.Modified()
 
-    can2.SaveAs( "%s/%s_%s.pdf" % (theDirname, detector, plot))
-    can2.SaveAs( "%s/%s_%s.png" % (theDirname, detector, plot))
-    can2.SaveAs( "%s/%s_%s.root" % (theDirname, detector, plot))
+    can2.SaveAs( "%s/%s_%s%s.pdf" % (theDirname, detector, plot, plotmat))
+    can2.SaveAs( "%s/%s_%s%s.png" % (theDirname, detector, plot, plotmat))
+    can2.SaveAs( "%s/%s_%s%s.root" % (theDirname, detector, plot, plotmat))
 
     #Zoom in a little bit
     if plot == "x_vs_z_vs_R" or plot == "l_vs_z_vs_R" or plot == "x_vs_z_vs_Rsum" or plot == "l_vs_z_vs_Rsum" or plot == "x_vs_z_vs_Rcos" or plot == "l_vs_z_vs_Rcos": 
@@ -584,8 +588,8 @@ def create2DPlots(detector, plot):
         #hist2d_X0_total.Draw("COLZ") 
         can2.Update()
         can2.Modified()
-        can2.SaveAs( "%s/%s_%s_ZplusZoom.pdf" % (theDirname, detector, plot))
-        can2.SaveAs( "%s/%s_%s_ZplusZoom.png" % (theDirname, detector, plot))
+        can2.SaveAs( "%s/%s_%s%s_ZplusZoom.pdf" % (theDirname, detector, plot, plotmat))
+        can2.SaveAs( "%s/%s_%s%s_ZplusZoom.png" % (theDirname, detector, plot, plotmat))
 
 
     gStyle.SetStripDecimals(True)
@@ -700,14 +704,19 @@ if __name__ == '__main__':
         if args.detector is None:
             print("Error, missing detector")
             raise RuntimeError
-        required_2Dplots = ["x_vs_eta_vs_phi", "l_vs_eta_vs_phi", "x_vs_z_vs_R",
-                            "l_vs_z_vs_R", "x_vs_z_vs_Rsum", "l_vs_z_vs_Rsum", "x_vs_z_vs_Rcos", "l_vs_z_vs_Rcos"]
+        required_2Dplots = ["x_vs_eta_vs_phi", "l_vs_eta_vs_phi", "x_vs_z_vs_Rsum", "l_vs_z_vs_Rsum", "x_vs_z_vs_Rsumcos", "l_vs_z_vs_Rsumcos", "x_vs_z_vs_Rloc", "l_vs_z_vs_Rloc", "x_vs_z_vs_Rloccos", "l_vs_z_vs_Rloccos"]
         required_plots = ["x_vs_eta", "x_vs_phi", "x_vs_R", "l_vs_eta", "l_vs_phi", "l_vs_R"]
 
         required_ratio_plots = ["x_over_l_vs_eta", "x_over_l_vs_phi"]
 
         for p in required_2Dplots:
-            create2DPlots(args.detector, p)
+            #First the total
+            create2DPlots(args.detector, p, plots[p].plotNumber, "")
+            #Then, the rest
+            for label, [num, color, leg] in hist_label_to_num.iteritems():
+                #print label, num, color, leg
+                create2DPlots(args.detector, p, num + plots[p].plotNumber, leg)
+
         for p in required_plots:
             createCompoundPlots(args.detector, p)
         for p in required_ratio_plots:
