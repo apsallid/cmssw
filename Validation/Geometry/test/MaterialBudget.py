@@ -3,16 +3,17 @@
 # Pure trick to start ROOT in batch mode, pass this only option to it
 # and the rest of the command line options to this code.
 import sys
+import numpy as np
 oldargv = sys.argv[:]
 sys.argv = [ '-b-' ]
 from ROOT import TCanvas, TLegend, TPaveText, THStack, TFile, TLatex
-from ROOT import TProfile, TProfile2D, TH1D, TH2F, TPaletteAxis
+from ROOT import TProfile, TProfile2D, TH1D, TH2F, TPaletteAxis, TH1, TH1F
 from ROOT import kBlack, kWhite, kOrange, kAzure, kBlue
 from ROOT import gROOT, gStyle
 gROOT.SetBatch(True)
 sys.argv = oldargv
 
-from Validation.Geometry.plot_utils import setTDRStyle, Plot_params, plots, COMPOUNDS, DETECTORS, sDETS, hist_label_to_num, drawEtaValues
+from Validation.Geometry.plot_utils import setTDRStyle, Plot_params, plots, COMPOUNDS, DETECTORS, sDETS, hist_label_to_num, drawEtaValues, TwikiPrintout
 from collections import namedtuple, OrderedDict
 import sys, os
 import argparse
@@ -38,7 +39,7 @@ def paramsGood_(detector, plot):
 
     theDetectorFilename = ''
     if detector in DETECTORS:
-        theDetectorFilename = 'matbdg_%s_1Mevents.root' % detector
+        theDetectorFilename = 'matbdg_%s.root' % detector
     else:
         theDetectorFilename = 'matbdg_%s.root' % COMPOUNDS[detector][0]
 
@@ -178,8 +179,8 @@ def createPlots_(plot):
     can_SubDetectors.Update()
     if not checkFile_(theDirname):
         os.mkdir(theDirname)
-    can_SubDetectors.SaveAs("%s/Tracker_SubDetectors_%s.pdf" % (theDirname, plot))
-    can_SubDetectors.SaveAs("%s/Tracker_SubDetectors_%s.root" % (theDirname, plot))
+    #can_SubDetectors.SaveAs("%s/Tracker_SubDetectors_%s.pdf" % (theDirname, plot))
+    #can_SubDetectors.SaveAs("%s/Tracker_SubDetectors_%s.root" % (theDirname, plot))
 
 
     # Second Plot: BeamPipe + SEN + ELE + CAB + COL + SUP + OTH/AIR +
@@ -223,8 +224,8 @@ def createPlots_(plot):
 
     # Store
     can_Materials.Update()
-    can_Materials.SaveAs("%s/Tracker_Materials_%s.pdf" % (theDirname, plot))
-    can_Materials.SaveAs("%s/Tracker_Materials_%s.root" % (theDirname, plot))
+    #can_Materials.SaveAs("%s/Tracker_Materials_%s.pdf" % (theDirname, plot))
+    #can_Materials.SaveAs("%s/Tracker_Materials_%s.root" % (theDirname, plot))
 
     return cumulative_matbdg
 
@@ -415,7 +416,7 @@ def createCompoundPlots(detector, plot):
 
     # Store
     can.Update();
-    can.SaveAs( "%s/%s_%s.pdf" % (theDirname, detector, plot))
+    #can.SaveAs( "%s/%s_%s.pdf" % (theDirname, detector, plot))
     can.SaveAs( "%s/%s_%s.png" % (theDirname, detector, plot))
 
 
@@ -429,9 +430,15 @@ def create2DPlots(detector, plot, plotnum, plotmat):
 
     """
 
-    theDirname = 'Images'
+    if plotmat != "": 
+        theDirname = ('Images/%s/' % plotmat).replace(" ", "")
+    else: 
+        theDirname = 'Images'
+
     if not checkFile_(theDirname):
         os.mkdir(theDirname)
+    if not os.path.isdir(('Images/%s/ZPlusZoom' % plotmat).replace(" ", "")):
+        os.mkdir( ('Images/%s/ZPlusZoom' % plotmat).replace(" ", "") )
 
     goodToGo, theDetectorFilename = paramsGood_(detector, plot)
     if not goodToGo:
@@ -445,6 +452,8 @@ def create2DPlots(detector, plot, plotnum, plotmat):
     # get TProfiles
     #prof2d_X0_det_total = theDetectorFile.Get('%s' % plots[plot].plotNumber)
     prof2d_X0_det_total = theDetectorFile.Get('%s' % plotnum)
+    print "==================================================================" 
+    print plotnum
 
     # histos
     prof2d_X0_det_total.__class__ = TProfile2D
@@ -570,26 +579,28 @@ def create2DPlots(detector, plot, plotnum, plotmat):
         keep_alive.extend(drawEtaValues())
 
     can2.Modified()
-    #hist2d_X0_total.SetContour(255)
+    hist2d_X0_total.SetContour(255)
 
     # Store
     can2.Update()
     can2.Modified()
 
-    can2.SaveAs( "%s/%s_%s%s.pdf" % (theDirname, detector, plot, plotmat))
+    #can2.SaveAs( "%s/%s_%s%s.pdf" % (theDirname, detector, plot, plotmat))
     can2.SaveAs( "%s/%s_%s%s.png" % (theDirname, detector, plot, plotmat))
-    can2.SaveAs( "%s/%s_%s%s.root" % (theDirname, detector, plot, plotmat))
+    #can2.SaveAs( "%s/%s_%s%s.root" % (theDirname, detector, plot, plotmat))
 
     #Zoom in a little bit
-    if plot == "x_vs_z_vs_R" or plot == "l_vs_z_vs_R" or plot == "x_vs_z_vs_Rsum" or plot == "l_vs_z_vs_Rsum" or plot == "x_vs_z_vs_Rcos" or plot == "l_vs_z_vs_Rcos": 
+    if plot == "x_vs_z_vs_R" or plot == "l_vs_z_vs_R" or plot == "x_vs_z_vs_Rsum" or plot == "l_vs_z_vs_Rsum" or plot == "x_vs_z_vs_Rcos" or plot == "l_vs_z_vs_Rcos" or plot == "x_vs_z_vs_Rloc" or plot == "l_vs_z_vs_Rloc" or  plot == "x_vs_z_vs_Rloccos" or plot == "l_vs_z_vs_Rloccos":
         #Z+
         #hist2d_X0_total.GetXaxis().SetLimits( 3100., 5200.)
         hist2d_X0_total.GetXaxis().SetRangeUser( 3100., 5200.)
+        #Do not draw eta values in the zoom case
+        keep_alive = []
         #hist2d_X0_total.Draw("COLZ") 
         can2.Update()
         can2.Modified()
-        can2.SaveAs( "%s/%s_%s%s_ZplusZoom.pdf" % (theDirname, detector, plot, plotmat))
-        can2.SaveAs( "%s/%s_%s%s_ZplusZoom.png" % (theDirname, detector, plot, plotmat))
+        #can2.SaveAs( "%s/%s/%s_%s%s_ZplusZoom.pdf" % (theDirname, "ZPlusZoom", detector, plot, plotmat))
+        can2.SaveAs( "%s/%s/%s_%s%s_ZplusZoom.png" % (theDirname, "ZPlusZoom", detector, plot, plotmat))
 
 
     gStyle.SetStripDecimals(True)
@@ -664,9 +675,33 @@ def createRatioPlots(detector, plot):
 
     # Store
     canR.Update()
-    canR.SaveAs("%s/%s_%s.pdf" % (theDirname, detector, plot))
+    #canR.SaveAs("%s/%s_%s.pdf" % (theDirname, detector, plot))
     canR.SaveAs("%s/%s_%s.png" % (theDirname, detector, plot))
 
+    
+def GetSiliconZValuesFromXML(): 
+    """Someone can use the xml files of the geometry. Just do 
+    cd $CMSSW_BASE/src/Geometry/HGCalCommonData/test
+    cmsRun testHGCalParameters_cfg.py
+    The scintillator position in the HEB is very close to the silicon but they have a 
+    1.95 mm difference. So, we take the silicon position. 
+
+    This returns a np.array of the z position of the silicon values in mm. 
+    """
+    
+    #First as they come out of the testHGCalParameters_cfg.py as cm 
+    #plus either the thermal screen front (297.0 cm)
+    #or the EE front (319.05 cm) 
+    layersmaxZ = ( 319.05, 319.815, 320.725, 322.255, 323.165, 324.695, 325.605, 327.135, 328.045, 329.575, 330.485, 332.015, 332.925, 334.455, 335.365, 336.895, 337.805, 339.335, 340.245, 341.775, 342.685, 344.215, 345.125, 346.655, 347.565, 349.095, 350.005, 351.535, 352.445, 357.715, 362.615, 367.515, 372.415, 377.315, 382.215, 387.115, 392.015, 397.105, 402.195, 407.285, 412.375, 420.765, 429.155, 437.545, 445.935, 454.325, 462.715, 471.105, 479.495, 487.885, 496.275, 504.665, 513.055)
+
+    layersmaxZ = np.asarray(layersmaxZ)
+    layersmaxZ = 10. * layersmaxZ # in mm
+
+    print "Total number of layers from XML " , layersmaxZ.size - 1 # Minus 1 for the EE front input by hand. 
+
+    return layersmaxZ
+
+               
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generic Material Plotter',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -709,6 +744,16 @@ if __name__ == '__main__':
 
         required_ratio_plots = ["x_over_l_vs_eta", "x_over_l_vs_phi"]
 
+        #Function to help filling the twiki with all these plots
+        #First I loop through labels to put the hide button in twiki
+        for label, [num, color, leg] in hist_label_to_num.iteritems():
+            for p in ["x_vs_z_vs_Rsum", "l_vs_z_vs_Rsum", "x_vs_z_vs_Rsumcos", "l_vs_z_vs_Rsumcos", "x_vs_z_vs_Rloc", "l_vs_z_vs_Rloc"]:
+                TwikiPrintout(p, leg)
+
+        #Below is the silicon position from the xml geometry file
+        #Should we put them on top of plots like the eta values?
+        print GetSiliconZValuesFromXML()
+
         for p in required_2Dplots:
             #First the total
             create2DPlots(args.detector, p, plots[p].plotNumber, "")
@@ -716,6 +761,7 @@ if __name__ == '__main__':
             for label, [num, color, leg] in hist_label_to_num.iteritems():
                 #print label, num, color, leg
                 create2DPlots(args.detector, p, num + plots[p].plotNumber, leg)
+
 
         for p in required_plots:
             createCompoundPlots(args.detector, p)

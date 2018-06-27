@@ -22,8 +22,8 @@ void MaterialBudgetHGCalHistos::book()
   std::cout << "=== booking user histos ===" << std::endl;
 
   // Parameters for 2D histograms
-  // Make z 1cm per bin
-  int nzbin = 1100;
+  // Make z 1cm per bin !!!!!!!! ====>>>> 1mm
+  int nzbin = 11000;
   float zMax = 5500.;
   float zMin = -5500.;
   // Make r 1cm per bin
