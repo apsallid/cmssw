@@ -4,16 +4,17 @@
 # and the rest of the command line options to this code.
 import sys
 import numpy as np
+from array import array
 oldargv = sys.argv[:]
 sys.argv = [ '-b-' ]
 from ROOT import TCanvas, TLegend, TPaveText, THStack, TFile, TLatex
-from ROOT import TProfile, TProfile2D, TH1D, TH2F, TPaletteAxis, TH1, TH1F
+from ROOT import TProfile, TProfile2D, TH1D, TH2F, TPaletteAxis, TH1, TH1F, TColor, TExec
 from ROOT import kBlack, kWhite, kOrange, kAzure, kBlue
 from ROOT import gROOT, gStyle
 gROOT.SetBatch(True)
 sys.argv = oldargv
 
-from Validation.Geometry.plot_utils import setTDRStyle, Plot_params, plots, COMPOUNDS, DETECTORS, sDETS, hist_label_to_num, drawEtaValues, TwikiPrintout
+from Validation.Geometry.plot_utils import setTDRStyle, Plot_params, plots, COMPOUNDS, DETECTORS, sDETS, hist_label_to_num, drawEtaValues, TwikiPrintout, acustompalette
 from collections import namedtuple, OrderedDict
 import sys, os
 import argparse
@@ -430,6 +431,8 @@ def create2DPlots(detector, plot, plotnum, plotmat):
 
     """
 
+    #gStyle.Reset()
+
     if plotmat != "": 
         theDirname = ('Images/%s/' % plotmat).replace(" ", "")
     else: 
@@ -483,7 +486,7 @@ def create2DPlots(detector, plot, plotnum, plotmat):
             hist_X0_total.Add(prof2d_X0_det_total.ProjectionXY("B_%s" % prof2d_X0_det_total.GetName()), +1.000 )
 
     # # properties
-    gStyle.SetPalette(1)
+    #gStyle.SetPalette(1)
     gStyle.SetStripDecimals(False)
     # #
 
@@ -534,8 +537,16 @@ def create2DPlots(detector, plot, plotnum, plotmat):
     gStyle.SetTitleFillColor(0)
     gStyle.SetTitleBorderSize(0)
 
+    #hist2d_X0_total.SetMaximum(hist2d_X0_total.GetMaximum())
     # Color palette
-    gStyle.SetPalette(1)
+    # gStyle.SetPalette()#1
+    acustompalette()
+    ex1 = TExec("ex1","acustompalette();");
+    ex1.Draw();
+
+    #for i in range(100): MyPaletteArray.append(i+1)
+
+    #gStyle.SetPalette(first_color_number);
 
     # Log?
     can2.SetLogz(plots[plot].zLog)

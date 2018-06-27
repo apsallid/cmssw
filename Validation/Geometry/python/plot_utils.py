@@ -1,10 +1,12 @@
 from ROOT import TStyle, kWhite, kTRUE
+from ROOT import gROOT, gStyle
 from ROOT import kGray, kAzure, kMagenta, kOrange, kWhite
 from ROOT import kRed, kBlue, kGreen, kPink, kYellow
-from ROOT import TLine, TLatex
+from ROOT import TLine, TLatex, TColor
 
 from collections import namedtuple, OrderedDict
 from math import sin, cos, tan, atan, exp, pi
+from array import array
 
 Plot_params = namedtuple('Params',
                          ['plotNumber',
@@ -367,3 +369,27 @@ def TwikiPrintout(plotname, label):
          print "| <img alt=\"HGCal_%s%s.png\" height=\"300\" width=\"550\" src=\"%%ATTACHURLPATH%%/HGCal_%s%s.png\" /> | The plot on the left shows the 2D profile histogram for *%s* that displays the local mean value of the material budget in units of interaction length in each R-z cell. R-z cell is 1 cm x 1 mm. The plot depicts the orthogonal accumulated material budget, that is cos(theta) what the track sees.|"% (plotname,label,plotname,label,label)
     """
  
+def acustompalette(): 
+    NRGBs = 7
+    NCont = 100
+    ncolors = array('i', [])
+    gStyle.SetNumberContours(NCont);
+    stops   = [ 0.00, 0.10, 0.25, 0.45, 0.60, 0.75, 1.00 ]
+    red     = [ 1.00, 0.00, 0.00, 0.00, 0.97, 0.97, 0.10 ]
+    green   = [ 1.00, 0.97, 0.30, 0.40, 0.97, 0.00, 0.00 ]
+    blue    = [ 1.00, 0.97, 0.97, 0.00, 0.00, 0.00, 0.00 ]
+    stopsArray = array('d', stops)
+    redArray = array('d', red)
+    greenArray = array('d', green)
+    blueArray = array('d', blue)
+    first_color_number = TColor.CreateGradientColorTable(NRGBs, stopsArray, redArray, greenArray, blueArray, NCont);
+    gStyle.SetNumberContours(NCont)
+
+
+    palsize = NCont
+    palette = []
+    for i in range(palsize):
+        palette.append(first_color_number+i)
+        palarray = array('i',palette)
+
+    gStyle.SetPalette(palsize,palarray)
