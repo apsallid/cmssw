@@ -4,6 +4,9 @@
 # and the rest of the command line options to this code.
 import sys
 import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
 from array import array
 oldargv = sys.argv[:]
 sys.argv = [ '-b-' ]
@@ -14,7 +17,7 @@ from ROOT import gROOT, gStyle
 gROOT.SetBatch(True)
 sys.argv = oldargv
 
-from Validation.Geometry.plot_utils import setTDRStyle, Plot_params, plots, COMPOUNDS, DETECTORS, sDETS, hist_label_to_num, drawEtaValues, TwikiPrintout, acustompalette
+from Validation.Geometry.plot_utils import setTDRStyle, Plot_params, plots, COMPOUNDS, DETECTORS, sDETS, hist_label_to_num, drawEtaValues, TwikiPrintout, acustompalette, dEdx, MatXo
 from collections import namedtuple, OrderedDict
 import sys, os
 import argparse
@@ -442,6 +445,8 @@ def create2DPlots(detector, plot, plotnum, plotmat):
         os.mkdir(theDirname)
     if not os.path.isdir(('Images/%s/ZPlusZoom' % plotmat).replace(" ", "")):
         os.mkdir( ('Images/%s/ZPlusZoom' % plotmat).replace(" ", "") )
+    if not os.path.isdir(('Images/%s/ZMinusZoom' % plotmat).replace(" ", "")):
+        os.mkdir( ('Images/%s/ZMinusZoom' % plotmat).replace(" ", "") )
 
     goodToGo, theDetectorFilename = paramsGood_(detector, plot)
     if not goodToGo:
@@ -601,7 +606,7 @@ def create2DPlots(detector, plot, plotnum, plotmat):
     #can2.SaveAs( "%s/%s_%s%s.root" % (theDirname, detector, plot, plotmat))
 
     #Zoom in a little bit
-    if plot == "x_vs_z_vs_R" or plot == "l_vs_z_vs_R" or plot == "x_vs_z_vs_Rsum" or plot == "l_vs_z_vs_Rsum" or plot == "x_vs_z_vs_Rcos" or plot == "l_vs_z_vs_Rcos" or plot == "x_vs_z_vs_Rloc" or plot == "l_vs_z_vs_Rloc" or  plot == "x_vs_z_vs_Rloccos" or plot == "l_vs_z_vs_Rloccos":
+    if plot == "x_vs_z_vs_Rsum" or plot == "l_vs_z_vs_Rsum" or plot == "x_vs_z_vs_Rsumcos" or plot == "l_vs_z_vs_Rsumcos" or plot == "x_vs_z_vs_Rloc" or plot == "l_vs_z_vs_Rloc" or  plot == "x_vs_z_vs_Rloccos" or plot == "l_vs_z_vs_Rloccos":
         #Z+
         #hist2d_X0_total.GetXaxis().SetLimits( 3100., 5200.)
         hist2d_X0_total.GetXaxis().SetRangeUser( 3100., 5200.)
@@ -612,6 +617,16 @@ def create2DPlots(detector, plot, plotnum, plotmat):
         can2.Modified()
         #can2.SaveAs( "%s/%s/%s_%s%s_ZplusZoom.pdf" % (theDirname, "ZPlusZoom", detector, plot, plotmat))
         can2.SaveAs( "%s/%s/%s_%s%s_ZplusZoom.png" % (theDirname, "ZPlusZoom", detector, plot, plotmat))
+        #Z-
+        #hist2d_X0_total.GetXaxis().SetLimits( 3100., 5200.)
+        hist2d_X0_total.GetXaxis().SetRangeUser( -5200., -3100.)
+        #Do not draw eta values in the zoom case
+        keep_alive = []
+        #hist2d_X0_total.Draw("COLZ") 
+        can2.Update()
+        can2.Modified()
+        #can2.SaveAs( "%s/%s/%s_%s%s_ZminusZoom.pdf" % (theDirname, "ZPlusZoom", detector, plot, plotmat))
+        can2.SaveAs( "%s/%s/%s_%s%s_ZminusZoom.png" % (theDirname, "ZMinusZoom", detector, plot, plotmat))
 
 
     gStyle.SetStripDecimals(True)
@@ -712,7 +727,27 @@ def GetSiliconZValuesFromXML():
 
     return layersmaxZ
 
-               
+def dEdxWeights(inputfile):
+    """Function that returns the dedx weights reading the volumes z boundaries
+    Input: Direct the output of a c++ to a file named "VolumesZPosition.txt"
+    Then remove all unnecessary lines and keep only material z lines. 
+    sed -i -e 's/M_NEMA\ FR4\ plate/M_NEMA_FR4_plate/g' VolumesZPosition.txt
+    """
+    
+    dedxweights = list()
+
+    matZ = pd.read_csv(inputfile, sep=" ", header=None, names=["Mat", "Z"])
+    #matZ = matZ.sort_values('Z', ascending=[True])
+    matZ = matZ.drop_duplicates(subset=['Mat', 'Z'], keep='first').sort_values('Z', ascending=[True])
+
+    matZ["PhysThickInmm"] = abs(matZ["Z"].shift(1) -  matZ["Z"])
+    matZ["PhysThickInmm"] = matZ["PhysThickInmm"].shift(-1)
+    matZ["dEdx"] = matZ.apply(lambda row: dEdx[row["Mat"]],axis=1)
+    matZ["PhysThickInXo"] = matZ.apply(lambda row: row["PhysThickInmm"] / MatXo[row["Mat"]],axis=1)
+    matZ["dEdxtimesdx"] = matZ["dEdx"] * matZ["PhysThickInmm"]
+
+    print matZ
+ 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generic Material Plotter',
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -755,11 +790,25 @@ if __name__ == '__main__':
 
         required_ratio_plots = ["x_over_l_vs_eta", "x_over_l_vs_phi"]
 
+        dEdxWeights("VolumesZPosition.txt")
+        
         #Function to help filling the twiki with all these plots
         #First I loop through labels to put the hide button in twiki
+        #All HGCal
+        print "---+++ Results: Plots for individual material in all HGCal"
         for label, [num, color, leg] in hist_label_to_num.iteritems():
             for p in ["x_vs_z_vs_Rsum", "l_vs_z_vs_Rsum", "x_vs_z_vs_Rsumcos", "l_vs_z_vs_Rsumcos", "x_vs_z_vs_Rloc", "l_vs_z_vs_Rloc"]:
-                TwikiPrintout(p, leg)
+                TwikiPrintout(p, leg, "all")
+        #Z+
+        print "---+++ Results: Plots for individual material in Z+ Endcap"
+        for label, [num, color, leg] in hist_label_to_num.iteritems():
+            for p in ["x_vs_z_vs_Rsum", "l_vs_z_vs_Rsum", "x_vs_z_vs_Rsumcos", "l_vs_z_vs_Rsumcos", "x_vs_z_vs_Rloc", "l_vs_z_vs_Rloc"]:
+                TwikiPrintout(p, leg, "zplus")
+        #Z-
+        print "---+++ Results: Plots for individual material in Z- Endcap"
+        for label, [num, color, leg] in hist_label_to_num.iteritems():
+            for p in ["x_vs_z_vs_Rsum", "l_vs_z_vs_Rsum", "x_vs_z_vs_Rsumcos", "l_vs_z_vs_Rsumcos", "x_vs_z_vs_Rloc", "l_vs_z_vs_Rloc"]:
+                TwikiPrintout(p, leg, "zminus")
 
         #Below is the silicon position from the xml geometry file
         #Should we put them on top of plots like the eta values?

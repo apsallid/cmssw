@@ -326,7 +326,7 @@ def drawEtaValues():
         keep_alive.append(t1)
     return keep_alive
 
-def TwikiPrintout(plotname, label): 
+def TwikiPrintout(plotname, label, zoom): 
     """The plots in the twiki are already too much and to avoid mistakes 
        we will try to automatize the procedure
     """
@@ -334,27 +334,42 @@ def TwikiPrintout(plotname, label):
     #Twiki will strip out spaces
     label = label.replace(" ", "_")
 
+    zoomstring = ""
+    
+    if zoom == "all":
+        zoomstring = ""
+        zoomtitle = "in all HGCal"
+    elif zoom == "zplus":
+        zoomstring = "_ZplusZoom"
+        zoomtitle = "in Z+ endcap of HGCal"
+    elif zoom == "zminus":
+        zoomstring = "_ZminusZoom"
+        zoomtitle = "in Z- endcap of HGCal"
+    else :
+        print "WRONG OPTION"
+    
+
     #Here for the hide button
     if plotname == "x_vs_z_vs_Rsum":
-        print "%%TWISTY{ mode=\"div\" showlink=\"Click to see the %s plots \" hidelink=\"Hide %s\" showimgright=\"%%ICONURLPATH{toggleopen-small}%%\" hideimgright=\"%%ICONURLPATH{toggleclose-small}%%\"}%%" % (label,label)
+        print "%%TWISTY{ mode=\"div\" showlink=\"Click to see the %s plots %s \" hidelink=\"Hide %s %s\" showimgright=\"%%ICONURLPATH{toggleopen-small}%%\" hideimgright=\"%%ICONURLPATH{toggleclose-small}%%\"}%%" % (label,zoomtitle, label, zoomtitle)
     
     if "Rsum" in plotname and "x_vs" in plotname and not "cos" in plotname: 
-        print "| <img alt=\"HGCal_%s%s.png\" height=\"300\" width=\"550\" src=\"%%ATTACHURLPATH%%/HGCal_%s%s.png\" /> | The plot on the left shows the 2D profile histogram for *%s* that displays the mean value of the material budget in units of radiation length in each R-z cell. R-z cell is 1 cm x 1 mm. The plot depicts the accumulated material budget as seen by the track, as the track travels throughout the detector.|" % (plotname,label,plotname,label,label)
+        print "| <img alt=\"HGCal_%s%s%s.png\" height=\"300\" width=\"550\" src=\"%%ATTACHURLPATH%%/HGCal_%s%s%s.png\" /> | The plot on the left shows the 2D profile histogram for *%s* %s that displays the mean value of the material budget in units of radiation length in each R-z cell. R-z cell is 1 cm x 1 mm. The plot depicts the accumulated material budget as seen by the track, as the track travels throughout the detector.|" % (plotname,label,zoomstring, plotname,label,zoomstring, label, zoomtitle)
 
     if "Rsum" in plotname and "l_vs" in plotname and not "cos" in plotname: 
-        print "| <img alt=\"HGCal_%s%s.png\" height=\"300\" width=\"550\" src=\"%%ATTACHURLPATH%%/HGCal_%s%s.png\" /> | The plot on the left shows the 2D profile histogram for *%s* that displays the mean value of the material budget in units of interaction length in each R-z cell. R-z cell is 1 cm x 1 mm. The plot depicts the accumulated material budget as seen by the track, as the track travels throughout the detector.|" % (plotname,label,plotname,label,label)
+        print "| <img alt=\"HGCal_%s%s%s.png\" height=\"300\" width=\"550\" src=\"%%ATTACHURLPATH%%/HGCal_%s%s%s.png\" /> | The plot on the left shows the 2D profile histogram for *%s* %s that displays the mean value of the material budget in units of interaction length in each R-z cell. R-z cell is 1 cm x 1 mm. The plot depicts the accumulated material budget as seen by the track, as the track travels throughout the detector.|" % (plotname,label,zoomstring, plotname,label,zoomstring, label, zoomtitle)
      
     if "Rsumcos" in plotname and "x_vs" in plotname: 
-        print "| <img alt=\"HGCal_%s%s.png\" height=\"300\" width=\"550\" src=\"%%ATTACHURLPATH%%/HGCal_%s%s.png\" /> | The plot on the left shows the 2D profile histogram for *%s* that displays the mean value of the material budget in units of radiation length in each R-z cell. R-z cell is 1 cm x 1 mm. The plot depicts the orthogonal accumulated material budget, that is cos(theta) what the track sees.|" % (plotname,label,plotname,label,label)
+        print "| <img alt=\"HGCal_%s%s%s.png\" height=\"300\" width=\"550\" src=\"%%ATTACHURLPATH%%/HGCal_%s%s%s.png\" /> | The plot on the left shows the 2D profile histogram for *%s* %s that displays the mean value of the material budget in units of radiation length in each R-z cell. R-z cell is 1 cm x 1 mm. The plot depicts the orthogonal accumulated material budget, that is cos(theta) what the track sees.|" % (plotname,label,zoomstring, plotname,label,zoomstring, label, zoomtitle)
 
     if "Rsumcos" in plotname and "l_vs" in plotname: 
-        print "| <img alt=\"HGCal_%s%s.png\" height=\"300\" width=\"550\" src=\"%%ATTACHURLPATH%%/HGCal_%s%s.png\" /> | The plot on the left shows the 2D profile histogram for *%s* that displays the mean value of the material budget in units of interaction length in each R-z cell. R-z cell is 1 cm x 1 mm. The plot depicts the orthogonal accumulated material budget, that is cos(theta) what the track sees.|" % (plotname,label,plotname,label,label)
+        print "| <img alt=\"HGCal_%s%s%s.png\" height=\"300\" width=\"550\" src=\"%%ATTACHURLPATH%%/HGCal_%s%s%s.png\" /> | The plot on the left shows the 2D profile histogram for *%s* %s that displays the mean value of the material budget in units of interaction length in each R-z cell. R-z cell is 1 cm x 1 mm. The plot depicts the orthogonal accumulated material budget, that is cos(theta) what the track sees.|" % (plotname,label,zoomstring, plotname,label,zoomstring, label, zoomtitle)
      
     if "Rloc" in plotname and "x_vs" in plotname and not "cos" in plotname: 
-         print "| <img alt=\"HGCal_%s%s.png\" height=\"300\" width=\"550\" src=\"%%ATTACHURLPATH%%/HGCal_%s%s.png\" /> | The plot on the left shows the 2D profile histogram for *%s* that displays the local mean value of the material budget in units of radiation length in each R-z cell. R-z cell is 1 cm x 1 mm. The plot depicts the local material budget as seen by the track, as the track travels throughout the detector.|"% (plotname,label,plotname,label,label)
+         print "| <img alt=\"HGCal_%s%s%s.png\" height=\"300\" width=\"550\" src=\"%%ATTACHURLPATH%%/HGCal_%s%s%s.png\" /> | The plot on the left shows the 2D profile histogram for *%s* %s that displays the local mean value of the material budget in units of radiation length in each R-z cell. R-z cell is 1 cm x 1 mm. The plot depicts the local material budget as seen by the track, as the track travels throughout the detector.|"% (plotname,label,zoomstring, plotname,label,zoomstring, label, zoomtitle)
 
     if "Rloc" in plotname and "l_vs" in plotname and not "cos" in plotname: 
-         print "| <img alt=\"HGCal_%s%s.png\" height=\"300\" width=\"550\" src=\"%%ATTACHURLPATH%%/HGCal_%s%s.png\" /> | The plot on the left shows the 2D profile histogram for *%s* that displays the local mean value of the material budget in units of interaction length in each R-z cell. R-z cell is 1 cm x 1 mm. The plot depicts the local material budget as seen by the track, as the track travels throughout the detector.|"% (plotname,label,plotname,label,label)
+         print "| <img alt=\"HGCal_%s%s%s.png\" height=\"300\" width=\"550\" src=\"%%ATTACHURLPATH%%/HGCal_%s%s%s.png\" /> | The plot on the left shows the 2D profile histogram for *%s* %s that displays the local mean value of the material budget in units of interaction length in each R-z cell. R-z cell is 1 cm x 1 mm. The plot depicts the local material budget as seen by the track, as the track travels throughout the detector.|"% (plotname,label,zoomstring, plotname,label,zoomstring, label, zoomtitle)
 
     #Here again for the closing of the hide button
     if plotname == "l_vs_z_vs_Rloc":
@@ -363,10 +378,10 @@ def TwikiPrintout(plotname, label):
     """ 
     I won't put the local cos plots for now, only the sum cos above
     if "Rloccos" in plotname and "x_vs" in plotname: 
-         print "| <img alt=\"HGCal_%s%s.png\" height=\"300\" width=\"550\" src=\"%%ATTACHURLPATH%%/HGCal_%s%s.png\" /> | The plot on the left shows the 2D profile histogram for *%s* that displays the local mean value of the material budget in units of radiation length in each R-z cell. R-z cell is 1 cm x 1 mm. The plot depicts the orthogonal accumulated material budget, that is cos(theta) what the track sees.|"% (plotname,label,plotname,label,label)
+         print "| <img alt=\"HGCal_%s%s%s.png\" height=\"300\" width=\"550\" src=\"%%ATTACHURLPATH%%/HGCal_%s%s%s.png\" /> | The plot on the left shows the 2D profile histogram for *%s* %s that displays the local mean value of the material budget in units of radiation length in each R-z cell. R-z cell is 1 cm x 1 mm. The plot depicts the orthogonal accumulated material budget, that is cos(theta) what the track sees.|"% (plotname,label,zoomstring, plotname,label,zoomstring, label, zoomtitle)
 
     if "Rloccos" in plotname and "l_vs" in plotname: 
-         print "| <img alt=\"HGCal_%s%s.png\" height=\"300\" width=\"550\" src=\"%%ATTACHURLPATH%%/HGCal_%s%s.png\" /> | The plot on the left shows the 2D profile histogram for *%s* that displays the local mean value of the material budget in units of interaction length in each R-z cell. R-z cell is 1 cm x 1 mm. The plot depicts the orthogonal accumulated material budget, that is cos(theta) what the track sees.|"% (plotname,label,plotname,label,label)
+         print "| <img alt=\"HGCal_%s%s%s.png\" height=\"300\" width=\"550\" src=\"%%ATTACHURLPATH%%/HGCal_%s%s%s.png\" /> | The plot on the left shows the 2D profile histogram for *%s* %s that displays the local mean value of the material budget in units of interaction length in each R-z cell. R-z cell is 1 cm x 1 mm. The plot depicts the orthogonal accumulated material budget, that is cos(theta) what the track sees.|"% (plotname,label,zoomstring, plotname,label,zoomstring, label, zoomtitle)
     """
  
 def acustompalette(): 
@@ -393,3 +408,39 @@ def acustompalette():
         palarray = array('i',palette)
 
     gStyle.SetPalette(palsize,palarray)
+
+
+#In MeV/mm
+dEdx = OrderedDict()
+dEdx['Copper'] = 1.257
+dEdx['H_Scintillator'] = 0.3952 #C
+dEdx['Cables'] = 0.#????????? <<<<<<<<<===============
+dEdx['M_NEMA_FR4_plate'] = 0.
+dEdx['Silicon'] = 0.3876
+dEdx['Other'] = 0.
+dEdx['Air'] = 0.
+#--------
+dEdx['Fe'] = 1.143
+dEdx['Mn'] = 1.062
+dEdx['Cr'] = 1.046
+dEdx['Ni'] = 1.307
+dEdx['StainlessSteel'] = 0.7*dEdx['Fe']+0.01*dEdx['Mn']+0.19*dEdx['Cr']+0.1*dEdx['Ni'];
+#-------- 
+dEdx['W'] = 2.210
+dEdx['Cu'] = 1.257
+dEdx['WCu'] = 0.75*dEdx['W']+0.25*dEdx['Cu']
+#--------
+dEdx['Lead'] = 1.274 #Pb
+
+#In mm
+MatXo = OrderedDict()
+MatXo['Copper'] = 14.3559
+MatXo['H_Scintillator'] = 425.393
+MatXo['Cables'] = 66.722
+MatXo['M_NEMA_FR4_plate'] = 175.056
+MatXo['Silicon'] = 93.6762
+MatXo['Other'] = 0.
+MatXo['Air'] = 301522.
+MatXo['StainlessSteel'] = 17.3555
+MatXo['WCu'] = 5.1225
+MatXo['Lead'] = 5.6118

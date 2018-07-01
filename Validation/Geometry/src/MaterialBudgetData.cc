@@ -118,7 +118,7 @@ void MaterialBudgetData::SetAllStepsToTree()
 
 void MaterialBudgetData::dataStartTrack( const G4Track* aTrack )
 {
-  std::cout << "MaterialBudgetData::dataStartTrack( const G4Track* aTrack )" << std::endl;;
+  // std::cout << "MaterialBudgetData::dataStartTrack( const G4Track* aTrack )" << std::endl;;
   const G4ThreeVector& dir = aTrack->GetMomentum() ;
 
   if( myMaterialBudgetCategorizer == nullptr) myMaterialBudgetCategorizer = new MaterialBudgetCategorizer;
@@ -221,13 +221,13 @@ void MaterialBudgetData::dataEndTrack( const G4Track* aTrack )
 {
   //-  std::cout << "[OVAL] MaterialBudget " << G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID() << " " << theEta << " " << thePhi << " " << theTotalMB << std::endl;
   // rr
-  std::cout << "Recorded steps " << theStepN << std::endl;
+  // std::cout << "Recorded steps " << theStepN << std::endl;
   // std::cout << " Material Budget: Radiation Length   " << "G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID()" << " eta " << theEta << " phi " << thePhi << " total X " << theTotalMB << " SUP " << theSupportMB << " SEN " << theSensitiveMB << " CAB " << theCablesMB << " COL " << theCoolingMB << " ELE " << theElectronicsMB << " other " << theOtherMB << " Air " << theAirMB << std::endl;
     // std::cout << " Material Budget: Interaction Length " << "G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID()" << " eta " << theEta << " phi " << thePhi << " total L " << theTotalIL << " SUP " << theSupportIL << " SEN " << theSensitiveIL << " CAB " << theCablesIL << " COL " << theCoolingIL << " ELE " << theElectronicsIL << " other " << theOtherIL << " Air " << theAirIL << std::endl;
 
-  std::cout << " HGCal Material Budget: Radiation Length   " << "G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID()" << " eta " << theEta << " phi " << thePhi << " total X " << theTotalMB << " theCopperMB " << theCopperMB << " theH_ScintillatorMB " << theH_ScintillatorMB << " CAB " << theCablesMB << " theLeadMB " << theLeadMB << " theM_NEMA_FR4_plateMB " << theM_NEMA_FR4_plateMB << " theSiliconMB " << theSiliconMB << " Air " << theAirMB << " theStainlessSteelMB " << theStainlessSteelMB << " theWCuMB " << theWCuMB << std::endl;
+  // std::cout << " HGCal Material Budget: Radiation Length   " << "G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID()" << " eta " << theEta << " phi " << thePhi << " total X " << theTotalMB << " theCopperMB " << theCopperMB << " theH_ScintillatorMB " << theH_ScintillatorMB << " CAB " << theCablesMB << " theLeadMB " << theLeadMB << " theM_NEMA_FR4_plateMB " << theM_NEMA_FR4_plateMB << " theSiliconMB " << theSiliconMB << " Air " << theAirMB << " theStainlessSteelMB " << theStainlessSteelMB << " theWCuMB " << theWCuMB << std::endl;
 
-  std::cout << " HGCal Material Budget: Interaction Length   " << "G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID()" << " eta " << theEta << " phi " << thePhi << " total X " << theTotalIL << " theCopperIL " << theCopperIL << " theH_ScintillatorIL " << theH_ScintillatorIL << " CAB " << theCablesIL << " theLeadIL " << theLeadIL << " theM_NEMA_FR4_plateIL " << theM_NEMA_FR4_plateIL << " theSiliconIL " << theSiliconIL << " Air " << theAirIL << " theStainlessSteelIL " << theStainlessSteelIL << " theWCuIL " << theWCuIL << std::endl;
+  // std::cout << " HGCal Material Budget: Interaction Length   " << "G4EventManager::GetEventManager()->GetConstCurrentEvent()->GetEventID()" << " eta " << theEta << " phi " << thePhi << " total X " << theTotalIL << " theCopperIL " << theCopperIL << " theH_ScintillatorIL " << theH_ScintillatorIL << " CAB " << theCablesIL << " theLeadIL " << theLeadIL << " theM_NEMA_FR4_plateIL " << theM_NEMA_FR4_plateIL << " theSiliconIL " << theSiliconIL << " Air " << theAirIL << " theStainlessSteelIL " << theStainlessSteelIL << " theWCuIL " << theWCuIL << std::endl;
 
   // rr
 }
@@ -252,17 +252,25 @@ void MaterialBudgetData::dataPerStep( const G4Step* aStep )
   G4double density = theMaterialPre->GetDensity() / densityConvertionFactor; // always g/cm3
   
   G4String materialName = theMaterialPre->GetName();
-  std::cout << " steplen " << steplen << " radlen " << radlen << " mb " << steplen/radlen << " mate " << theMaterialPre->GetName() << std::endl;
-
+  // std::cout << " steplen " << steplen << " radlen " << radlen << " mb " << steplen/radlen << " mate " << theMaterialPre->GetName() << std::endl;
+  // std::cout << " Material Name " << theMaterialPre->GetName() << " radlen " << radlen << std::endl;
+  //If the particle enters a new volume or leaves the one it is:
+  if ( prePoint->GetStepStatus() == fGeomBoundary && fabs(prePoint->GetMomentum().eta()) > 2.0 && fabs(prePoint->GetMomentum().eta()) < 2.4){
+    std::cout << theMaterialPre->GetName() << " " <<  prePos.z() << std::endl;
+  }
+  // if ( postPoint->GetStepStatus() == fGeomBoundary && fabs(postPoint->GetMomentum().eta()) < 2.0 && fabs(postPoint->GetMomentum().eta()) > 2.4){
+  //   std::cout << theMaterialPre->GetName() << " " <<  postPos.z() << std::endl;
+  // }
+ 
   G4String volumeName = aStep->GetPreStepPoint()->GetTouchable()->GetVolume(0)->GetLogicalVolume()->GetName();
-  std::cout << " Volume "   << volumeName << "\n";
-  std::cout << " Material " << materialName << "\n";
+  // std::cout << " Volume "   << volumeName << "\n";
+  // std::cout << " Material " << materialName << "\n";
 
   // instantiate the categorizer
   assert(myMaterialBudgetCategorizer);
   int volumeID   = myMaterialBudgetCategorizer->volume( volumeName );
   int materialID = myMaterialBudgetCategorizer->material( materialName );
-  std::cout << "Volume ID " << volumeID << " and material ID " << materialID << "\n";
+  // std::cout << "Volume ID " << volumeID << " and material ID " << materialID << "\n";
 
   // FIXME: Both volume ID and material ID are zeros, so this part is not executed leaving all
   // values as zeros. 
@@ -333,12 +341,12 @@ void MaterialBudgetData::dataPerStep( const G4Step* aStep )
   const G4VProcess*        interactionPost   = postPoint->GetProcessDefinedStep();
   
   G4Track* track = aStep->GetTrack();
-  if(theStepN==0) std::cout << " Simulated Particle " << theID << "\tMass " << theMass << " MeV/c2"
-			    << "\tPt = " << thePt  << " MeV/c" << "\tEta = " << theEta << "\tPhi = " << thePhi 
-			    << "\tEnergy = " << theEnergy << " MeV"
-		    //			    << std::endl
-		    //			    << "\tMagnetic Field at (0,0,0): (" << B000[0] << "," < B000[1] << "," << B000[2] << ")" 
-			    << std::endl;
+  // if(theStepN==0) std::cout << " Simulated Particle " << theID << "\tMass " << theMass << " MeV/c2"
+  // 			    << "\tPt = " << thePt  << " MeV/c" << "\tEta = " << theEta << "\tPhi = " << thePhi 
+  // 			    << "\tEnergy = " << theEnergy << " MeV"
+  // 		    //			    << std::endl
+  // 		    //			    << "\tMagnetic Field at (0,0,0): (" << B000[0] << "," < B000[1] << "," << B000[2] << ")" 
+  // 			    << std::endl;
 
   //fill data per step
   if( allStepsToTree ){
