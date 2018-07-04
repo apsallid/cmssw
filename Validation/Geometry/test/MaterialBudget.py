@@ -420,7 +420,7 @@ def createCompoundPlots(detector, plot):
 
     # Store
     can.Update();
-    #can.SaveAs( "%s/%s_%s.pdf" % (theDirname, detector, plot))
+    can.SaveAs( "%s/%s_%s.pdf" % (theDirname, detector, plot))
     can.SaveAs( "%s/%s_%s.png" % (theDirname, detector, plot))
 
 
@@ -437,7 +437,7 @@ def create2DPlots(detector, plot, plotnum, plotmat):
     #gStyle.Reset()
 
     if plotmat != "": 
-        theDirname = ('Images/%s/' % plotmat).replace(" ", "")
+        theDirname = ('Images/%s' % plotmat).replace(" ", "")
     else: 
         theDirname = 'Images'
 
@@ -601,7 +601,7 @@ def create2DPlots(detector, plot, plotnum, plotmat):
     can2.Update()
     can2.Modified()
 
-    #can2.SaveAs( "%s/%s_%s%s.pdf" % (theDirname, detector, plot, plotmat))
+    can2.SaveAs( "%s/%s_%s%s.pdf" % (theDirname, detector, plot, plotmat))
     can2.SaveAs( "%s/%s_%s%s.png" % (theDirname, detector, plot, plotmat))
     #can2.SaveAs( "%s/%s_%s%s.root" % (theDirname, detector, plot, plotmat))
 
@@ -615,7 +615,7 @@ def create2DPlots(detector, plot, plotnum, plotmat):
         #hist2d_X0_total.Draw("COLZ") 
         can2.Update()
         can2.Modified()
-        #can2.SaveAs( "%s/%s/%s_%s%s_ZplusZoom.pdf" % (theDirname, "ZPlusZoom", detector, plot, plotmat))
+        can2.SaveAs( "%s/%s/%s_%s%s_ZplusZoom.pdf" % (theDirname, "ZPlusZoom", detector, plot, plotmat))
         can2.SaveAs( "%s/%s/%s_%s%s_ZplusZoom.png" % (theDirname, "ZPlusZoom", detector, plot, plotmat))
         #Z-
         #hist2d_X0_total.GetXaxis().SetLimits( 3100., 5200.)
@@ -625,7 +625,7 @@ def create2DPlots(detector, plot, plotnum, plotmat):
         #hist2d_X0_total.Draw("COLZ") 
         can2.Update()
         can2.Modified()
-        #can2.SaveAs( "%s/%s/%s_%s%s_ZminusZoom.pdf" % (theDirname, "ZPlusZoom", detector, plot, plotmat))
+        can2.SaveAs( "%s/%s/%s_%s%s_ZminusZoom.pdf" % (theDirname, "ZMinusZoom", detector, plot, plotmat))
         can2.SaveAs( "%s/%s/%s_%s%s_ZminusZoom.png" % (theDirname, "ZMinusZoom", detector, plot, plotmat))
 
 
@@ -701,7 +701,7 @@ def createRatioPlots(detector, plot):
 
     # Store
     canR.Update()
-    #canR.SaveAs("%s/%s_%s.pdf" % (theDirname, detector, plot))
+    canR.SaveAs("%s/%s_%s.pdf" % (theDirname, detector, plot))
     canR.SaveAs("%s/%s_%s.png" % (theDirname, detector, plot))
 
     
