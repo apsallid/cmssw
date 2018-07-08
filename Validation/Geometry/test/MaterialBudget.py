@@ -435,6 +435,9 @@ def create2DPlots(detector, plot, plotnum, plotmat):
     """
 
     #gStyle.Reset()
+    #Better to use an underscore. 
+    plotmat = plotmat.replace(" ", "_")
+
 
     if plotmat != "": 
         theDirname = ('Images/%s' % plotmat).replace(" ", "")
@@ -785,12 +788,15 @@ if __name__ == '__main__':
         if args.detector is None:
             print("Error, missing detector")
             raise RuntimeError
-        required_2Dplots = ["x_vs_eta_vs_phi", "l_vs_eta_vs_phi", "x_vs_z_vs_Rsum", "l_vs_z_vs_Rsum", "x_vs_z_vs_Rsumcos", "l_vs_z_vs_Rsumcos", "x_vs_z_vs_Rloc", "l_vs_z_vs_Rloc", "x_vs_z_vs_Rloccos", "l_vs_z_vs_Rloccos"]
+        #required_2Dplots = ["x_vs_eta_vs_phi", "l_vs_eta_vs_phi", "x_vs_z_vs_Rsum", "l_vs_z_vs_Rsum", "x_vs_z_vs_Rsumcos", "l_vs_z_vs_Rsumcos", "x_vs_z_vs_Rloc", "l_vs_z_vs_Rloc", "x_vs_z_vs_Rloccos", "l_vs_z_vs_Rloccos"]
         required_plots = ["x_vs_eta", "x_vs_phi", "x_vs_R", "l_vs_eta", "l_vs_phi", "l_vs_R"]
+
+        required_2Dplots = ["x_vs_eta_vs_phi", "l_vs_eta_vs_phi", "x_vs_z_vs_Rsum", "l_vs_z_vs_Rsum", "x_vs_z_vs_Rsumcos"]
 
         required_ratio_plots = ["x_over_l_vs_eta", "x_over_l_vs_phi"]
 
-        dEdxWeights("VolumesZPosition.txt")
+        #Now, in separate file
+        #dEdxWeights("VolumesZPosition.txt")
         
         #Function to help filling the twiki with all these plots
         #First I loop through labels to put the hide button in twiki
