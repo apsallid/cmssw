@@ -788,10 +788,13 @@ if __name__ == '__main__':
         if args.detector is None:
             print("Error, missing detector")
             raise RuntimeError
-        #required_2Dplots = ["x_vs_eta_vs_phi", "l_vs_eta_vs_phi", "x_vs_z_vs_Rsum", "l_vs_z_vs_Rsum", "x_vs_z_vs_Rsumcos", "l_vs_z_vs_Rsumcos", "x_vs_z_vs_Rloc", "l_vs_z_vs_Rloc", "x_vs_z_vs_Rloccos", "l_vs_z_vs_Rloccos"]
+        required_2Dplots = ["x_vs_eta_vs_phi", "l_vs_eta_vs_phi", "x_vs_z_vs_Rsum", "l_vs_z_vs_Rsum", "x_vs_z_vs_Rsumcos", "l_vs_z_vs_Rsumcos", "x_vs_z_vs_Rloc", "l_vs_z_vs_Rloc", "x_vs_z_vs_Rloccos", "l_vs_z_vs_Rloccos"]
+        # The plots below require z bin 1 cm to have more statistics for eta, phi 
+        # while the plots above are with 200000 events for z bin 1 mm. 
+        #required_2Dplots = ["x_vs_eta_vs_phi", "l_vs_eta_vs_phi", "x_vs_z_vs_Rsum", "l_vs_z_vs_Rsum", "x_vs_z_vs_Rsumcos"]
+
         required_plots = ["x_vs_eta", "x_vs_phi", "x_vs_R", "l_vs_eta", "l_vs_phi", "l_vs_R"]
 
-        required_2Dplots = ["x_vs_eta_vs_phi", "l_vs_eta_vs_phi", "x_vs_z_vs_Rsum", "l_vs_z_vs_Rsum", "x_vs_z_vs_Rsumcos"]
 
         required_ratio_plots = ["x_over_l_vs_eta", "x_over_l_vs_phi"]
 
