@@ -3703,7 +3703,7 @@
     <rMaterial name="materials:Beryllium"/>
    </MaterialFraction>
   </CompositeMaterial>
-  <CompositeMaterial name="StainlessSteel" density="8.02*g/cm3" symbol=" " method="mixture by weight">
+  <CompositeMaterial name="StainlessSteel" density="7.218*g/cm3" symbol=" " method="mixture by weight">
    <MaterialFraction fraction="0.6996">
     <rMaterial name="materials:Iron"/>
    </MaterialFraction>
