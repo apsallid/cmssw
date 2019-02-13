@@ -24,6 +24,8 @@
 
 #include "KDTreeLinkerAlgoT.h"
 
+//Density collection
+typedef std::unordered_map< DetId, float > Density;
 
 template <typename T>
 std::vector<size_t> sorted_indices(const std::vector<T> &v) {
@@ -174,6 +176,9 @@ void reset(){
 }
 void computeThreshold();
 
+//getDensity
+ Density getDensity();
+
 /// point in the space
 typedef math::XYZPoint Point;
 
@@ -207,6 +212,9 @@ hgcal::RecHitTools rhtools_;
 
 // The algo id
 reco::CaloCluster::AlgoId algoId_;
+
+ // For keeping the density per hit
+ std::unordered_map< DetId, float > density_v;
 
 // various parameters used for calculating the noise levels for a given sensor (and whether to use them)
 bool dependSensor_;
@@ -309,6 +317,9 @@ double calculateLocalDensity(std::vector<KDNode> &, KDTree &, const unsigned int
 double calculateDistanceToHigher(std::vector<KDNode> &) const;
 int findAndAssignClusters(std::vector<KDNode> &, KDTree &, double, KDTreeBox &, const unsigned int, std::vector<std::vector<KDNode> >&) const;
 math::XYZPoint calculatePosition(std::vector<KDNode> &) const;
+
+//For keeping the density information
+ void setDensity(std::vector<KDNode> &nd);
 
 // attempt to find subclusters within a given set of hexels
 std::vector<unsigned> findLocalMaximaInCluster(const std::vector<KDNode>&);
