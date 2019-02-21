@@ -157,5 +157,11 @@
   <class name="edm::Wrapper<edm::RefVector<edm::AssociationMap<edm::OneToOne<vector<reco::SuperCluster>,vector<reco::HFEMClusterShape>,unsigned int> >,edm::helpers::KeyVal<edm::Ref<vector<reco::SuperCluster>,reco::SuperCluster,edm::refhelper::FindUsingAdvance<vector<reco::SuperCluster>,reco::SuperCluster> >,edm::Ref<vector<reco::HFEMClusterShape>,reco::HFEMClusterShape,edm::refhelper::FindUsingAdvance<vector<reco::HFEMClusterShape>,reco::HFEMClusterShape> > >,edm::AssociationMap<edm::OneToOne<vector<reco::SuperCluster>,vector<reco::HFEMClusterShape>,unsigned int> >::Find> >" />
 
 
+  <class name="std::pair<const DetId,float>"/>               
+  <class name="std::map<DetId,float>"/> 
+  <class name="edm::Wrapper<std::map<DetId,float> >"/>
+  <class name="std::map<DetId, std::pair<unsigned int, unsigned int> >"/>
+  <class name="std::map<DetId, std::pair<unsigned long, unsigned long> >"/>
+
 </lcgdict>
 
