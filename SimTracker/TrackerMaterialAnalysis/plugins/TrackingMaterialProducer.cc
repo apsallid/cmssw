@@ -166,9 +166,9 @@ void TrackingMaterialProducer::update(const BeginOfTrack* event)
   //on the geometry under study and looking for zFront print out. 
   if (isHGCal && track->GetTrackStatus() != fStopAndKill && fabs(track->GetMomentum().eta()) > 2.0 && fabs(track->GetMomentum().eta()) < 2.4){
     if(track->GetMomentum().eta() > 0.){
-      outVolumeZpositionTxt << "StainlessSteel " << hgcalzfront_ << " " << 0 << " " << 0 << " " << 0 << " " << 0 <<std::endl;
+      //outVolumeZpositionTxt << "StainlessSteel " << hgcalzfront_ << " " << 0 << " " << 0 << " " << 0 << " " << 0 <<std::endl;
     } else if (track->GetMomentum().eta() <= 0.){
-      outVolumeZpositionTxt << "StainlessSteel " << - hgcalzfront_ << " " << 0 << " " << 0 << " " << 0 << " " << 0 <<std::endl;
+      //outVolumeZpositionTxt << "StainlessSteel " << - hgcalzfront_ << " " << 0 << " " << 0 << " " << 0 << " " << 0 <<std::endl;
     }
   }
 
