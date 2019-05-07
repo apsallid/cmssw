@@ -42,14 +42,14 @@ process.source = cms.Source("EmptySource",
 process.generator = cms.EDProducer("FlatRandomEGunProducer",
     PGunParameters = cms.PSet(
         PartID = cms.vint32(14),
-        MinEta = cms.double(-5.5),
-        MaxEta = cms.double(5.5),
+        MinEta = cms.double(1.0),
+        MaxEta = cms.double(3.5),
         MinPhi = cms.double(-3.14159265359),
         MaxPhi = cms.double(3.14159265359),
         MinE   = cms.double(10.0),
         MaxE   = cms.double(10.0)
     ),
-    AddAntiParticle = cms.bool(False),
+    AddAntiParticle = cms.bool(True),
     Verbosity       = cms.untracked.int32(0)
 )
 

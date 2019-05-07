@@ -140,6 +140,7 @@ void MaterialBudgetAction::update(const BeginOfRun* )
   for(const auto& volcite: theVolumeList) {
     bool volFound = false;
     for(const auto& lvcite: *lvs) {
+      std::cout << lvcite->GetName() << std::endl;
       if( lvcite->GetName() == volcite )  {
 	volFound = true;
 	break;

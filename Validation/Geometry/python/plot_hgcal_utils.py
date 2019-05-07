@@ -12,10 +12,10 @@ from array import array
 from Validation.Geometry.plot_utils import Plot_params
 
 plots = {}
-plots.setdefault('x_vs_eta', Plot_params(10, '#eta', 'x/X_{0}', 0.0, 2.575, -4.0, 4.0, '', 0, 0., 0., 0, 1))
+plots.setdefault('x_vs_eta', Plot_params(10, '#eta', 'x/X_{0}', 0.0, 145., -4.0, 4.0, '', 0, 0., 0., 0, 1))
 plots.setdefault('x_vs_phi', Plot_params(20, '#varphi [rad]', 'x/X_{0}', 0.0, 6.2, -4.0, 4.0, '', 0, 0., 0., 0, 1))
 plots.setdefault('x_vs_R',   Plot_params(40, 'R [cm]', 'x/X_{0}', 0.0, 70.0, 0.0, 1200.0, '', 0, 0., 0., 0, 1))
-plots.setdefault('l_vs_eta', Plot_params(10010, '#eta', 'x/#lambda_{I}', 0.0, 0.73, -4.0, 4.0, '', 0, 0., 0., 0, 1))
+plots.setdefault('l_vs_eta', Plot_params(10010, '#eta', 'x/#lambda_{I}', 0.0, 14.0, -4.0, 4.0, '', 0, 0., 0., 0, 1))
 plots.setdefault('l_vs_phi', Plot_params(10020, '#varphi [rad]', 'x/#lambda_{I}', 0.0, 1.2, -4.0, 4.0, '', 0, 0., 0., 0, 1))
 plots.setdefault('l_vs_R',   Plot_params(10040, 'R [cm]', 'x/#lambda_{I}', 0.0, 7.5, 0.0, 1200.0, '', 0, 0., 0., 0, 1))
 plots.setdefault('x_vs_eta_vs_phi', Plot_params(30, '#eta', '#varphi', 0., 0., 0., 0., 'x/X_{0}', 0, -1., -1., 0, 1))
@@ -34,9 +34,21 @@ plots.setdefault('x_over_l_vs_eta', Plot_params(10, '#eta', '(x/X_{0})/(x/#lambd
 plots.setdefault('x_over_l_vs_phi', Plot_params(20, '#varphi [rad]', '(x/X_{0})/(x/#lambda_{I})', 0., 0., 0., 0., '', 0, -1, -1, 0, 0))
 
 # Conversion name from the label (key) to the components in CMSSW/Geometry
-_LABELS2COMPS = {'HGCal': 'HGCal',
+_LABELS2COMPS = {'BeamPipe': 'BEAM',
+                 'Tracker': 'Tracker',
+                 'CALO': 'CALO',
+                 'Phase2PixelBarrel': 'Phase2PixelBarrel',
+                 'Phase2OTBarrel': 'Phase2OTBarrel',
+                 'Phase2PixelEndcap': 'Phase2PixelEndcap',
+                 'Phase2OTForward': 'Phase2OTForward',
+                 'HGCal': 'HGCal',
                  'HGCalEE': 'HGCalEE',
-                 'HGCalHE': ['HGCalHEsil', 'HGCalHEmix']
+                 'HGCalHE': ['HGCalHEsil', 'HGCalHEmix'],
+                 'ECAL': 'ECAL',
+                 'EndcapTimingLayer': 'EndcapTimingLayer',
+                 'BarrelTimingLayer': 'BarrelTimingLayer',
+                 'HCal': 'HCal',
+                 'CMSE':'CMSE'
                  }
 
 # Compounds are used to stick together different part of the HGCal
@@ -47,17 +59,33 @@ _LABELS2COMPS = {'HGCal': 'HGCal',
 # cumulative plot. A missing element will invalidate the full
 # procedure.
 COMPOUNDS = OrderedDict()
+COMPOUNDS["Tracker"] = ["Tracker"]
+COMPOUNDS["TrackerSumPhaseII"] = ["BeamPipe",
+                                  "Phase2PixelBarrel",
+                                  "Phase2OTBarrel", "Phase2OTForward",
+                                  "Phase2PixelEndcap"]
+COMPOUNDS["CALO"] = ["CALO"]
 COMPOUNDS["HGCal"] = ["HGCal"]
 COMPOUNDS["HGCalEE"] = ["HGCalEE"]
 COMPOUNDS["HGCalHE"] = ["HGCalHEsil", "HGCalHEmix"]
-
+COMPOUNDS["ECAL"] = ["ECAL"]
+COMPOUNDS["ETL"] = ["ETL"]
+COMPOUNDS["HCal"] = ["HCal"]
+COMPOUNDS["FromVertexToBackOfHGCal"] = ["BeamPipe","Tracker","ECAL","HCal","BarrelTimingLayer","EndcapTimingLayer","HGCal"]
+COMPOUNDS["ExcludingHGCal"] = ["BeamPipe","Tracker","ECAL","HCal","BarrelTimingLayer","EndcapTimingLayer"]
 
 # The DETECTORS must be the single component of the HGCal for which
 # the user can ask for the corresponding material description.
 DETECTORS = OrderedDict()
-DETECTORS["HGCal"] = kAzure-5
-DETECTORS["HGCalEE"] = kAzure-9
-DETECTORS["HGCalHE"] = kOrange-2
+DETECTORS["BeamPipe"] = kGray+2
+DETECTORS["Tracker"]  = kAzure-5
+DETECTORS["HCal"] = kMagenta-2
+DETECTORS["ECAL"] = kOrange+10
+#When exluding comment out 
+DETECTORS["HGCal"] = kOrange-2
+DETECTORS["EndcapTimingLayer"] = kAzure-9 
+#DETECTORS["HGCalEE"] = kAzure-9
+#DETECTORS["HGCalHE"] = kOrange-10
 
 # sDETS are the label of the HGCal elements in the Reconstruction
 # geometry. They are all used to derive the reconstruction material
@@ -69,8 +97,10 @@ DETECTORS["HGCalHE"] = kOrange-2
 # reconstruction geometries in CMSSW.
 sDETS = OrderedDict()
 sDETS["HGCalEE"] = kRed
-sDETS["HGCalHEsil"] = kBlue
-sDETS["HGCalHEmix"] = kGreen
+#sDETS["HGCalHEsil"] = kBlue
+#sDETS["HGCalHEmix"] = kGreen
+sDETS["ECAL"] = kBlue
+sDETS["HCal"] = kOrange
 #sDETS[""] = kYellow
 #sDETS[""] = kOrange
 #sDETS[""] = kPink

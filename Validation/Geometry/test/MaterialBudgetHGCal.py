@@ -11,7 +11,7 @@ from array import array
 oldargv = sys.argv[:]
 sys.argv = [ '-b-' ]
 from ROOT import TCanvas, TLegend, TPaveText, THStack, TFile, TLatex, TPaveLabel
-from ROOT import TProfile, TProfile2D, TH1D, TH2F, TPaletteAxis, TH1, TH1F, TColor, TExec
+from ROOT import TProfile, TProfile2D, TH1D, TH2D, TH2F, TPaletteAxis, TH1, TH1F, TColor, TExec, TLine
 from ROOT import kBlack, kWhite, kOrange, kAzure, kBlue
 from ROOT import gROOT, gStyle
 gROOT.SetBatch(True)
@@ -76,7 +76,7 @@ def assignOrAddIfExists_(h, p):
         h.Add(p.ProjectionX("B_%s" % h.GetName()), +1.000)
     return h
 
-def createPlots_(plot):
+def createPlots_(plot, compounddetectorname):
     """Cumulative material budget from simulation.
     
        Internal function that will produce a cumulative profile of the
@@ -88,7 +88,7 @@ def createPlots_(plot):
 
     """
 
-    IBs = ["InnerServices", "Phase2PixelBarrel", "TIB", "TIDF", "TIDB"]
+    #IBs = ["InnerServices", "Phase2PixelBarrel", "TIB", "TIDF", "TIDB"]
     theDirname = "Figures"
 
     hist_X0_detectors = OrderedDict()
@@ -96,7 +96,7 @@ def createPlots_(plot):
         print("Error: chosen plot name not known %s" % plot)
         return
 
-    hist_X0_IB = None
+    #hist_X0_IB = None
     # We need to keep the file content alive for the lifetime of the
     # full function....
     subDetectorFiles = []
@@ -115,8 +115,8 @@ def createPlots_(plot):
         prof_X0_XXX = subDetectorFile.Get("%d" % plots[plot].plotNumber)
 
         # Merge together the "inner barrel detectors".
-        if subDetector in IBs:
-            hist_X0_IB = assignOrAddIfExists_(hist_X0_IB, prof_X0_XXX)
+        #if subDetector in IBs:
+        #    hist_X0_IB = assignOrAddIfExists_(hist_X0_IB, prof_X0_XXX)
 
         hist_X0_detectors[subDetector] = prof_X0_XXX.ProjectionX()
 
@@ -128,9 +128,10 @@ def createPlots_(plot):
 
     cumulative_matbdg = TH1D("CumulativeSimulMatBdg",
                              "CumulativeSimulMatBdg",
-                             hist_X0_IB.GetNbinsX(),
-                             hist_X0_IB.GetXaxis().GetXmin(),
-                             hist_X0_IB.GetXaxis().GetXmax())
+                             hist_X0_detectors["BeamPipe"].GetNbinsX(),
+                             hist_X0_detectors["BeamPipe"].GetXaxis().GetXmin(),
+                             hist_X0_detectors["BeamPipe"].GetXaxis().GetXmax())
+    
     cumulative_matbdg.SetDirectory(0)
 
     # colors
@@ -140,29 +141,59 @@ def createPlots_(plot):
     for label, [num, color, leg] in hist_label_to_num.iteritems():
         hist_X0_elements[label].SetFillColor(color)
 
-    # First Plot: BeamPipe + Pixel + TIB/TID + TOB + TEC + Outside
+    # First Plot: BeamPipe + Tracker + ECAL + HCal + HGCal
     # stack
-    stackTitle_SubDetectors = "Tracker Material Budget;%s;%s" % (
+    stackTitle_SubDetectors = "Material Budget;%s;%s" % (
         plots[plot].abscissa,plots[plot].ordinate)
     stack_X0_SubDetectors = THStack("stack_X0",stackTitle_SubDetectors)
     for det, histo in hist_X0_detectors.iteritems():
+        #Cut histo in HGCal boundaries
+        #lowbintocut1 = histo.FindBin(-5.0)
+        #lowbintocut2 = histo.FindBin(-3.0)
+        #lowbintocut3 = histo.FindBin(-1.3)
+        #lowbintocut4 = histo.FindBin(1.3)
+        #lowbintocut5 = histo.FindBin(3.0)
+        #lowbintocut6 = histo.FindBin(5.0)
+        #for i in range(lowbintocut1,lowbintocut2): histo.SetBinContent( i  , 0.) 
+        #for i in range(lowbintocut3,lowbintocut4): histo.SetBinContent( i  , 0.) 
+        #for i in range(lowbintocut5,lowbintocut6): histo.SetBinContent( i  , 0.) 
         stack_X0_SubDetectors.Add(histo)
         cumulative_matbdg.Add(histo, 1)
 
     # canvas
     can_SubDetectors = TCanvas("can_SubDetectors","can_SubDetectors",800,800)
-    can_SubDetectors.Range(0,0,25,25)
+    #can_SubDetectors.Range(0,0,25,25)
     can_SubDetectors.SetFillColor(kWhite)
 
     # Draw
     stack_X0_SubDetectors.SetMinimum(plots[plot].ymin)
     stack_X0_SubDetectors.SetMaximum(plots[plot].ymax)
     stack_X0_SubDetectors.Draw("HIST")
-    stack_X0_SubDetectors.GetXaxis().SetLimits(plots[plot].xmin, plots[plot].xmax)
+    #stack_X0_SubDetectors.GetXaxis().SetLimits(plots[plot].xmin, plots[plot].xmax)
+    
+    #HGCal Boundaries
+    hgbound1 = TLine(1.3,0,1.3,plots[plot].ymax - 0.2 * plots[plot].ymax)
+    hgbound1.SetLineWidth(5)
+    hgbound1.SetLineStyle(10)
+    #hgbound1.Draw("same")
 
+    hgbound2 = TLine(3.0,0,3.0,plots[plot].ymax- 0.2 * plots[plot].ymax)
+    hgbound2.SetLineWidth(5)
+    hgbound2.SetLineStyle(10)
+    #hgbound2.Draw("same")
+
+    hgbound3 = TLine(-1.3,0,-1.3,plots[plot].ymax- 0.2 * plots[plot].ymax)
+    hgbound3.SetLineWidth(5)
+    hgbound3.SetLineStyle(10)
+    #hgbound3.Draw("same")
+
+    hgbound4 = TLine(-3.0,0,-3.0,plots[plot].ymax- 0.2 * plots[plot].ymax)
+    hgbound4.SetLineWidth(5)
+    hgbound4.SetLineStyle(10)
+    #hgbound4.Draw("same")
 
     # Legenda
-    theLegend_SubDetectors = TLegend(0.180,0.8,0.98,0.92)
+    theLegend_SubDetectors = TLegend(0.180,0.8,0.98,0.90)
     theLegend_SubDetectors.SetNColumns(3)
     theLegend_SubDetectors.SetFillColor(0)
     theLegend_SubDetectors.SetFillStyle(0)
@@ -170,6 +201,7 @@ def createPlots_(plot):
 
     for det, histo in hist_X0_detectors.iteritems():
         theLegend_SubDetectors.AddEntry(histo, det,  "f")
+    #theLegend_SubDetectors.AddEntry(hgbound1, "HGCal Eta Boundaries [1.3, 3.0]",  "l") 
 
     theLegend_SubDetectors.Draw()
 
@@ -185,55 +217,198 @@ def createPlots_(plot):
     can_SubDetectors.Update()
     if not checkFile_(theDirname):
         os.mkdir(theDirname)
-    #can_SubDetectors.SaveAs("%s/Tracker_SubDetectors_%s.pdf" % (theDirname, plot))
-    #can_SubDetectors.SaveAs("%s/Tracker_SubDetectors_%s.root" % (theDirname, plot))
+    can_SubDetectors.SaveAs("%s/MaterialBdg_%s_%s.pdf" % (theDirname, compounddetectorname,plot))
+    can_SubDetectors.SaveAs("%s/MaterialBdg_%s_%s.png" % (theDirname, compounddetectorname,plot))
+    can_SubDetectors.SaveAs("%s/MaterialBdg_%s_%s.root" % (theDirname, compounddetectorname,plot))
 
+    if plot == "x_vs_eta" or plot == "l_vs_eta":
+        canname = "MBCan_1D_%s_%s_total"  % (compounddetectorname, plot)
+        can2 = TCanvas(canname, canname, 800, 800)
+        can2.Range(0,0,25,25)
+        can2.SetFillColor(kWhite)
+        gStyle.SetOptStat(0)
+        gStyle.SetOptTitle(0);
+        #title = TPaveLabel(.11,.95,.35,.99,"Total accumulated material budget","brndc")
+        stack_X0_SubDetectors.GetStack().Last().SetMarkerStyle(34)
+        stack_X0_SubDetectors.GetStack().Last().GetXaxis().SetRangeUser( 1.4, 3.5)
+        stack_X0_SubDetectors.GetStack().Last().Draw();
+        stack_X0_SubDetectors.GetYaxis().SetTitleOffset(1.15);
+        can2.Update()
+        can2.Modified()
+        can2.SaveAs("%s/%s_%s_total_Zplus.pdf" % (theDirname, compounddetectorname, plot))
+        can2.SaveAs("%s/%s_%s_total_Zplus.png" % (theDirname, compounddetectorname, plot))
+        stack_X0_SubDetectors.GetStack().Last().GetXaxis().SetRangeUser( -3.5, -1.4)
+        stack_X0_SubDetectors.GetStack().Last().Draw();
+        stack_X0_SubDetectors.GetYaxis().SetTitleOffset(1.15);
+        can2.Update()
+        can2.Modified()
+        can2.SaveAs("%s/%s_%s_total_Zminus.pdf" % (theDirname, compounddetectorname, plot))
+        can2.SaveAs("%s/%s_%s_total_Zminus.png" % (theDirname, compounddetectorname, plot))
 
-    # Second Plot: BeamPipe + SEN + ELE + CAB + COL + SUP + OTH/AIR +
-    # Outside stack
-    stackTitle_Materials = "Tracker Material Budget;%s;%s" % (plots[plot].abscissa,
-                                                              plots[plot].ordinate)
-    stack_X0_Materials = THStack("stack_X0",stackTitle_Materials)
-    stack_X0_Materials.Add(hist_X0_detectors["BeamPipe"])
-    for label, [num, color, leg] in hist_label_to_num.iteritems():
-        stack_X0_Materials.Add(hist_X0_elements[label])
-
-    # canvas
-    can_Materials = TCanvas("can_Materials","can_Materials",800,800)
-    can_Materials.Range(0,0,25,25)
-    can_Materials.SetFillColor(kWhite)
-
-    # Draw
-    stack_X0_Materials.SetMinimum(plots[plot].ymin)
-    stack_X0_Materials.SetMaximum(plots[plot].ymax)
-    stack_X0_Materials.Draw("HIST")
-    stack_X0_Materials.GetXaxis().SetLimits(plots[plot].xmin, plots[plot].xmax)
-
-    # Legenda
-    theLegend_Materials = TLegend(0.180,0.8,0.95,0.92)
-    theLegend_Materials.SetNColumns(3)
-    theLegend_Materials.SetFillColor(0)
-    theLegend_Materials.SetBorderSize(0)
-
-    theLegend_Materials.AddEntry(hist_X0_detectors["BeamPipe"],  "Beam Pipe", "f")
-    for label, [num, color, leg] in hist_label_to_num.iteritems():
-        theLegend_Materials.AddEntry(hist_X0_elements[label], leg, "f")
-    theLegend_Materials.Draw()
-
-    # text
-    text_Materials = TPaveText(0.180,0.727,0.402,0.787,"NDC")
-    text_Materials.SetFillColor(0)
-    text_Materials.SetBorderSize(0)
-    text_Materials.AddText("CMS Simulation")
-    text_Materials.SetTextAlign(11)
-    text_Materials.Draw()
-
-    # Store
-    can_Materials.Update()
-    #can_Materials.SaveAs("%s/Tracker_Materials_%s.pdf" % (theDirname, plot))
-    #can_Materials.SaveAs("%s/Tracker_Materials_%s.root" % (theDirname, plot))
+        #Also print them to give them exact numbers
+        etavalues = []
+        matbudginX0 = []
+        matbudginIntLen = []
+        for binx in range(0,stack_X0_SubDetectors.GetStack().Last().GetXaxis().GetNbins()):
+            bincontent = stack_X0_SubDetectors.GetStack().Last().GetBinContent(binx) 
+            if bincontent == 0: continue
+            etavalues.append( stack_X0_SubDetectors.GetStack().Last().GetBinCenter(binx)  )
+            if plot == "x_vs_eta": 
+                matbudginX0.append( bincontent  )
+                d1 = {'Eta': etavalues, 'MatBudInX0': matbudginX0}
+                df1 = pd.DataFrame(data=d1).round(2)
+                df1.to_csv(r'/afs/cern.ch/work/a/apsallid/CMS/PFCalStudies/CMS-HGCAL/matbudV10fromVertexToBackofHGCal/CMSSW_10_6_X_2019-04-17-2300/src/Validation/Geometry/test/EtavsMatBudinXo.txt',sep=' ', index=False, header=False)
+                #print df1
+            if plot == "l_vs_eta": 
+                matbudginIntLen.append( bincontent )
+                d2 = {'Eta': etavalues, 'MatBudInIntLen': matbudginIntLen}
+                df2 = pd.DataFrame(data=d2).round(2)
+                df2.to_csv(r'/afs/cern.ch/work/a/apsallid/CMS/PFCalStudies/CMS-HGCAL/matbudV10fromVertexToBackofHGCal/CMSSW_10_6_X_2019-04-17-2300/src/Validation/Geometry/test/EtavsMatBudInIntLen.txt',sep=' ', index=False, header=False)
+                #print df2
 
     return cumulative_matbdg
+
+def createPlots2D_(plot, compounddetectorname):
+    """2D Cumulative material budget from simulation.
+    
+       
+
+    """
+
+    #IBs = ["InnerServices", "Phase2PixelBarrel", "TIB", "TIDF", "TIDB"]
+    theDirname = "Figures"
+
+    hist_X0_detectors = OrderedDict()
+    if plot not in plots.keys():
+        print("Error: chosen plot name not known %s" % plot)
+        return
+
+    #hist_X0_IB = None
+    # We need to keep the file content alive for the lifetime of the
+    # full function....
+    subDetectorFiles = []
+
+    hist_X0_elements = OrderedDict()
+    prof_X0_elements = OrderedDict()
+
+    for subDetector,color in DETECTORS.iteritems():
+        subDetectorFilename = "matbdg_%s.root" % subDetector
+        if not checkFile_(subDetectorFilename):
+            print("Error opening file: %s" % subDetectorFilename)
+            continue
+
+        subDetectorFiles.append(TFile(subDetectorFilename))
+        subDetectorFile = subDetectorFiles[-1]
+        print ("Opening file: %s" % subDetectorFilename)
+        prof_X0_XXX = subDetectorFile.Get("%d" % plots[plot].plotNumber)
+
+        #hist_X0_detectors[subDetector] = prof_X0_XXX
+        hist_X0_detectors[subDetector] = prof_X0_XXX.ProjectionXY("_pxy","B")
+        print subDetector
+
+    # First Plot: BeamPipe + Tracker + ECAL + HCal + HGCal
+ 
+    # Create "null" histo
+    minX = 1.03*hist_X0_detectors["BeamPipe"].GetXaxis().GetXmin()
+    maxX = 1.03*hist_X0_detectors["BeamPipe"].GetXaxis().GetXmax()
+    minY = 1.03*hist_X0_detectors["BeamPipe"].GetYaxis().GetXmin()
+    maxY = 1.03*hist_X0_detectors["BeamPipe"].GetYaxis().GetXmax()
+
+    frame = TH2F("frame", "", 10, minX, maxX, 10, minY, maxY);
+    frame.SetMinimum(0.1)
+    frame.SetMaximum(10.)
+    frame.GetXaxis().SetTickLength(frame.GetXaxis().GetTickLength()*0.50)
+    frame.GetYaxis().SetTickLength(frame.GetXaxis().GetTickLength()/4.)
+
+    hist2d_X0_total = hist_X0_detectors["BeamPipe"]
+
+    # stack
+    hist2dTitle = ('%s %s;%s;%s;%s' % (plots[plot].quotaName,
+                                       "All detectors",
+                                       plots[plot].abscissa,
+                                       plots[plot].ordinate,
+                                       plots[plot].quotaName))
+
+    hist2d_X0_total.SetTitle(hist2dTitle)
+    frame.SetTitle(hist2dTitle)
+    frame.SetTitleOffset(0.5,"Y")
+
+    #If here you put different histomin,histomaxin plot_utils you won't see anything 
+    #for the material plots. 
+    if plots[plot].histoMin != -1.:
+        hist2d_X0_total.SetMinimum(plots[plot].histoMin)
+    if plots[plot].histoMax != -1.:
+        hist2d_X0_total.SetMaximum(plots[plot].histoMax)
+
+    #
+    # canvas
+    can_SubDetectors = TCanvas("can_SubDetectors","can_SubDetectors",2480+248, 580+58+58)
+    can_SubDetectors.SetTopMargin(0.1)
+    can_SubDetectors.SetBottomMargin(0.1)
+    can_SubDetectors.SetLeftMargin(0.04)
+    can_SubDetectors.SetRightMargin(0.06)
+    can_SubDetectors.SetFillColor(kWhite)
+    gStyle.SetOptStat(0)
+    gStyle.SetTitleFillColor(0)
+    gStyle.SetTitleBorderSize(0)
+    gStyle.SetOptTitle(0)
+
+    hist2d_X0_total.GetYaxis().SetTickLength(hist2d_X0_total.GetXaxis().GetTickLength()/4.)
+    hist2d_X0_total.GetYaxis().SetTickLength(hist2d_X0_total.GetXaxis().GetTickLength()/4.)
+    hist2d_X0_total.SetTitleOffset(0.5,"Y")
+    hist2d_X0_total.GetYaxis().SetTitleOffset(0.45);
+    #hist2d_X0_total.GetXaxis().SetTitleOffset(1.15);
+    #hist2d_X0_total.GetXaxis().SetNoExponent(True)
+    #hist2d_X0_total.GetYaxis().SetNoExponent(True)
+
+
+    # colors
+    for det, color in DETECTORS.iteritems():
+        hist_X0_detectors[det].SetMarkerColor(color)
+        hist_X0_detectors[det].SetFillColor(color)
+
+    for det, histo in hist_X0_detectors.iteritems():
+        print det
+        histo.Draw("same")
+
+    # Legenda
+    theLegend_SubDetectors = TLegend(0.180,0.8,0.98,0.90)
+    theLegend_SubDetectors.SetNColumns(3)
+    theLegend_SubDetectors.SetFillColor(0)
+    theLegend_SubDetectors.SetFillStyle(0)
+    theLegend_SubDetectors.SetBorderSize(0)
+
+    for det, histo in hist_X0_detectors.iteritems():
+        theLegend_SubDetectors.AddEntry(histo, det,  "f")
+    #theLegend_SubDetectors.AddEntry(hgbound1, "HGCal Eta Boundaries [1.3, 3.0]",  "l") 
+
+    theLegend_SubDetectors.Draw()
+
+    
+    # text
+    text_SubDetectors = TPaveText(0.180,0.727,0.402,0.787,"NDC")
+    text_SubDetectors.SetFillColor(0)
+    text_SubDetectors.SetBorderSize(0)
+    text_SubDetectors.AddText("CMS Simulation")
+    text_SubDetectors.SetTextAlign(11)
+    text_SubDetectors.Draw()
+    
+
+    #Add eta labels
+    keep_alive = []
+    if plots[plot].iDrawEta:
+        keep_alive.extend(drawEtaValues())
+    
+    # Store
+    can_SubDetectors.Update()
+    if not checkFile_(theDirname):
+        os.mkdir(theDirname)
+    can_SubDetectors.SaveAs("%s/MaterialBdg_%s_%s.png" % (theDirname, compounddetectorname, plot))
+    #It seems that it is too heavy to create .pdf and .root
+    #can_SubDetectors.SaveAs("%s/MaterialBdg_FromVertexToEndofHGCal_%s.pdf" % (theDirname, plot))
+    #can_SubDetectors.SaveAs("%s/MaterialBdg_FromVertexToEndofHGCal_%s.root" % (theDirname, plot))
+
+
 
 def createPlotsReco_(reco_file, label, debug=False):
     """Cumulative material budget from reconstruction.
@@ -342,6 +517,7 @@ def materialBudget_Simul_vs_Reco(reco_file, label, debug=False):
     filename = "MaterialBdg_Reco_vs_Simul_%s.png" % label
     cc.SaveAs(filename)
 
+
 def createCompoundPlots(detector, plot):
     """Produce the requested plot for the specified detector.
 
@@ -436,14 +612,14 @@ def createCompoundPlots(detector, plot):
         gStyle.SetOptStat(0)
         gStyle.SetOptTitle(0);
         #title = TPaveLabel(.11,.95,.35,.99,"Total accumulated material budget","brndc")
-        stack_X0.GetStack().Last().GetXaxis().SetRangeUser( 0., 3.)
+        stack_X0.GetStack().Last().GetXaxis().SetRangeUser( 0., 3.5)
         stack_X0.GetStack().Last().Draw();
         stack_X0.GetYaxis().SetTitleOffset(1.15);
         can2.Update()
         can2.Modified()
         can2.SaveAs("%s/%s_%s_total_Zplus.pdf" % (theDirname, detector, plot))
         can2.SaveAs("%s/%s_%s_total_Zplus.png" % (theDirname, detector, plot))
-        stack_X0.GetStack().Last().GetXaxis().SetRangeUser( -3., 0.)
+        stack_X0.GetStack().Last().GetXaxis().SetRangeUser( -3.5, 0.)
         stack_X0.GetStack().Last().Draw();
         stack_X0.GetYaxis().SetTitleOffset(1.15);
         can2.Update()
@@ -452,7 +628,7 @@ def createCompoundPlots(detector, plot):
         can2.SaveAs("%s/%s_%s_total_Zminus.png" % (theDirname, detector, plot))
  
 
-def create2DPlots(detector, plot, plotnum, plotmat):
+def create2DPlots(detector, plot, plotnum, plotmat, dosingledetector = True):
     """Produce the requested plot for the specified detector.
 
        Function that will plot the requested 2D-@plot for the
@@ -496,12 +672,17 @@ def create2DPlots(detector, plot, plotnum, plotmat):
 
     # histos
     prof2d_X0_det_total.__class__ = TProfile2D
-    #hist_X0_total = prof2d_X0_det_total.ProjectionXY()
+    hist_X0_total = prof2d_X0_det_total.ProjectionXY()
 
     # keep files live forever
     files = []
-    if detector in COMPOUNDS.keys():
-        for subDetector in COMPOUNDS[detector][1:]:
+    if detector in COMPOUNDS.keys() and not dosingledetector:
+        #When the loop was:
+        #for subDetector in COMPOUNDS[detector][1:]:
+        #and the detector was single it never went in the loop and read the single file 
+        #from above. I alter this to COMPOUNDS[detector] to do the multi material budget plot.
+        #This won't effect the single detector due to the alter in the if above
+        for subDetector in COMPOUNDS[detector]:
             # filenames of single components
             subDetectorFilename = "matbdg_%s.root" % subDetector
  
@@ -520,6 +701,7 @@ def create2DPlots(detector, plot, plotnum, plotmat):
 
             # add to summary histogram
             hist_X0_total.Add(prof2d_X0_det_total.ProjectionXY("B_%s" % prof2d_X0_det_total.GetName()), +1.000 )
+            #hist_X0_total.Add(prof2d_X0_det_total, +1.000 )
 
     # # properties
     #gStyle.SetPalette(1)
@@ -549,7 +731,10 @@ def create2DPlots(detector, plot, plotnum, plotmat):
                                        plots[plot].ordinate,
                                        plots[plot].quotaName))
 
-    hist2d_X0_total = prof2d_X0_det_total
+    if dosingledetector: 
+        hist2d_X0_total = prof2d_X0_det_total
+    else : 
+        hist2d_X0_total = hist_X0_total
     hist2d_X0_total.SetTitle(hist2dTitle)
     frame.SetTitle(hist2dTitle)
     frame.SetTitleOffset(0.5,"Y")
@@ -770,6 +955,10 @@ if __name__ == '__main__':
                         help='Compare simulation and reco materials',
                         action='store_true',
                         default=False)
+    parser.add_argument('-m', '--multi',
+                        help='Combining multiple detectors',
+                        action='store_true',
+                        default=False)
     parser.add_argument('-s', '--single',
                         help='Material budget for single detector from simulation',
                         action='store_true',
@@ -792,11 +981,30 @@ if __name__ == '__main__':
             raise RuntimeError
         materialBudget_Simul_vs_Reco(args.reco, args.label, debug=False)
 
+    if args.multi: 
+        #Material Budget plot from Vertex to end of HGCal
+        cumulative_matbdg_sim = createPlots_("x_vs_eta",args.detector)
+        cumulative_matbdg_sim = createPlots_("l_vs_eta",args.detector)
+        cumulative_matbdg_sim = createPlots2D_("x_vs_z_vs_Rsum",args.detector)
+        cumulative_matbdg_sim = createPlots2D_("l_vs_z_vs_Rsum",args.detector)
+
+        required_2DplotsForalldetectors = ["x_vs_z_vs_Rsum", "l_vs_z_vs_Rsum"]
+
+        for p in required_2DplotsForalldetectors:
+            #First the total
+            create2DPlots(args.detector, p, plots[p].plotNumber, "", not args.multi)
+             #Then, the rest
+            #for label, [num, color, leg] in hist_label_to_num.iteritems():
+                #print label, num, color, leg
+                #create2DPlots(args.detector, p, num + plots[p].plotNumber, leg)
+
+
     if args.single:
         if args.detector is None:
             print("Error, missing detector")
             raise RuntimeError
         required_2Dplots = ["x_vs_eta_vs_phi", "l_vs_eta_vs_phi", "x_vs_z_vs_Rsum", "l_vs_z_vs_Rsum", "x_vs_z_vs_Rsumcos", "l_vs_z_vs_Rsumcos", "x_vs_z_vs_Rloc", "l_vs_z_vs_Rloc", "x_vs_z_vs_Rloccos", "l_vs_z_vs_Rloccos"]
+        required_2Dplots = ["x_vs_z_vs_Rsum", "l_vs_z_vs_Rsum"]
         # The plots below require z bin 1 cm to have more statistics for eta, phi 
         # while the plots above are with 200000 events for z bin 1 mm. 
         #required_2Dplots = ["x_vs_eta_vs_phi", "l_vs_eta_vs_phi", "x_vs_z_vs_Rsum", "l_vs_z_vs_Rsum", "x_vs_z_vs_Rsumcos"]
@@ -830,7 +1038,7 @@ if __name__ == '__main__':
         for p in required_2Dplots:
             #First the total
             create2DPlots(args.detector, p, plots[p].plotNumber, "")
-            #Then, the rest
+             #Then, the rest
             for label, [num, color, leg] in hist_label_to_num.iteritems():
                 #print label, num, color, leg
                 create2DPlots(args.detector, p, num + plots[p].plotNumber, leg)
