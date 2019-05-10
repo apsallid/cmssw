@@ -76,7 +76,7 @@ process.source = cms.Source("PoolSource",
 )
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(-1)
+    input = cms.untracked.int32(-1)#200
 )
 
 process.p1 = cms.Path(process.g4SimHits)
@@ -99,3 +99,5 @@ process.g4SimHits.Watchers = cms.VPSet(cms.PSet(
         TextFile = cms.string('None')
     )
 ))
+
+

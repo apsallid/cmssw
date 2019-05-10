@@ -19,7 +19,7 @@ sys.argv = oldargv
 
 from Validation.Geometry.plot_utils import setTDRStyle, Plot_params, drawEtaValues
  
-from Validation.Geometry.plot_hgcal_utils import plots, COMPOUNDS, DETECTORS, sDETS, hist_label_to_num, TwikiPrintout, acustompalette, dEdx, MatXo
+from Validation.Geometry.plot_hgcal_utils import plots, COMPOUNDS, DETECTORS, sDETS, hist_label_to_num, TwikiPrintout, acustompalette, dEdx, MatXo, drawHalfEtaValues
 from collections import namedtuple, OrderedDict
 import sys, os
 import argparse
@@ -113,6 +113,7 @@ def createPlots_(plot, compounddetectorname):
         subDetectorFile = subDetectorFiles[-1]
         print ("Opening file: %s" % subDetectorFilename)
         prof_X0_XXX = subDetectorFile.Get("%d" % plots[plot].plotNumber)
+        #print (prof_X0_XXX)
 
         # Merge together the "inner barrel detectors".
         #if subDetector in IBs:
@@ -193,10 +194,11 @@ def createPlots_(plot, compounddetectorname):
     #hgbound4.Draw("same")
 
     # Legenda
-    theLegend_SubDetectors = TLegend(0.180,0.8,0.98,0.90)
-    theLegend_SubDetectors.SetNColumns(3)
+    theLegend_SubDetectors = TLegend(0.130,0.7,0.93,0.90) #(0.180,0.8,0.98,0.90)
+    theLegend_SubDetectors.SetNColumns(2)
     theLegend_SubDetectors.SetFillColor(0)
     theLegend_SubDetectors.SetFillStyle(0)
+    #theLegend_SubDetectors.SetTextSize(1.3)
     theLegend_SubDetectors.SetBorderSize(0)
 
     for det, histo in hist_X0_detectors.iteritems():
@@ -206,7 +208,7 @@ def createPlots_(plot, compounddetectorname):
     theLegend_SubDetectors.Draw()
 
     # text
-    text_SubDetectors = TPaveText(0.180,0.727,0.402,0.787,"NDC")
+    text_SubDetectors = TPaveText(0.130,0.627,0.352,0.687,"NDC") #(0.180,0.727,0.402,0.787,"NDC")
     text_SubDetectors.SetFillColor(0)
     text_SubDetectors.SetBorderSize(0)
     text_SubDetectors.AddText("CMS Simulation")
@@ -230,14 +232,14 @@ def createPlots_(plot, compounddetectorname):
         gStyle.SetOptTitle(0);
         #title = TPaveLabel(.11,.95,.35,.99,"Total accumulated material budget","brndc")
         stack_X0_SubDetectors.GetStack().Last().SetMarkerStyle(34)
-        stack_X0_SubDetectors.GetStack().Last().GetXaxis().SetRangeUser( 1.4, 3.5)
+        stack_X0_SubDetectors.GetStack().Last().GetXaxis().SetRangeUser( 1.0, 3.5)
         stack_X0_SubDetectors.GetStack().Last().Draw();
         stack_X0_SubDetectors.GetYaxis().SetTitleOffset(1.15);
         can2.Update()
         can2.Modified()
         can2.SaveAs("%s/%s_%s_total_Zplus.pdf" % (theDirname, compounddetectorname, plot))
         can2.SaveAs("%s/%s_%s_total_Zplus.png" % (theDirname, compounddetectorname, plot))
-        stack_X0_SubDetectors.GetStack().Last().GetXaxis().SetRangeUser( -3.5, -1.4)
+        stack_X0_SubDetectors.GetStack().Last().GetXaxis().SetRangeUser( -3.5, -1.0)
         stack_X0_SubDetectors.GetStack().Last().Draw();
         stack_X0_SubDetectors.GetYaxis().SetTitleOffset(1.15);
         can2.Update()
@@ -257,13 +259,13 @@ def createPlots_(plot, compounddetectorname):
                 matbudginX0.append( bincontent  )
                 d1 = {'Eta': etavalues, 'MatBudInX0': matbudginX0}
                 df1 = pd.DataFrame(data=d1).round(2)
-                df1.to_csv(r'/afs/cern.ch/work/a/apsallid/CMS/PFCalStudies/CMS-HGCAL/matbudV10fromVertexToBackofHGCal/CMSSW_10_6_X_2019-04-17-2300/src/Validation/Geometry/test/EtavsMatBudinXo.txt',sep=' ', index=False, header=False)
+                df1.to_csv(r'/afs/cern.ch/work/a/apsallid/CMS/PFCalStudies/CMS-HGCAL/matbudV10fromVertexToBackofHGCal/CMSSW_10_6_X_2019-05-07-1100/src/Validation/Geometry/test/EtavsMatBudinXo.txt',sep=' ', index=False, header=False)
                 #print df1
             if plot == "l_vs_eta": 
                 matbudginIntLen.append( bincontent )
                 d2 = {'Eta': etavalues, 'MatBudInIntLen': matbudginIntLen}
                 df2 = pd.DataFrame(data=d2).round(2)
-                df2.to_csv(r'/afs/cern.ch/work/a/apsallid/CMS/PFCalStudies/CMS-HGCAL/matbudV10fromVertexToBackofHGCal/CMSSW_10_6_X_2019-04-17-2300/src/Validation/Geometry/test/EtavsMatBudInIntLen.txt',sep=' ', index=False, header=False)
+                df2.to_csv(r'/afs/cern.ch/work/a/apsallid/CMS/PFCalStudies/CMS-HGCAL/matbudV10fromVertexToBackofHGCal/CMSSW_10_6_X_2019-05-07-1100/src/Validation/Geometry/test/EtavsMatBudInIntLen.txt',sep=' ', index=False, header=False)
                 #print df2
 
     return cumulative_matbdg
@@ -356,7 +358,7 @@ def createPlots2D_(plot, compounddetectorname):
     hist2d_X0_total.GetYaxis().SetTickLength(hist2d_X0_total.GetXaxis().GetTickLength()/4.)
     hist2d_X0_total.GetYaxis().SetTickLength(hist2d_X0_total.GetXaxis().GetTickLength()/4.)
     hist2d_X0_total.SetTitleOffset(0.5,"Y")
-    hist2d_X0_total.GetYaxis().SetTitleOffset(0.45);
+    hist2d_X0_total.GetYaxis().SetTitleOffset(0.50);
     #hist2d_X0_total.GetXaxis().SetTitleOffset(1.15);
     #hist2d_X0_total.GetXaxis().SetNoExponent(True)
     #hist2d_X0_total.GetYaxis().SetNoExponent(True)
@@ -372,7 +374,7 @@ def createPlots2D_(plot, compounddetectorname):
         histo.Draw("same")
 
     # Legenda
-    theLegend_SubDetectors = TLegend(0.180,0.8,0.98,0.90)
+    theLegend_SubDetectors = TLegend(0.100,0.7,0.90,0.90)#(0.180,0.8,0.98,0.90)
     theLegend_SubDetectors.SetNColumns(3)
     theLegend_SubDetectors.SetFillColor(0)
     theLegend_SubDetectors.SetFillStyle(0)
@@ -386,7 +388,7 @@ def createPlots2D_(plot, compounddetectorname):
 
     
     # text
-    text_SubDetectors = TPaveText(0.180,0.727,0.402,0.787,"NDC")
+    text_SubDetectors = TPaveText(0.100,0.627,0.322,0.687,"NDC")#(0.180,0.727,0.402,0.787,"NDC")
     text_SubDetectors.SetFillColor(0)
     text_SubDetectors.SetBorderSize(0)
     text_SubDetectors.AddText("CMS Simulation")
@@ -407,6 +409,15 @@ def createPlots2D_(plot, compounddetectorname):
     #It seems that it is too heavy to create .pdf and .root
     #can_SubDetectors.SaveAs("%s/MaterialBdg_FromVertexToEndofHGCal_%s.pdf" % (theDirname, plot))
     #can_SubDetectors.SaveAs("%s/MaterialBdg_FromVertexToEndofHGCal_%s.root" % (theDirname, plot))
+
+    hist2d_X0_total.GetXaxis().SetRangeUser( 0., 7000.)
+    #Draw eta values in the zoom case
+    keep_alive = []
+    keep_alive.extend(drawHalfEtaValues())
+    #hist2d_X0_total.Draw("COLZ") 
+    can_SubDetectors.Update()
+    can_SubDetectors.Modified()
+    can_SubDetectors.SaveAs("%s/MaterialBdg_%s_%s_Zpluszoom.png" % (theDirname, compounddetectorname, plot))
 
 
 
@@ -694,9 +705,10 @@ def create2DPlots(detector, plot, plotnum, plotmat, dosingledetector = True):
             subDetectorFile = TFile(subDetectorFilename)
             files.append(subDetectorFile)
             print("*** Open file... %s" %  subDetectorFilename)
-
+            
             # subdetector profiles
             prof2d_X0_det_total = subDetectorFile.Get('%s' % plots[plot].plotNumber)
+            #print(prof2d_X0_det_total.GetEntries())
             prof2d_X0_det_total.__class__ = TProfile2D
 
             # add to summary histogram
@@ -825,7 +837,7 @@ def create2DPlots(detector, plot, plotnum, plotmat, dosingledetector = True):
     if plot == "x_vs_z_vs_Rsum" or plot == "l_vs_z_vs_Rsum" or plot == "x_vs_z_vs_Rsumcos" or plot == "l_vs_z_vs_Rsumcos" or plot == "x_vs_z_vs_Rloc" or plot == "l_vs_z_vs_Rloc" or  plot == "x_vs_z_vs_Rloccos" or plot == "l_vs_z_vs_Rloccos":
         #Z+
         #hist2d_X0_total.GetXaxis().SetLimits( 3100., 5200.)
-        hist2d_X0_total.GetXaxis().SetRangeUser( 3100., 5400.)
+        hist2d_X0_total.GetXaxis().SetRangeUser( 0., 7000.)
         #Do not draw eta values in the zoom case
         keep_alive = []
         #hist2d_X0_total.Draw("COLZ") 
@@ -835,7 +847,7 @@ def create2DPlots(detector, plot, plotnum, plotmat, dosingledetector = True):
         can2.SaveAs( "%s/%s/%s_%s%s_ZplusZoom.png" % (theDirname, "ZPlusZoom", detector, plot, plotmat))
         #Z-
         #hist2d_X0_total.GetXaxis().SetLimits( 3100., 5200.)
-        hist2d_X0_total.GetXaxis().SetRangeUser( -5400., -3100.)
+        hist2d_X0_total.GetXaxis().SetRangeUser( 0., -7000.)
         #Do not draw eta values in the zoom case
         keep_alive = []
         #hist2d_X0_total.Draw("COLZ") 
@@ -1039,9 +1051,9 @@ if __name__ == '__main__':
             #First the total
             create2DPlots(args.detector, p, plots[p].plotNumber, "")
              #Then, the rest
-            for label, [num, color, leg] in hist_label_to_num.iteritems():
+            #for label, [num, color, leg] in hist_label_to_num.iteritems():
                 #print label, num, color, leg
-                create2DPlots(args.detector, p, num + plots[p].plotNumber, leg)
+                #create2DPlots(args.detector, p, num + plots[p].plotNumber, leg)
 
 
         for p in required_plots:

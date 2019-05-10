@@ -23,14 +23,14 @@ void MaterialBudgetHGCalHistos::book()
   std::cout << "=== booking user histos ===" << std::endl;
 
   // Parameters for 2D histograms
-  // Make z 1mm per bin 
-  int nzbin = 11000;
-  float zMax = 5500.;//
-  float zMin = -5500.;//
+  // Make z 2mm per bin 
+  int nzbin = 7000;
+  float zMax = 7000.;//
+  float zMin = -7000.;//
   // Make r 1cm per bin
-  int nrbin = 345;
+  int nrbin = 805;
   float rMin = -50.;
-  float rMax = 3400.;
+  float rMax = 8000.;
   // eta
   int netabin = 250;
   float etaMin = -5.;
@@ -40,9 +40,9 @@ void MaterialBudgetHGCalHistos::book()
   float phiMin = -3.2;
   float phiMax = 3.2;
   // R for profile histos
-  int nRbin = 300;
+  int nRbin = 800;
   float RMin = 0.;
-  float RMax = 3000.;
+  float RMax = 8000.;
   
   // total X0
   hmgr->addHistoProf1( new TProfile("10", "MB prof Eta;#eta;x/X_{0} ", netabin, etaMin, etaMax ) );
