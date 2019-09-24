@@ -6,6 +6,8 @@ fCPerMIP_v9 = cms.vdouble(2.06,3.43,5.15) #120um, 200um, 300um
 
 fCPerMIP_v10 = fCPerMIP_v9
 
+fCPerMIP_v11 = fCPerMIP_v9
+
 # HGCAL producer of rechits starting from digis
 HGCalUncalibRecHit = cms.EDProducer(
     "HGCalUncalibRecHitProducer",
@@ -74,6 +76,10 @@ phase2_hgcalV9.toModify( HGCalUncalibRecHit.HGCHEFConfig , fCPerMIP = fCPerMIP_v
 from Configuration.Eras.Modifier_phase2_hgcalV10_cff import phase2_hgcalV10
 phase2_hgcalV10.toModify( HGCalUncalibRecHit.HGCEEConfig , fCPerMIP = fCPerMIP_v10 ) 
 phase2_hgcalV10.toModify( HGCalUncalibRecHit.HGCHEFConfig , fCPerMIP = fCPerMIP_v10 )
+
+from Configuration.Eras.Modifier_phase2_hgcalV11_cff import phase2_hgcalV11
+phase2_hgcalV11.toModify( HGCalUncalibRecHit.HGCEEConfig , fCPerMIP = fCPerMIP_v11 ) 
+phase2_hgcalV11.toModify( HGCalUncalibRecHit.HGCHEFConfig , fCPerMIP = fCPerMIP_v11 )
 
 from Configuration.Eras.Modifier_phase2_hfnose_cff import phase2_hfnose
 phase2_hfnose.toModify( HGCalUncalibRecHit.HGCHFNoseConfig , isSiFE = True )

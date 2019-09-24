@@ -182,6 +182,10 @@ dEdX_weights_v10 = cms.vdouble(0.0,      # there is no layer zero
 from Configuration.Eras.Modifier_phase2_hgcalV10_cff import phase2_hgcalV10
 phase2_hgcalV10.toModify( dEdX, weights = dEdX_weights_v10 )
 
+dEdX_weights_v11 = dEdX_weights_v10
+from Configuration.Eras.Modifier_phase2_hgcalV11_cff import phase2_hgcalV11
+phase2_hgcalV11.toModify( dEdX, weights = dEdX_weights_v11 )
+
 # HGCAL rechit producer
 HGCalRecHit = cms.EDProducer(
     "HGCalRecHitProducer",
@@ -232,3 +236,4 @@ HGCalRecHit = cms.EDProducer(
 
 phase2_hgcalV9.toModify( HGCalRecHit , thicknessCorrection = [0.759,0.760,0.773] ) #120um, 200um, 300um
 phase2_hgcalV10.toModify( HGCalRecHit , thicknessCorrection = [0.781,0.775,0.769] ) #120um, 200um, 300um
+phase2_hgcalV11.toModify( HGCalRecHit , thicknessCorrection = [0.776,0.770,0.771] ) #120um, 200um, 300um
