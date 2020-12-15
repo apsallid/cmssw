@@ -9,6 +9,7 @@ using namespace edm;
 HGCalValidator::HGCalValidator(const edm::ParameterSet& pset)
     : label_lcl(pset.getParameter<edm::InputTag>("label_lcl")),
       label_mcl(pset.getParameter<std::vector<edm::InputTag>>("label_mcl")),
+      associator_(pset.getUntrackedParameter<std::vector<edm::InputTag>>("associator")),
       SaveGeneralInfo_(pset.getUntrackedParameter<bool>("SaveGeneralInfo")),
       doCaloParticlePlots_(pset.getUntrackedParameter<bool>("doCaloParticlePlots")),
       doCaloParticleSelection_(pset.getUntrackedParameter<bool>("doCaloParticleSelection")),
@@ -26,11 +27,14 @@ HGCalValidator::HGCalValidator(const edm::ParameterSet& pset)
 
   simVertices_ = consumes<std::vector<SimVertex>>(pset.getParameter<edm::InputTag>("simVertices"));
 
-  for (auto& itag :label_clustersmask){
+  for (auto& itag :label_clustersmask) {
     clustersMaskTokens_.push_back(consumes<std::vector<float>>(itag));
-    SCAssocByEnergyScoreProducer_.push_back(consumes<hgcal::LayerClusterToSimClusterAssociator>(edm::InputTag("scAssocByEnergyScoreProducer" + itag.label())));
   }
-  
+  for (auto const& assoc: associator_) {
+    associatorMapStRs.push_back(consumes<hgcal::SimToRecoCollectionWithSimClusters>(assoc));
+    associatorMapRtSs.push_back(consumes<hgcal::RecoToSimCollectionWithSimClusters>(assoc));
+  }
+
   hitMap_ = consumes<std::unordered_map<DetId, const HGCRecHit*>>(edm::InputTag("hgcalRecHitMapProducer"));
 
   density_ = consumes<Density>(edm::InputTag("hgcalLayerClusters"));
@@ -311,8 +315,12 @@ void HGCalValidator::dqmAnalyze(const edm::Event& event,
 
       const auto& inputClusterMask = event.get(clustersMaskTokens_[ws]);
 
-      edm::Handle<hgcal::LayerClusterToSimClusterAssociator> SCAssocByEnergyScoreHandle;
-      event.getByToken(SCAssocByEnergyScoreProducer_[ws], SCAssocByEnergyScoreHandle);
+      edm::Handle<hgcal::SimToRecoCollectionWithSimClusters> simtorecoCollectionH;
+      event.getByToken(associatorMapStRs[ws], simtorecoCollectionH);
+      auto simRecColl = *simtorecoCollectionH;
+      edm::Handle<hgcal::RecoToSimCollectionWithSimClusters> recotosimCollectionH;
+      event.getByToken(associatorMapRtSs[ws], recotosimCollectionH);
+      auto recSimColl = *recotosimCollectionH;
 
       histoProducerAlgo_->fill_simclusterassosiation_histos(histograms.histoProducerAlgo,
 							    ws,
@@ -324,7 +332,8 @@ void HGCalValidator::dqmAnalyze(const edm::Event& event,
 							    inputClusterMask,
 							    *hitMap,
 							    totallayers_to_monitor_,
-							    SCAssocByEnergyScoreHandle);
+							    recSimColl,
+                                                            simRecColl);
 
       //General Info on simClusters
       LogTrace("HGCalValidator") << "\n# of simclusters: " << nSimClusters << " label_clustersmask[ws].label() " << label_clustersmask[ws].label() << "\n";
