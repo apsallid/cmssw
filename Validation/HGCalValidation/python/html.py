@@ -99,7 +99,7 @@ _pageNameMap = {
     "hitCalibration": "Reconstructed hits calibration",
     "hitValidation" : "Simulated hits, digis, reconstructed hits validation" , 
     "hgcalLayerClusters": "Layer clusters",
-    "allTiclMultiClusters":"TICL multiclusters", 
+    "tracksters":"Tracksters", 
     "ticlMultiClustersFromTrackstersEM": "Electromagnetic multiclusters",
     "ticlMultiClustersFromTrackstersHAD": "Hadronic multiclusters",
     "hgcalMultiClusters" : "Old multiclusters",
@@ -115,7 +115,7 @@ _sectionNameMapOrder = collections.OrderedDict([
     ("ticlMultiClustersFromTrackstersEM","Electromagnetic multiclusters"),
     # ticlMultiClustersFromTrackstersHAD
     ("ticlMultiClustersFromTrackstersHAD","Hadronic multiclusters"),
-    ("allTiclMultiClusters","TICL multiclusters"),
+    ("tracksters","Tracksters"),
     # hgcalMultiClusters
     ("hgcalMultiClusters","Old multiclusters"),
 ])
@@ -125,7 +125,7 @@ _summary = {}
 
 #Objects to keep in summary
 #_summobj = ['hitCalibration','hitValidation', 'hgcalLayerClusters','ticlMultiClustersFromTrackstersEM','ticlMultiClustersFromTrackstersHAD']
-_summobj = ['hitCalibration','hitValidation', 'hgcalLayerClusters','allTiclMultiClusters']
+_summobj = ['hitCalibration','hitValidation', 'hgcalLayerClusters','tracksters']
 #_summobj = ['hitCalibration','hitValidation', 'hgcalLayerClusters']
 
 #Plots to keep in summary from hitCalibration
