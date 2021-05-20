@@ -83,7 +83,11 @@ def putype(t):
 #------------------------------------------------------------------------------------------
 #thereleases = { "CMSSW 11_1_X" : ["CMSSW_11_1_0_pre4_GEANT4","CMSSW_11_1_0_pre3","CMSSW_11_1_0_pre2"] }
 thereleases = OrderedDict()
-thereleases = { "CMSSW 11_3_X" : [
+thereleases = { "CMSSW 12_0_X" : [
+    "CMSSW_12_0_0_pre1_vs_CMSSW_11_3_0_pre6"
+                 ],
+                "CMSSW 11_3_X" : [
+    "CMSSW_11_3_0_vs_CMSSW_11_3_0_pre6",
     "CMSSW_11_3_0_pre6_vs_CMSSW_11_3_0_pre5",
     "CMSSW_11_3_0_pre5_vs_CMSSW_11_3_0_pre4",
     "CMSSW_11_3_0_pre4_vs_CMSSW_11_3_0_pre3",
@@ -135,9 +139,9 @@ geometryTests = { "Material budget" : [
 
 GeoScenario = "Extended2026D76_vs_Extended2026D83"
 
-RefRelease='CMSSW_11_3_0_pre5'
+RefRelease='CMSSW_11_3_0_pre6'
 
-NewRelease='CMSSW_11_3_0_pre6'
+NewRelease='CMSSW_12_0_0_pre1'
 
 NotNormalRelease = "normal"
 NotNormalRefRelease = "normal"
