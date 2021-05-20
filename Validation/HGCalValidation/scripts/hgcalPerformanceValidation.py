@@ -784,7 +784,7 @@ if (opt.GATHER != None) :
                    #print(df[obj][ind])          
                    print(j)
                    #index_file.write(' <li><a href="plots_%s_%s">%s</a></li>   \n' %(samplename, df[obj][ind], df[obj][ind].partition("/")[2] ))
-                   if "Ticl" in j: 
+                   if "tracksters" in j: 
                        index_file.write(' <li><a href="../HGCValid_%s_Plots/plots_%s_%s">%s</a></li>   \n' %(j, samplename, column, column.replace("ticlTracksters","") ))
                    else: 
                        index_file.write(' <li><a href="../HGCValid_%s_Plots/plots_%s_%s">%s</a></li>   \n' %(j, samplename, column, column.partition("/")[2] ))
